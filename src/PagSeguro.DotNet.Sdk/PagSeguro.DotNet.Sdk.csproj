@@ -12,8 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Account\PagSeguro.DotNet.Sdk.Account.csproj" />
     <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Certificate\PagSeguro.DotNet.Sdk.Certificate.csproj" />
     <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Connect\PagSeguro.DotNet.Sdk.Connect.csproj" />
+    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.PublicKey\PagSeguro.DotNet.Sdk.PublicKey.csproj" />
   </ItemGroup>
 
 </Project>

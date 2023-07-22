@@ -55,7 +55,7 @@ namespace PagSeguro.DotNet.Sdk.Tests
         {
             AuthorizationCodeWriteDto writeDto = CreateAuthorizationCodeWriteDto();
 
-            await _client.ConnectAsync(writeDto);
+            AuthorizationCodeReadDto result = await _client.ConnectAsync(writeDto);
 
             await _client.Authorization
                 .Received(1)
@@ -63,6 +63,9 @@ namespace PagSeguro.DotNet.Sdk.Tests
             _client.Settings
                 .AccessToken
                 .Should().Be(_authorizationCodeReadDto.AccessToken);
+            result
+                .Should()
+                .BeEquivalentTo(_authorizationCodeReadDto);
         }
 
         private AuthorizationCodeWriteDto CreateAuthorizationCodeWriteDto()
