@@ -1,0 +1,43 @@
+name: .Net 7 CI Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: CI Build
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore Dependencies
+      run: dotnet restore PagSeguro.DotNet.Sdk.sln
+    - name: Build
+      run: dotnet build PagSeguro.DotNet.Sdk.sln --configuration Release --no-restore
+    - name: Test
+      run: dotnet test PagSeguro.DotNet.Sdk.sln  --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+    - name: Code Coverage Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: coverage/**/coverage.cobertura.xml
+        badge: true
+        fail_below_min: true
+        format: markdown
+        hide_branch_rate: false
+        hide_complexity: true
+        indicators: true
+        output: both
+        thresholds: '60 80'
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: code-coverage-results.md
