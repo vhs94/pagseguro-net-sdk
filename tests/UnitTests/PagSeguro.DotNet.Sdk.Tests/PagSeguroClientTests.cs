@@ -1,0 +1,96 @@
+﻿using AutoFixture;
+using FluentAssertions;
+using NSubstitute;
+using PagSeguro.DotNet.Sdk.Common.Tests;
+using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
+using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
+using PagSeguro.DotNet.Sdk.Settings;
+
+namespace PagSeguro.DotNet.Sdk.Tests
+{
+    public class PagSeguroClientTests : BaseTests
+    {
+        private PagSeguroClient _client;
+        private ClientSettings _settings;
+        private AuthorizationCodeReadDto _authorizationCodeReadDto;
+        private ChallengeReadDto _challengeReadDto;
+
+        protected override void CreateMocks()
+        {
+            _settings = CreateClientSettings();
+            _client = Substitute.For<PagSeguroClient>(_settings);
+        }
+
+        private ClientSettings CreateClientSettings()
+        {
+            return Fixture.Create<ClientSettings>();
+        }
+
+        protected override void SetupMocks()
+        {
+            _authorizationCodeReadDto = CreateAuthorizationCodeReadDto();
+            _challengeReadDto = CreateChallengeReadDto();
+            _client
+                .Authorization
+                .CreateAccessTokenByCodeAsync(Arg.Any<AuthorizationCodeWriteDto>())
+                .Returns(_authorizationCodeReadDto);
+            _client
+                .Authorization
+                .CreateAccessTokenByChallengeAsync(Arg.Any<ChallengeWriteDto>())
+                .Returns(_challengeReadDto);
+        }
+
+        private AuthorizationCodeReadDto CreateAuthorizationCodeReadDto()
+        {
+            return Fixture.Create<AuthorizationCodeReadDto>();
+        }
+
+        private ChallengeReadDto CreateChallengeReadDto()
+        {
+            return Fixture.Create<ChallengeReadDto>();
+        }
+
+        [Fact]
+        public async Task ConnectAsync_AuthorizationCodeIsValid_AcessTokenIsSet()
+        {
+            AuthorizationCodeWriteDto writeDto = CreateAuthorizationCodeWriteDto();
+
+            await _client.ConnectAsync(writeDto);
+
+            await _client.Authorization
+                .Received(1)
+                .CreateAccessTokenByCodeAsync(writeDto);
+            _client.Settings
+                .AccessToken
+                .Should().Be(_authorizationCodeReadDto.AccessToken);
+        }
+
+        private AuthorizationCodeWriteDto CreateAuthorizationCodeWriteDto()
+        {
+            return Fixture.Create<AuthorizationCodeWriteDto>();
+        }
+
+        [Fact]
+        public async Task ConnectChallengeAsync_ChallengeIsValid_AcessTokenAndDecryptedChallengeIsSet()
+        {
+            ChallengeWriteDto writeDto = CreateChallengeWriteDto();
+
+            await _client.ConnectChallengeAsync(writeDto);
+
+            await _client.Authorization
+                .Received(1)
+                .CreateAccessTokenByChallengeAsync(writeDto);
+            _client.Settings
+                .AccessToken
+                .Should().Be(_challengeReadDto.AccessToken);
+            _client.Settings
+                .Challenge
+                .Should().Be(_challengeReadDto.DecryptedChallenge);
+        }
+
+        private ChallengeWriteDto CreateChallengeWriteDto()
+        {
+            return Fixture.Create<ChallengeWriteDto>();
+        }
+    }
+}
