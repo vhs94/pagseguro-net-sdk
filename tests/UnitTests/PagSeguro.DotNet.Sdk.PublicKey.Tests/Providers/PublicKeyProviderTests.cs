@@ -29,6 +29,21 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
         }
 
         [Fact]
+        public async Task UpdatePublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
+        {
+            await Provider.UpdatePublicKeyAsync();
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(
+                    Provider.BaseUrl,
+                    PublicKeyEndpoints.PublicKey,
+                    PublicKeyEndpoints.Card))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithVerb(HttpMethod.Put)
+                .Times(1);
+        }
+
+        [Fact]
         public async Task GetPublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
         {
             await Provider.GetPublicKeyAsync();

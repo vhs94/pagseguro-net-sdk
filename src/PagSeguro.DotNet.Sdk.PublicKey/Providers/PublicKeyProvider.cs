@@ -26,6 +26,16 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
                 .ReceiveJson<PublicKeyReadDto>();
         }
 
+        public async Task<PublicKeyReadDto> UpdatePublicKeyAsync()
+        {
+            return await BaseUrl
+                .AppendPathSegment(PublicKeyEndpoints.PublicKey)
+                .AppendPathSegment(PublicKeyEndpoints.Card)
+                .WithOAuthBearerToken(Settings.Token)
+                .PutAsync()
+                .ReceiveJson<PublicKeyReadDto>();
+        }
+
         public async Task<PublicKeyReadDto> GetPublicKeyAsync()
         {
             return await BaseUrl
