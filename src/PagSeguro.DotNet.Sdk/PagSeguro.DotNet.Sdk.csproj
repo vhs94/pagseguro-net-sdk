@@ -4,7 +4,24 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Title>PagSeguro DotNet SDK</Title>
+    <Authors>victor_santana09</Authors>
+    <Description>Client moderno para APIs PagSeguro</Description>
+    <PackageProjectUrl>https://github.com/vhs94/pagseguro-net-sdk</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
+    <PackageTags>pagseguro;uol;pagbank;payment-gateway;payment;sdk;</PackageTags>
+    <AssemblyVersion></AssemblyVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
