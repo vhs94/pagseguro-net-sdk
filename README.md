@@ -1,4 +1,9 @@
 Client moderno das APIs do PagSeguro
+# Install
+
+```sh
+dotnet add package PagSeguro.DotNet.Sdk 
+```
 
 # Como usar
 
@@ -78,10 +83,10 @@ var certificate = await client.DigitalCertificate.CreateCertificateAsync();
 - DigitalCertificate
 - PublicKey
 
-### Tests
+# Tests
 Todo o projeto está com alto nível de coverage, estou trabalhando para exibir isso no repo.
 
-### Roadmap
+# Roadmap
 
 - Disponibilizar mais fluxos
 - Disponibilizar middlewares para a utilização com Dependency Injection
