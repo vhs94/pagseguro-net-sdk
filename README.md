@@ -27,12 +27,12 @@ Este tipo de conexão é o mais comum
 var client = new PagSeguroClient(new ClientSettings
 {
     Token = "<SEU_TOKEN>",
+    ClientId = "<SEU_CLIENT_ID>",
+    ClientSecret = "<SEU_CLIENT_SECRET>"
 });
 
 await client.ConnectAsync(new AuthorizationCodeWriteDto
 {
-    ClientId = "<SEU_CLIENT_ID>",
-    ClientSecret = "<SEU_CLIENT_SECRET>",
     Code = "<CODIGO_REDIRECIONADO_URL>",
     RedirectUri = "<URL_REDIRECIONAMENTO>",
     Scope = ApiScopes.ReadAccounts //se omitido, utiliza todos os scopes
@@ -54,14 +54,12 @@ O Challenge é usado apenas no fluxo de criação de certificados digitais.
 var client = new PagSeguroClient(new ClientSettings
 {
     Token = "<SEU_TOKEN>",
+    ClientId = "<SEU_CLIENT_ID>",
+    ClientSecret = "<SEU_CLIENT_SECRET>",
     PrivateKey = "<SUA_PRIVATE_KEY>" // private key usada para descriptografar o challenge
 });
 
-await client.ConnectChallengeAsync(new ChallengeWriteDto
-{
-    ClientId = "<SEU_CLIENT_ID>",
-    ClientSecret = "<SEU_CLIENT_SECRET>"
-});
+await client.ConnectChallengeAsync();
 ```
 
 - Com o client conectado,agora é possível criar certificados
@@ -72,11 +70,13 @@ var certificate = await client.DigitalCertificate.CreateCertificateAsync();
 
 # Fluxos Disponíveis
 
-- Authorization
-- Application
-- Account
-- DigitalCertificate
-- PublicKey
+| Fluxo | Features |
+|----------|----------|
+| Connect Authorization   |  Obter access token (authorization_code e challenge)  |
+| Application   | Cria e consulta aplicações por Id |
+| Account   | Cria e consulta contas por Id |
+| DigitalCertificate   | Cria certificados digitais |
+| PublicKey   | Cria, atualiza e consulta public Keys por Id |
 
 ### Tests
 Todo o projeto está com alto nível de coverage, estou trabalhando para exibir isso no repo.

@@ -9,6 +9,5 @@ namespace PagSeguro.DotNet.Sdk.Account.Dtos
         [JsonProperty("business_category")]
         public string BusinessCategory { get; set; }
         public PersonDto Person { get; set; }
-        public CompanyDto Company { get; set; }
     }
 }

@@ -14,13 +14,24 @@ namespace PagSeguro.DotNet.Sdk.Account.Providers
         {
         }
 
+        public async Task<CreatedAccountDto> CreateAccountAsync(AccountWriteDto accountWriteDto)
+        {
+            return await BaseUrl
+                .AppendPathSegment(AccountEndpoints.Account)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(AccountHeaders.ClientId, Settings.ClientId)
+                .WithHeader(AccountHeaders.ClientSecret, Settings.ClientSecret)
+                .PostJsonAsync(accountWriteDto)
+                .ReceiveJson<CreatedAccountDto>();
+        }
+
         public async Task<AccountReadDto> GetAccountByIdAsync(string accountId)
         {
             return await BaseUrl
                 .AppendPathSegment(AccountEndpoints.Account)
                 .AppendPathSegment(accountId)
                 .WithOAuthBearerToken(Settings.Token)
-                .WithHeader(AccountHeaders.ClientId, Settings.AccessToken)
+                .WithHeader(AccountHeaders.ClientToken, Settings.AccessToken)
                 .GetJsonAsync<AccountReadDto>();
         }
     }

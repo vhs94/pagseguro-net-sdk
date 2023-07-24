@@ -27,8 +27,8 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
             return await BaseUrl
                 .AppendPathSegment(ConnectEndpoints.Token)
                 .WithOAuthBearerToken(Settings.Token)
-                .WithHeader(CommonHeaders.ClientId, authorizationCodeWriteDto.ClientId)
-                .WithHeader(CommonHeaders.ClientSecret, authorizationCodeWriteDto.ClientSecret)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
                 .PostJsonAsync(new
                 {
                     grant_type = authorizationCodeWriteDto.GrantType,
@@ -39,17 +39,17 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                 .ReceiveJson<AuthorizationCodeReadDto>();
         }
 
-        public async Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync(ChallengeWriteDto challengeWriteDto)
+        public async Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync()
         {
             var challengeResult = await BaseUrl
                 .AppendPathSegment(ConnectEndpoints.Token)
                 .WithOAuthBearerToken(Settings.Token)
-                .WithHeader(CommonHeaders.ClientId, challengeWriteDto.ClientId)
-                .WithHeader(CommonHeaders.ClientSecret, challengeWriteDto.ClientSecret)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
                 .PostJsonAsync(new
                 {
-                    grant_type = challengeWriteDto.GrantType,
-                    scope = challengeWriteDto.Scope
+                    grant_type = ApiGrants.Challenge,
+                    scope = ApiScopes.CreateCertificate.ToDescription()
                 })
                 .ReceiveJson<ChallengeReadDto>();
 

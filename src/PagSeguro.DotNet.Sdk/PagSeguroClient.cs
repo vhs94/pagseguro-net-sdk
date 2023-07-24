@@ -38,7 +38,7 @@ namespace PagSeguro.DotNet.Sdk
             CreateServiceCollection();
             ConfigureFlurlHttp();
             MapSettings(settings);
-            SetupSettings();
+            ConfigureSettings();
         }
 
         private void CreateServiceCollection()
@@ -68,7 +68,7 @@ namespace PagSeguro.DotNet.Sdk
             Settings = _mapper.Map<PagSeguroSettings>(settings);
         }
 
-        private void SetupSettings()
+        private void ConfigureSettings()
         {
             _services.RemoveAll<PagSeguroSettings>();
             _services.AddSingleton(Settings);
@@ -80,18 +80,25 @@ namespace PagSeguro.DotNet.Sdk
             AuthorizationCodeReadDto result = await Authorization.CreateAccessTokenByCodeAsync(
                 authorizationCodeWriteDto);
             Settings.AccessToken = result.AccessToken;
-            SetupSettings();
+            ConfigureSettings();
             return result;
         }
 
-        public async Task ConnectChallengeAsync(
-            ChallengeWriteDto challengeWriteDto)
+        public async Task ConnectChallengeAsync()
         {
-            ChallengeReadDto result = await Authorization.CreateAccessTokenByChallengeAsync(
-                challengeWriteDto);
+            ChallengeReadDto result = await Authorization.CreateAccessTokenByChallengeAsync();
             Settings.AccessToken = result.AccessToken;
             Settings.Challenge = result.DecryptedChallenge;
-            SetupSettings();
+            ConfigureSettings();
+        }
+
+        public void ConfigureClientApplication(
+            string clientId,
+            string clientSecret)
+        {
+            Settings.ClientId = clientId;
+            Settings.ClientSecret = clientSecret;
+            ConfigureSettings();
         }
     }
 }

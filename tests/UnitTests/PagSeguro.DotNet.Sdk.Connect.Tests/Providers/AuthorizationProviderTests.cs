@@ -41,15 +41,13 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         [Fact]
         public async Task CreateAccessTokenByChallengeAsync_PayloadIsValid_HttpRequestIsCreated()
         {
-            var challenge = CreateChallenge();
-
-            await Provider.CreateAccessTokenByChallengeAsync(challenge);
+            await Provider.CreateAccessTokenByChallengeAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
                 .WithOAuthBearerToken(Settings.Token)
-                .WithHeader(CommonHeaders.ClientId, challenge.ClientId)
-                .WithHeader(CommonHeaders.ClientSecret, challenge.ClientSecret)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(new
                 {
@@ -59,17 +57,10 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .Times(1);
         }
 
-        private ChallengeWriteDto CreateChallenge()
-        {
-            return Fixture.Create<ChallengeWriteDto>();
-        }
-
         [Fact]
         public async Task CreateChallengeAsync_SettingsHasPrivateKey_ChallengeIsDecrypted()
         {
-            var challenge = CreateChallenge();
-
-            var result = await Provider.CreateAccessTokenByChallengeAsync(challenge);
+            ChallengeReadDto result = await Provider.CreateAccessTokenByChallengeAsync();
 
             _cryptoServiceMock
                 .Received(1)
@@ -80,9 +71,8 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         public async Task CreateChallengeAsync_SettingsPrivateKeyIsEmpty_ChallengeIsNotDecrypted()
         {
             Settings.PrivateKey = null;
-            var challenge = CreateChallenge();
 
-            await Provider.CreateAccessTokenByChallengeAsync(challenge);
+            await Provider.CreateAccessTokenByChallengeAsync();
 
             _cryptoServiceMock
                 .DidNotReceive()

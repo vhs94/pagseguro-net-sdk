@@ -36,7 +36,7 @@ namespace PagSeguro.DotNet.Sdk.Tests
                 .Returns(_authorizationCodeReadDto);
             _client
                 .Authorization
-                .CreateAccessTokenByChallengeAsync(Arg.Any<ChallengeWriteDto>())
+                .CreateAccessTokenByChallengeAsync()
                 .Returns(_challengeReadDto);
         }
 
@@ -76,13 +76,11 @@ namespace PagSeguro.DotNet.Sdk.Tests
         [Fact]
         public async Task ConnectChallengeAsync_ChallengeIsValid_AcessTokenAndDecryptedChallengeIsSet()
         {
-            ChallengeWriteDto writeDto = CreateChallengeWriteDto();
-
-            await _client.ConnectChallengeAsync(writeDto);
+            await _client.ConnectChallengeAsync();
 
             await _client.Authorization
                 .Received(1)
-                .CreateAccessTokenByChallengeAsync(writeDto);
+                .CreateAccessTokenByChallengeAsync();
             _client.Settings
                 .AccessToken
                 .Should().Be(_challengeReadDto.AccessToken);
@@ -91,9 +89,20 @@ namespace PagSeguro.DotNet.Sdk.Tests
                 .Should().Be(_challengeReadDto.DecryptedChallenge);
         }
 
-        private ChallengeWriteDto CreateChallengeWriteDto()
+        [Fact]
+        public void ConfigureClientApplication_ClientIsValid_ClientApplicationIsSet()
         {
-            return Fixture.Create<ChallengeWriteDto>();
+            string clientId = "id";
+            string clientSecret = "secret";
+
+            _client.ConfigureClientApplication(clientId, clientSecret);
+
+            _client.Settings
+                .ClientId
+                .Should().Be(clientId);
+            _client.Settings
+                .ClientSecret
+                .Should().Be(clientSecret);
         }
     }
 }

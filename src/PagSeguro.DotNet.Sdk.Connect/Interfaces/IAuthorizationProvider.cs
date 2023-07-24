@@ -8,6 +8,6 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
     {
         Task<AuthorizationCodeReadDto> CreateAccessTokenByCodeAsync(
             AuthorizationCodeWriteDto authorizationCodeWriteDto);
-        Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync(ChallengeWriteDto challengeWriteDto);
+        Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync();
     }
 }
