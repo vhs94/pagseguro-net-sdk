@@ -1,4 +1,4 @@
-Client moderno das APIs do PagSeguro
+Client moderno para APIs PagSeguro
 # Install
 
 ```sh
