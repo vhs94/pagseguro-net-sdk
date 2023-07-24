@@ -12,7 +12,7 @@ dotnet add package PagSeguro.DotNet.Sdk
 var client = new PagSeguroClient(new ClientSettings
 {
     Environment = PagSeguroEnvironment.Sandbox,
-    Token = "<SEU_TOKEN>",
+    Token = "<SEU_TOKEN>"
 });
 ```
 - Use os providers disponiveis para manipular as APIs
