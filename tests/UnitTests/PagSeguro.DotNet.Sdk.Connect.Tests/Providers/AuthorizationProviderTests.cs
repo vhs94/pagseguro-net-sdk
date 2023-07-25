@@ -3,6 +3,7 @@ using Flurl;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
+using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
@@ -36,6 +37,36 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         private ChallengeReadDto CreateChallengeReadDto()
         {
             return Fixture.Create<ChallengeReadDto>();
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenByCodeAsync_PayloadIsValid_HttpRequestIsCreated()
+        {
+            AuthorizationCodeWriteDto authorizationCode = CreateAuthorizationCodeWriteDto();
+
+            await Provider.CreateAccessTokenByCodeAsync(authorizationCode);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(new
+                {
+                    grant_type = ApiGrants.AuthorizationCode,
+                    code = authorizationCode.Code,
+                    redirect_uri = authorizationCode.RedirectUri,
+                    scope = authorizationCode.Scope.ToStringApiScopes()
+                })
+                .Times(1);
+        }
+
+        private AuthorizationCodeWriteDto CreateAuthorizationCodeWriteDto()
+        {
+            return Fixture.Build<AuthorizationCodeWriteDto>()
+                .With(ac => ac.Scope, ApiScopes.ReadAccounts)
+                .Create();
         }
 
         [Fact]
