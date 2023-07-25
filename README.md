@@ -1,4 +1,7 @@
 Client moderno para APIs PagSeguro
+
+[![codecov](https://codecov.io/gh/vhs94/pagseguro-net-sdk/branch/main/graph/badge.svg?token=DBC135AXUC)](https://codecov.io/gh/vhs94/pagseguro-net-sdk)
+
 # Install
 
 ```sh
@@ -84,7 +87,7 @@ var certificate = await client.DigitalCertificate.CreateCertificateAsync();
 | PublicKey   | Cria, atualiza e consulta public Keys por Id |
 
 # Tests
-Todo o projeto está com alto nível de coverage, estou trabalhando para exibir isso no repo.
+Todo o projeto está com alto nível de coverage. [click aqui](https://app.codecov.io/gh/vhs94/pagseguro-net-sdk) para mais detalhes.
 
 # Roadmap
 
