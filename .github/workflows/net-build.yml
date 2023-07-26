@@ -25,5 +25,3 @@ jobs:
         run: dotnet test PagSeguro.DotNet.Sdk.sln  --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
       - name: Codecov
         uses: codecov/codecov-action@v3.1.4
-        ignore:
-          - "tests/"
