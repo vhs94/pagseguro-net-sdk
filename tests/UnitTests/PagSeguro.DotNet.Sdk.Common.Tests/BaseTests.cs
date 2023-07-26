@@ -21,13 +21,9 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests
             SetupMocks();
         }
 
-        protected virtual void CreateMocks()
-        {
-        }
+        protected virtual void CreateMocks() { }
 
-        protected virtual void SetupMocks()
-        {
-        }
+        protected virtual void SetupMocks() { }
 
         public void Dispose()
         {

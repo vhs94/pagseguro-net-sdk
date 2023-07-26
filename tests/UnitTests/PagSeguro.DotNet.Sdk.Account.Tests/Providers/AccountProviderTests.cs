@@ -1,8 +1,10 @@
 ﻿using AutoFixture;
+using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Account.Dtos;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Providers;
+using PagSeguro.DotNet.Sdk.Common.Exceptions;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
@@ -37,6 +39,33 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
+        public async Task CreateAccountAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
+        {
+            AccountWriteDto accountWriteDto = CreateAccountWriteDto();
+            Settings.AccessToken = null;
+
+            Func<Task> task = async () => await Provider.CreateAccountAsync(accountWriteDto);
+
+            await task
+                .Should()
+                .ThrowAsync<ClientNotConnectedException>();
+        }
+
+        [Fact]
+        public async Task CreateAccountAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
+        {
+            AccountWriteDto accountWriteDto = CreateAccountWriteDto();
+            Settings.ClientId = null;
+            Settings.ClientSecret = null;
+
+            Func<Task> task = async () => await Provider.CreateAccountAsync(accountWriteDto);
+
+            await task
+                .Should()
+                .ThrowAsync<MissingClientApplicationException>();
+        }
+
+        [Fact]
         public async Task GetAccountByIdAsync_AccountIdIsValid_HttpRequestIsCreated()
         {
             string accountId = "accountId";
@@ -49,6 +78,18 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
                 .WithHeader(AccountHeaders.ClientToken, Settings.AccessToken)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
+        }
+
+        [Fact]
+        public async Task GetAccountByIdAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
+        {
+            Settings.AccessToken = null;
+
+            Func<Task> task = async () => await Provider.GetAccountByIdAsync(null);
+
+            await task
+                .Should()
+                .ThrowAsync<ClientNotConnectedException>();
         }
     }
 }

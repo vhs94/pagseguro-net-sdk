@@ -1,4 +1,5 @@
 ﻿using Flurl.Http;
+using PagSeguro.DotNet.Sdk.Common.Attributes;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
@@ -7,6 +8,7 @@ using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 
+[module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Connect.Providers
 {
     public class AuthorizationProvider : BaseProvider, IAuthorizationProvider
@@ -21,6 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
             _cryptoService = cryptoService;
         }
 
+        [ClientApplicationRequired]
         public async Task<AuthorizationCodeReadDto> CreateAccessTokenByCodeAsync(
             AuthorizationCodeWriteDto authorizationCodeWriteDto)
         {
@@ -39,6 +42,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                 .ReceiveJson<AuthorizationCodeReadDto>();
         }
 
+        [ClientApplicationRequired]
         public async Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync()
         {
             var challengeResult = await BaseUrl

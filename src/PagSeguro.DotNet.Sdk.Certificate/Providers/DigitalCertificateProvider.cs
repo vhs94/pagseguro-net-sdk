@@ -2,9 +2,11 @@
 using PagSeguro.DotNet.Sdk.Certificate.Dtos;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
+using PagSeguro.DotNet.Sdk.Common.Attributes;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 
+[module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Certificate.Providers
 {
     public class DigitalCertificateProvider : BaseProvider, IDigitalCertificateProvider
@@ -14,6 +16,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Providers
         {
         }
 
+        [ChallengeRequired]
         public async Task<CertificateReadDto> CreateCertificateAsync()
         {
             return await BaseUrl

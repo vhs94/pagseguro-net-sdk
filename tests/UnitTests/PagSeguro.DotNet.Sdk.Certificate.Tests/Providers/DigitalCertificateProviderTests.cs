@@ -1,6 +1,8 @@
-﻿using Flurl;
+﻿using FluentAssertions;
+using Flurl;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Providers;
+using PagSeguro.DotNet.Sdk.Common.Exceptions;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
@@ -23,6 +25,18 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
                 .WithHeader(CertificateHeaders.Challenge, Settings.Challenge)
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
+        }
+
+        [Fact]
+        public async Task CreateAccountAsync_ChallengeIsEmpty_ClientNotConnectedWithChallengeExceptionIsThrown()
+        {
+            Settings.Challenge = null;
+
+            Func<Task> task = Provider.CreateCertificateAsync;
+
+            await task
+                .Should()
+                .ThrowAsync<ClientNotConnectedWithChallengeException>();
         }
     }
 }

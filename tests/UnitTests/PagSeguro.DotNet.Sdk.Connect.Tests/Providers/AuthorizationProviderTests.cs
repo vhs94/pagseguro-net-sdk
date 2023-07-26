@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
+using FluentAssertions;
 using Flurl;
 using NSubstitute;
+using PagSeguro.DotNet.Sdk.Common.Exceptions;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
@@ -70,6 +72,19 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         }
 
         [Fact]
+        public async Task CreateAccessTokenByCodeAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
+        {
+            Settings.ClientId = null;
+            Settings.ClientSecret = null;
+
+            Func<Task> task = async () => await Provider.CreateAccessTokenByCodeAsync(null);
+
+            await task
+                .Should()
+                .ThrowAsync<MissingClientApplicationException>();
+        }
+
+        [Fact]
         public async Task CreateAccessTokenByChallengeAsync_PayloadIsValid_HttpRequestIsCreated()
         {
             await Provider.CreateAccessTokenByChallengeAsync();
@@ -108,6 +123,19 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             _cryptoServiceMock
                 .DidNotReceive()
                 .Decrypt(Arg.Any<string>());
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenByChallengeAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
+        {
+            Settings.ClientId = null;
+            Settings.ClientSecret = null;
+
+            Func<Task> task = Provider.CreateAccessTokenByChallengeAsync;
+
+            await task
+                .Should()
+                .ThrowAsync<MissingClientApplicationException>();
         }
     }
 }
