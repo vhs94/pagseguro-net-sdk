@@ -29,24 +29,16 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             _cryptoServiceMock = Substitute.For<ICryptoService>();
         }
 
-        protected override void SetupMocks()
-        {
-            HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
-                .RespondWithJson(CreateChallengeReadDto());
-        }
-
-        private ChallengeReadDto CreateChallengeReadDto()
-        {
-            return Fixture.Create<ChallengeReadDto>();
-        }
-
         [Fact]
         public async Task CreateAccessTokenByCodeAsync_PayloadIsValid_HttpRequestIsCreated()
         {
+            AuthorizationCodeReadDto authorizationCodeReadDto = CreateAuthorizationCodeReadDto();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .RespondWithJson(authorizationCodeReadDto);
             AuthorizationCodeWriteDto authorizationCode = CreateAuthorizationCodeWriteDto();
 
-            await Provider.CreateAccessTokenByCodeAsync(authorizationCode);
+            AuthorizationCodeReadDto result = await Provider.CreateAccessTokenByCodeAsync(authorizationCode);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
@@ -62,6 +54,14 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                     scope = authorizationCode.Scope.ToStringApiScopes()
                 })
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(authorizationCodeReadDto);
+        }
+
+        private AuthorizationCodeReadDto CreateAuthorizationCodeReadDto()
+        {
+            return Fixture.Create<AuthorizationCodeReadDto>();
         }
 
         private AuthorizationCodeWriteDto CreateAuthorizationCodeWriteDto()
@@ -87,7 +87,15 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         [Fact]
         public async Task CreateAccessTokenByChallengeAsync_PayloadIsValid_HttpRequestIsCreated()
         {
-            await Provider.CreateAccessTokenByChallengeAsync();
+            ChallengeReadDto challengeReadDto = CreateChallengeReadDto();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .RespondWithJson(challengeReadDto);
+            _cryptoServiceMock
+                .Decrypt(challengeReadDto.Challenge)
+                .Returns(challengeReadDto.DecryptedChallenge);
+
+            ChallengeReadDto result = await Provider.CreateAccessTokenByChallengeAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
@@ -101,16 +109,17 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                     scope = ApiScopes.CreateCertificate.ToDescription()
                 })
                 .Times(1);
-        }
-
-        [Fact]
-        public async Task CreateChallengeAsync_SettingsHasPrivateKey_ChallengeIsDecrypted()
-        {
-            ChallengeReadDto result = await Provider.CreateAccessTokenByChallengeAsync();
-
             _cryptoServiceMock
                 .Received(1)
                 .Decrypt(result.Challenge);
+            result
+                .Should()
+                .BeEquivalentTo(challengeReadDto);
+        }
+
+        private ChallengeReadDto CreateChallengeReadDto()
+        {
+            return Fixture.Create<ChallengeReadDto>();
         }
 
         [Fact]

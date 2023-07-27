@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Application;
@@ -9,17 +10,34 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
 {
     public class ApplicationProviderTests : BaseProviderTests<ApplicationProvider>
     {
+        private ApplicationReadDto _applicationReadDto;
+
         protected override ApplicationProvider CreateProvider()
         {
             return new ApplicationProvider(Settings);
         }
 
+        protected override void SetupMocks()
+        {
+            _applicationReadDto = CreateApplicationReadDto();
+            HttpTestMock
+                .ForCallsTo(
+                    Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application),
+                    Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, "*"))
+                .RespondWithJson(_applicationReadDto);
+        }
+
+        private ApplicationReadDto CreateApplicationReadDto()
+        {
+            return Fixture.Create<ApplicationReadDto>();
+        }
+
         [Fact]
         public async Task CreateApplicationAsync_ApplicationIsValid_HttpRequestIsCreated()
         {
-            var application = CreateApplication();
+            ApplicationWriteDto application = CreateApplication();
 
-            await Provider.CreateApplicationAsync(application);
+            ApplicationReadDto result = await Provider.CreateApplicationAsync(application);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application))
@@ -27,6 +45,9 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(application)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_applicationReadDto);
         }
 
         private ApplicationWriteDto CreateApplication()
@@ -37,15 +58,18 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         [Fact]
         public async Task GetApplicationAsync_ApplicationIdIsValid_HttpRequestIsCreated()
         {
-            var applicationId = "appId";
+            string applicationId = "appId";
 
-            await Provider.GetApplicationAsync(applicationId);
+            ApplicationReadDto result = await Provider.GetApplicationAsync(applicationId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, applicationId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_applicationReadDto);
         }
     }
 }

@@ -11,9 +11,36 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
 {
     public class AccountProviderTests : BaseProviderTests<AccountProvider>
     {
+        private CreatedAccountDto _createdAccountDto;
+        private AccountReadDto _accountReadDto;
+
         protected override AccountProvider CreateProvider()
         {
             return new AccountProvider(Settings);
+        }
+
+        protected override void SetupMocks()
+        {
+            _createdAccountDto = CreateCreatedAccountDto();
+            _accountReadDto = CreateAccountReadDto();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
+                .WithVerb(HttpMethod.Post)
+                .RespondWithJson(_createdAccountDto);
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, "*"))
+                .WithVerb(HttpMethod.Get)
+                .RespondWithJson(_accountReadDto);
+        }
+
+        private CreatedAccountDto CreateCreatedAccountDto()
+        {
+            return Fixture.Create<CreatedAccountDto>();
+        }
+
+        private AccountReadDto CreateAccountReadDto()
+        {
+            return Fixture.Create<AccountReadDto>();
         }
 
         [Fact]
@@ -21,7 +48,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         {
             AccountWriteDto accountWriteDto = CreateAccountWriteDto();
 
-            await Provider.CreateAccountAsync(accountWriteDto);
+            CreatedAccountDto result = await Provider.CreateAccountAsync(accountWriteDto);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
@@ -31,6 +58,15 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
                 .WithRequestJson(accountWriteDto)
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(
+                    _createdAccountDto,
+                    options => options.Excluding(f => f.Person.BirthDate));
+            result.Person.BirthDate
+                .Should()
+                .Be(_createdAccountDto.Person.BirthDate.Date);
+
         }
 
         private AccountWriteDto CreateAccountWriteDto()
@@ -70,7 +106,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         {
             string accountId = "accountId";
 
-            await Provider.GetAccountByIdAsync(accountId);
+            AccountReadDto result = await Provider.GetAccountByIdAsync(accountId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, accountId))
@@ -78,6 +114,14 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
                 .WithHeader(AccountHeaders.ClientToken, Settings.AccessToken)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(
+                    _accountReadDto,
+                    options => options.Excluding(f => f.Person.BirthDate));
+            result.Person.BirthDate
+                .Should()
+                .Be(_accountReadDto.Person.BirthDate.Date);
         }
 
         [Fact]

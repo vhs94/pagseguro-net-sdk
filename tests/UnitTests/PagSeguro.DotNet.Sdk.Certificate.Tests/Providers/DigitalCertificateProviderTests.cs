@@ -1,5 +1,7 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
 using Flurl;
+using PagSeguro.DotNet.Sdk.Certificate.Dtos;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Providers;
 using PagSeguro.DotNet.Sdk.Common.Exceptions;
@@ -9,15 +11,31 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
 {
     public class DigitalCertificateProviderTests : BaseProviderTests<DigitalCertificateProvider>
     {
+        private CertificateReadDto _certificateReadDto;
+
         protected override DigitalCertificateProvider CreateProvider()
         {
             return new DigitalCertificateProvider(Settings);
         }
 
+        protected override void SetupMocks()
+        {
+            _certificateReadDto = CreateCertificateReadDto();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
+                .WithVerb(HttpMethod.Post)
+                .RespondWithJson(_certificateReadDto);
+        }
+
+        private CertificateReadDto CreateCertificateReadDto()
+        {
+            return Fixture.Create<CertificateReadDto>();
+        }
+
         [Fact]
         public async Task CreateCertificateAsync_CertificateIsValid_HttpRequestIsCreated()
         {
-            await Provider.CreateCertificateAsync();
+            CertificateReadDto result = await Provider.CreateCertificateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
@@ -25,6 +43,9 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
                 .WithHeader(CertificateHeaders.Challenge, Settings.Challenge)
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_certificateReadDto);
         }
 
         [Fact]

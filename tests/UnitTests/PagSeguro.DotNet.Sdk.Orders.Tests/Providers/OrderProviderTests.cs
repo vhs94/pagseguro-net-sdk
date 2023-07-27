@@ -22,6 +22,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
             _orderReadDto = CreateOrderReadDto();
             HttpTestMock
                 .ForCallsTo(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .WithVerb(HttpMethod.Post)
                 .RespondWithJson(_orderReadDto);
         }
 

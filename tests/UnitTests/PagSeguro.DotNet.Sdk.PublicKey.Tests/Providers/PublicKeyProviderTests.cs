@@ -1,5 +1,8 @@
-﻿using Flurl;
+﻿using AutoFixture;
+using FluentAssertions;
+using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
+using PagSeguro.DotNet.Sdk.PublicKey.Dtos;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Providers;
 
@@ -7,15 +10,32 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
 {
     public class PublicKeyProviderTests : BaseProviderTests<PublicKeyProvider>
     {
+        private PublicKeyReadDto _publicKeyReadDto;
+
         protected override PublicKeyProvider CreateProvider()
         {
             return new PublicKeyProvider(Settings);
         }
 
+        protected override void SetupMocks()
+        {
+            _publicKeyReadDto = CreatePublicKeyReadDto();
+            HttpTestMock
+                .ForCallsTo(
+                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey),
+                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey, "*"))
+                .RespondWithJson(_publicKeyReadDto);
+        }
+
+        private PublicKeyReadDto CreatePublicKeyReadDto()
+        {
+            return Fixture.Create<PublicKeyReadDto>();
+        }
+
         [Fact]
         public async Task CreatePublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            await Provider.CreatePublicKeyAsync();
+            PublicKeyReadDto result = await Provider.CreatePublicKeyAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey))
@@ -26,12 +46,15 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                     type = "card"
                 })
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_publicKeyReadDto);
         }
 
         [Fact]
         public async Task UpdatePublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            await Provider.UpdatePublicKeyAsync();
+            PublicKeyReadDto result = await Provider.UpdatePublicKeyAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
@@ -41,12 +64,15 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Put)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_publicKeyReadDto);
         }
 
         [Fact]
         public async Task GetPublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            await Provider.GetPublicKeyAsync();
+            PublicKeyReadDto result = await Provider.GetPublicKeyAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
@@ -56,6 +82,9 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_publicKeyReadDto);
         }
     }
 }
