@@ -14,6 +14,8 @@ using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
+using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 using PagSeguro.DotNet.Sdk.Settings;
@@ -24,13 +26,15 @@ namespace PagSeguro.DotNet.Sdk
     {
         private ServiceCollection _services;
         private IServiceProvider _serviceProvider => _services.BuildServiceProvider();
-        private IMapper _mapper => _serviceProvider.GetService<IMapper>()!;
-        public virtual IAuthorizationProvider Authorization => _serviceProvider.GetService<IAuthorizationProvider>()!;
-        public virtual IApplicationProvider Application => _serviceProvider.GetService<IApplicationProvider>()!;
-        public virtual IAccountProvider Account => _serviceProvider.GetService<IAccountProvider>()!;
+        private IMapper _mapper => _serviceProvider.GetService<IMapper>();
+        public virtual IAuthorizationProvider Authorization => _serviceProvider.GetService<IAuthorizationProvider>();
+        public virtual IApplicationProvider Application => _serviceProvider.GetService<IApplicationProvider>();
+        public virtual IAccountProvider Account => _serviceProvider.GetService<IAccountProvider>();
         public virtual IDigitalCertificateProvider DigitalCertificate
-            => _serviceProvider.GetService<IDigitalCertificateProvider>()!;
-        public virtual IPublicKeyProvider PublicKey => _serviceProvider.GetService<IPublicKeyProvider>()!;
+            => _serviceProvider.GetService<IDigitalCertificateProvider>();
+        public virtual IPublicKeyProvider PublicKey => _serviceProvider.GetService<IPublicKeyProvider>();
+        public virtual IOrderProvider Order => _serviceProvider.GetService<IOrderProvider>();
+
         public PagSeguroSettings Settings { get; private set; }
 
         public PagSeguroClient(ClientSettings settings)
@@ -48,6 +52,7 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddCertificateClient();
             _services.AddAccountClient();
             _services.AddAPublicKeyClient();
+            _services.AddOrderClient();
             _services.AddAutoMapper(typeof(PagSeguroClient));
         }
 

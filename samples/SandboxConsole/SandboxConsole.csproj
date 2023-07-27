@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
     <ProjectReference Include="..\..\src\PagSeguro.DotNet.Sdk\PagSeguro.DotNet.Sdk.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="order.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,9 @@
-﻿using PagSeguro.DotNet.Sdk;
+﻿using Newtonsoft.Json;
+using PagSeguro.DotNet.Sdk;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
 using PagSeguro.DotNet.Sdk.Settings;
 
 var client = new PagSeguroClient(new ClientSettings
@@ -12,14 +14,17 @@ var client = new PagSeguroClient(new ClientSettings
     Environment = PagSeguroEnvironment.Sandbox
 });
 
-await client.ConnectAsync(new AuthorizationCodeWriteDto
-{
-    Code = "9dd62e730a844c179e018f58cc953796",
-    RedirectUri = "https://google.com",
-    Scope = ApiScopes.ReadAccounts
-});
+//await client.ConnectAsync(new AuthorizationCodeWriteDto
+//{
+//    Code = "9dd62e730a844c179e018f58cc953796",
+//    RedirectUri = "https://google.com",
+//    Scope = ApiScopes.ReadAccounts
+//});
+//var strOrder = File.ReadAllText("order.json");
+//var order = JsonConvert.DeserializeObject<OrderWriteDto>(strOrder);
 
-client.ConfigureClientApplication(null, null);
+//var result = await client.Order.CreateOrderAsync(order);
+//client.ConfigureClientApplication(null, null);
 var xpto = await client.Account.CreateAccountAsync(null);
 
 
