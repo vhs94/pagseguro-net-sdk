@@ -6,5 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces
     public interface IOrderProvider : IProvider
     {
         Task<OrderReadDto> CreateOrderAsync(OrderWriteDto orderWriteDto);
+        Task<OrderReadDto> GetOrderByIdAsync(string orderId);
     }
 }

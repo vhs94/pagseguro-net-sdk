@@ -23,5 +23,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers
                 .PostJsonAsync(orderWriteDto)
                 .ReceiveJson<OrderReadDto>();
         }
+
+        public async Task<OrderReadDto> GetOrderByIdAsync(string orderId)
+        {
+            return await BaseUrl
+                .AppendPathSegment(OrderEndpoint.Orders)
+                .AppendPathSegment(orderId)
+                .WithOAuthBearerToken(Settings.Token)
+                .GetJsonAsync<OrderReadDto>();
+        }
     }
 }

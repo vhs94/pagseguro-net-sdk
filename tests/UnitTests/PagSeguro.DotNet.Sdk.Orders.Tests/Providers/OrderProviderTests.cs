@@ -21,8 +21,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         {
             _orderReadDto = CreateOrderReadDto();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
-                .WithVerb(HttpMethod.Post)
+                .ForCallsTo(
+                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders),
+                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, "*"))
+                .WithVerb(HttpMethod.Post, HttpMethod.Get)
                 .RespondWithJson(_orderReadDto);
         }
 
@@ -53,6 +55,23 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         private OrderWriteDto CreateOrderWriteDto()
         {
             return Fixture.Create<OrderWriteDto>();
+        }
+
+        [Fact]
+        public async Task GetOrderByIdAsync_OrderIsValid_HttpRequestIsCreated()
+        {
+            string orderId = Guid.NewGuid().ToString();
+
+            OrderReadDto result = await Provider.GetOrderByIdAsync(orderId);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, orderId))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithVerb(HttpMethod.Get)
+                .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_orderReadDto);
         }
     }
 }
