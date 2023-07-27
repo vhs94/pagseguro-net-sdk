@@ -85,6 +85,7 @@ var certificate = await client.DigitalCertificate.CreateCertificateAsync();
 | Account   | Cria e consulta contas por Id |
 | DigitalCertificate   | Cria certificados digitais |
 | PublicKey   | Cria, atualiza e consulta public Keys por Id |
+| Orders   | Cria e consulta pedidos por Id |
 
 # Tests
 Todo o projeto está com alto nível de coverage. [click aqui](https://app.codecov.io/gh/vhs94/pagseguro-net-sdk) para mais detalhes.
