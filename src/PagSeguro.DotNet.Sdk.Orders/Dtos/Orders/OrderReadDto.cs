@@ -12,13 +12,15 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
         public ICollection<LinkDto> Links { get; set; }
         [JsonProperty("qr_codes")]
         public ICollection<QrCodeReadDto> QrCodes { get; set; }
-        public ICollection<ChargeDto> Charges { get; set; }
+        public ICollection<ChargeReadDto> Charges { get; set; }
+        public ICollection<ItemReadDto> Items { get; set; }
 
         public OrderReadDto()
         {
             Links = new List<LinkDto>();
             QrCodes = new List<QrCodeReadDto>();
-            Charges = new List<ChargeDto>();
+            Charges = new List<ChargeReadDto>();
+            Items = new List<ItemReadDto>();
         }
     }
 }

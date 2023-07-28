@@ -9,6 +9,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
         public static void AddOrderClient(this IServiceCollection services)
         {
             services.AddScoped<IOrderProvider, OrderProvider>();
+            services.AddScoped<IChargeProvider, ChargeProvider>();
         }
     }
 }

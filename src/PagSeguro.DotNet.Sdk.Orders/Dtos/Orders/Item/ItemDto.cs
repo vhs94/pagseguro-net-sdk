@@ -2,7 +2,7 @@
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 {
-    public class ItemDto
+    public abstract class ItemDto
     {
         [JsonProperty("reference_id")]
         public string ReferenceId { get; set; }

@@ -3,5 +3,8 @@
     public static class OrderEndpoint
     {
         public const string Orders = "/orders";
+        public const string Charges = "charges";
+        public const string Pay = "pay";
+        public const string Capture = "capture";
     }
 }

@@ -34,7 +34,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateApplicationAsync_OrderIsValid_HttpRequestIsCreated()
+        public async Task CreateOrderAsync_OrderIsValid_HttpRequestIsCreated()
         {
             OrderWriteDto orderWriteDto = CreateOrderWriteDto();
 
