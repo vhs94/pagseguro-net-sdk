@@ -1,38 +1,35 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <PackageId>$(AssemblyName)</PackageId>
-    <Title>PagSeguro DotNet SDK</Title>
-    <Authors>victor_santana09</Authors>
-    <Description>Client moderno para APIs PagSeguro</Description>
-    <PackageProjectUrl>https://github.com/vhs94/pagseguro-net-sdk</PackageProjectUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
-    <PackageTags>pagseguro;uol;pagbank;payment-gateway;payment;sdk;</PackageTags>
-    <AssemblyVersion></AssemblyVersion>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>$(AssemblyName)</PackageId>
+		<PackageVersion>1.5.0</PackageVersion>
+		<Title>PagSeguro DotNet SDK</Title>
+		<Authors>victor_santana09</Authors>
+		<Description>Client moderno para APIs PagSeguro</Description>
+		<PackageProjectUrl>https://github.com/vhs94/pagseguro-net-sdk</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
+		<PackageTags>pagseguro;uol;pagbank;payment-gateway;payment;sdk;</PackageTags>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Account\PagSeguro.DotNet.Sdk.Account.csproj" />
-    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Certificate\PagSeguro.DotNet.Sdk.Certificate.csproj" />
-    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Connect\PagSeguro.DotNet.Sdk.Connect.csproj" />
-    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
-    <ProjectReference Include="..\PagSeguro.DotNet.Sdk.PublicKey\PagSeguro.DotNet.Sdk.PublicKey.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="PagSeguro.DotNet.Sdk.Account" Version="1.5.0" />
+		<PackageReference Include="PagSeguro.DotNet.Sdk.Certificate" Version="1.5.0" />
+		<PackageReference Include="PagSeguro.DotNet.Sdk.Connect" Version="1.5.0" />
+		<PackageReference Include="PagSeguro.DotNet.Sdk.Orders" Version="1.5.0" />
+		<PackageReference Include="PagSeguro.DotNet.Sdk.PublicKey" Version="1.5.0" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+	</ItemGroup>
 
 </Project>

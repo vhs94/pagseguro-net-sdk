@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk;
-using PagSeguro.DotNet.Sdk.Common.Helpers;
+﻿using PagSeguro.DotNet.Sdk;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
 using PagSeguro.DotNet.Sdk.Settings;
 
 var client = new PagSeguroClient(new ClientSettings
