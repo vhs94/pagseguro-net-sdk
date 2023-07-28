@@ -34,6 +34,7 @@ namespace PagSeguro.DotNet.Sdk
             => _serviceProvider.GetService<IDigitalCertificateProvider>();
         public virtual IPublicKeyProvider PublicKey => _serviceProvider.GetService<IPublicKeyProvider>();
         public virtual IOrderProvider Order => _serviceProvider.GetService<IOrderProvider>();
+        public virtual IChargeProvider Charge => _serviceProvider.GetService<IChargeProvider>();
 
         public PagSeguroSettings Settings { get; private set; }
 

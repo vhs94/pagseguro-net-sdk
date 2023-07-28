@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName)</PackageId>
-		<PackageVersion>1.5.0</PackageVersion>
+		<PackageVersion>1.6.0</PackageVersion>
 		<Title>PagSeguro DotNet SDK</Title>
 		<Authors>victor_santana09</Authors>
 		<Description>Client moderno para APIs PagSeguro</Description>
@@ -26,7 +26,7 @@
 		<PackageReference Include="PagSeguro.DotNet.Sdk.Account" Version="1.5.0" />
 		<PackageReference Include="PagSeguro.DotNet.Sdk.Certificate" Version="1.5.0" />
 		<PackageReference Include="PagSeguro.DotNet.Sdk.Connect" Version="1.5.0" />
-		<PackageReference Include="PagSeguro.DotNet.Sdk.Orders" Version="1.5.0" />
+		<PackageReference Include="PagSeguro.DotNet.Sdk.Orders" Version="1.6.0" />
 		<PackageReference Include="PagSeguro.DotNet.Sdk.PublicKey" Version="1.5.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
