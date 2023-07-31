@@ -1,10 +1,7 @@
 ﻿using System.Net;
-using AutoFixture;
 using FluentAssertions;
 using Flurl.Http;
-using Newtonsoft.Json;
 using NSubstitute;
-using PagSeguro.DotNet.Sdk.Common.Dtos;
 using PagSeguro.DotNet.Sdk.Common.Exceptions;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Http;
 using PagSeguro.DotNet.Sdk.Common.Factories;
@@ -35,12 +32,8 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
             _response
                 .StatusCode
                 .Returns((int)HttpStatusCode.BadRequest);
-            BadRequestResponseDto badRequestBody = CreateBadRequestResponse();
-            _response
-                .GetStringAsync()
-                .Returns(JsonConvert.SerializeObject(badRequestBody));
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -54,12 +47,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .Be(HttpStatusCode.BadRequest);
             badRequestException.Response
                 .Should()
-                .BeEquivalentTo(badRequestBody);
-        }
-
-        private BadRequestResponseDto CreateBadRequestResponse()
-        {
-            return Fixture.Create<BadRequestResponseDto>();
+                .BeEquivalentTo(_responseBody);
         }
 
         [Fact]
@@ -69,7 +57,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.Conflict);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -93,7 +81,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.Forbidden);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -117,7 +105,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.InternalServerError);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -141,7 +129,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.NotAcceptable);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -165,7 +153,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.NotFound);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -189,7 +177,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.Unauthorized);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
@@ -213,19 +201,19 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
                 .StatusCode
                 .Returns((int)HttpStatusCode.BadGateway);
 
-            Exception httpException = await _factory.CreateHttpExceptionAsync(_response);
+            PagSeguroHttpException httpException = await _factory.CreateHttpExceptionAsync(_response);
 
             httpException
                 .Should()
-                .BeOfType<PagSeguroHttpException>();
-            var badGatewayException = (PagSeguroHttpException)httpException;
-            badGatewayException.Message
+                .BeOfType<UnknownHttpException>();
+            var unknownHttpException = (UnknownHttpException)httpException;
+            unknownHttpException.Message
                 .Should()
-                .Be(ErrorMessages.DefaultHttpExceptionMessage);
-            badGatewayException.StatusCode
+                .Be(ErrorMessages.UnkownHttpExceptionMessage);
+            unknownHttpException.StatusCode
                 .Should()
                 .Be(HttpStatusCode.BadGateway);
-            badGatewayException.Response
+            unknownHttpException.Response
                 .Should()
                 .BeEquivalentTo(_responseBody);
         }

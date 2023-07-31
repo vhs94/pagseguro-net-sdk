@@ -1,9 +1,10 @@
 ﻿using Flurl.Http;
+using PagSeguro.DotNet.Sdk.Common.Exceptions;
 
 namespace PagSeguro.DotNet.Sdk.Common.Interfaces
 {
     public interface IPagSeguroHttpExceptionFactory
     {
-        Task<Exception> CreateHttpExceptionAsync(IFlurlResponse response);
+        Task<PagSeguroHttpException> CreateHttpExceptionAsync(IFlurlResponse response);
     }
 }

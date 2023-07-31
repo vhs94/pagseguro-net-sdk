@@ -1,12 +1,11 @@
 ﻿using System.Net;
-using PagSeguro.DotNet.Sdk.Common.Dtos;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 
 namespace PagSeguro.DotNet.Sdk.Common.Exceptions
 {
-    public class BadRequestException : BasePagSeguroHttpException<BadRequestResponseDto>
+    public class BadRequestException : PagSeguroHttpException
     {
-        public BadRequestException(BadRequestResponseDto response)
+        public BadRequestException(string response)
             : base(
                   HttpStatusCode.BadRequest,
                   response,

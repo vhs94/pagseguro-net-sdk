@@ -1,15 +1,20 @@
 ﻿using System.Net;
 
-namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
+namespace PagSeguro.DotNet.Sdk.Common.Exceptions
 {
-    public class PagSeguroHttpException : BasePagSeguroHttpException<string>
+    public abstract class PagSeguroHttpException : Exception
     {
+        public string Response { get; }
+        public HttpStatusCode StatusCode { get; }
+
         public PagSeguroHttpException(
             HttpStatusCode statusCode,
             string response,
             string message = null)
-            : base(statusCode, response, message)
+            : base(message)
         {
+            Response = response;
+            StatusCode = statusCode;
         }
     }
 }

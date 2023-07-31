@@ -14,6 +14,6 @@
         public const string NotAcceptableExceptionMessage = "Server returned with HTTP 406 Not Acceptable. Check the used HTTP verb used.";
         public const string NotFoundExceptionMessage = "Server returned with HTTP 404 Not Found.";
         public const string UnauthorizedExceptionMessage = "Server returned with HTTP 401 Unauthorized.";
-        public const string DefaultHttpExceptionMessage = "Server returned with a HTTP Exception. Check the response for details.";
+        public const string UnkownHttpExceptionMessage = "Server returned with a HTTP Exception. Check the response for details.";
     }
 }
