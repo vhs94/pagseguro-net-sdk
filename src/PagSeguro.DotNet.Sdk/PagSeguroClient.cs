@@ -9,6 +9,8 @@ using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
+using PagSeguro.DotNet.Sdk.Common.Helpers;
+using PagSeguro.DotNet.Sdk.Common.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
@@ -30,11 +32,13 @@ namespace PagSeguro.DotNet.Sdk
         public virtual IAuthorizationProvider Authorization => _serviceProvider.GetService<IAuthorizationProvider>();
         public virtual IApplicationProvider Application => _serviceProvider.GetService<IApplicationProvider>();
         public virtual IAccountProvider Account => _serviceProvider.GetService<IAccountProvider>();
-        public virtual IDigitalCertificateProvider DigitalCertificate
-            => _serviceProvider.GetService<IDigitalCertificateProvider>();
         public virtual IPublicKeyProvider PublicKey => _serviceProvider.GetService<IPublicKeyProvider>();
         public virtual IOrderProvider Order => _serviceProvider.GetService<IOrderProvider>();
         public virtual IChargeProvider Charge => _serviceProvider.GetService<IChargeProvider>();
+        public virtual IDigitalCertificateProvider DigitalCertificate
+            => _serviceProvider.GetService<IDigitalCertificateProvider>();
+        private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory
+            => _serviceProvider.GetService<IPagSeguroHttpExceptionFactory>();
 
         public PagSeguroSettings Settings { get; private set; }
 
@@ -49,6 +53,7 @@ namespace PagSeguro.DotNet.Sdk
         private void CreateServiceCollection()
         {
             _services = new ServiceCollection();
+            _services.AddPagSeguroCommon();
             _services.AddConnectClient();
             _services.AddCertificateClient();
             _services.AddAccountClient();
@@ -66,7 +71,13 @@ namespace PagSeguro.DotNet.Sdk
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 };
                 settings.JsonSerializer = new NewtonsoftJsonSerializer(jsonSettings);
+                settings.OnErrorAsync = HandleExceptionAsync;
             });
+        }
+
+        private async Task HandleExceptionAsync(FlurlCall call)
+        {
+            throw await _pagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
         }
 
         private void MapSettings(ClientSettings settings)

@@ -9,5 +9,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces
         Task<OrderReadDto> ChargeOrderAsync(ChargeOrderDto chargeOrderDto);
         Task<ChargeReadDto> GetOrderChargeByIdAsync(string chargeId);
         Task<ChargeReadDto> CaptureChargeAsync(CaptureChargeDto captureChargeDto);
+        Task<ChargeReadDto> CancelChargeAsync(CancelChargeDto cancelChargeDto);
     }
 }

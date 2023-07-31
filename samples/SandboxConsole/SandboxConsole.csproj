@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PagSeguro.DotNet.Sdk" Version="1.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
+    <ProjectReference Include="..\..\src\PagSeguro.DotNet.Sdk\PagSeguro.DotNet.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -49,5 +49,20 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers
                 })
                 .ReceiveJson<ChargeReadDto>();
         }
+
+        public async Task<ChargeReadDto> CancelChargeAsync(CancelChargeDto cancelChargeDto)
+        {
+            return await BaseUrl
+                .AppendPathSegments(OrderEndpoint.Charges, cancelChargeDto.ChargeId, OrderEndpoint.Cancel)
+                .WithOAuthBearerToken(Settings.Token)
+                .PostJsonAsync(new
+                {
+                    amount = new
+                    {
+                        value = cancelChargeDto.AmountValue
+                    }
+                })
+                .ReceiveJson<ChargeReadDto>();
+        }
     }
 }

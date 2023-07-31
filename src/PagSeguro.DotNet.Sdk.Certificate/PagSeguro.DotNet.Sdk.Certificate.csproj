@@ -11,7 +11,10 @@
 		<PackageReference Include="Flurl.Http" Version="3.2.4" />
 		<PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="PagSeguro.DotNet.Sdk.Common" Version="1.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -6,5 +6,6 @@
         public const string Charges = "charges";
         public const string Pay = "pay";
         public const string Capture = "capture";
+        public const string Cancel = "cancel";
     }
 }

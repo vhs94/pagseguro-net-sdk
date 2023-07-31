@@ -124,5 +124,38 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         {
             return Fixture.Create<CaptureChargeDto>();
         }
+
+        [Fact]
+        public async Task CancelChargeAsync_ChargeIsValid_HttpRequestIsCreated()
+        {
+            CancelChargeDto cancelChargeDto = CreateCancelChargeDto();
+
+            ChargeReadDto result = await Provider.CancelChargeAsync(cancelChargeDto);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(
+                    Provider.BaseUrl,
+                    OrderEndpoint.Charges,
+                    cancelChargeDto.ChargeId,
+                    OrderEndpoint.Cancel))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithRequestJson(new
+                {
+                    amount = new
+                    {
+                        value = cancelChargeDto.AmountValue
+                    }
+                })
+                .WithVerb(HttpMethod.Post)
+                .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(_chargeReadDto);
+        }
+
+        private CancelChargeDto CreateCancelChargeDto()
+        {
+            return Fixture.Create<CancelChargeDto>();
+        }
     }
 }

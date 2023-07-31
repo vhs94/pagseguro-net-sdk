@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="PagSeguro.DotNet.Sdk.Common" Version="1.5.0" />
+		<PackageReference Include="NSubstitute" Version="5.0.0" />
 		<PackageReference Include="AutoFixture" Version="4.18.0" />
 		<PackageReference Include="FluentAssertions" Version="6.11.0" />
 		<PackageReference Include="Flurl.Http" Version="3.2.4" />
@@ -27,6 +27,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\src\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
 	</ItemGroup>
 
 </Project>

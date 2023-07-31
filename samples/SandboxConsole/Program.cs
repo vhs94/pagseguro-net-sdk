@@ -6,7 +6,7 @@ var client = new PagSeguroClient(new ClientSettings
 {
     ClientId = "8815a5e2-616b-4754-a6d1-40d92b71674c",
     ClientSecret = "45e5a4de-b8eb-4b78-9ce6-fad416b1953c",
-    Token = "BCABE5E7AA9D43BCBBB76E3C45C1567A",
+    //Token = "BCABE5E7AA9D43BCBBB76E3C45C1567A",
     Environment = PagSeguroEnvironment.Sandbox
 });
 
@@ -21,7 +21,7 @@ var client = new PagSeguroClient(new ClientSettings
 
 //var result = await client.Order.CreateOrderAsync(order);
 //client.ConfigureClientApplication(null, null);
-var xpto = await client.Account.CreateAccountAsync(null);
+var xpto = await client.Application.CreateApplicationAsync(null);
 
 
 Console.ReadKey();
