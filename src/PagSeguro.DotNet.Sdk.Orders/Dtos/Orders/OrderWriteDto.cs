@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 {

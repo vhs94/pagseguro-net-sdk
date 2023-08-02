@@ -1,4 +1,4 @@
-﻿namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges
+﻿namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount
 {
     public class ChargeAmountReadDto : ChargeAmountDto
     {

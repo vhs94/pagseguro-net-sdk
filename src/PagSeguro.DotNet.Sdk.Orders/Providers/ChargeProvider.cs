@@ -1,68 +1,43 @@
-﻿using Flurl.Http;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers
 {
     public class ChargeProvider : BaseProvider, IChargeProvider
     {
-        public ChargeProvider(PagSeguroSettings settings)
+        private readonly IServiceProvider _serviceProvider;
+
+        public ChargeProvider(
+            PagSeguroSettings settings,
+            IServiceProvider serviceProvider)
             : base(settings)
         {
+            _serviceProvider = serviceProvider;
         }
 
-        public async Task<OrderReadDto> ChargeOrderAsync(ChargeOrderDto chargeOrderDto)
+        public IGenericChargeProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> ForBankSlip()
         {
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Orders, chargeOrderDto.OrderId, OrderEndpoint.Pay)
-                .WithOAuthBearerToken(Settings.Token)
-                .PostJsonAsync(new
-                {
-                    charges = chargeOrderDto.Charges
-                })
-                .ReceiveJson<OrderReadDto>();
+            return _serviceProvider.GetService<IGenericChargeProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>>();
         }
 
-        public async Task<ChargeReadDto> GetOrderChargeByIdAsync(string chargeId)
+        public IGenericChargeProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto> ForCreditCard()
         {
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, chargeId)
-                .WithOAuthBearerToken(Settings.Token)
-                .GetJsonAsync<ChargeReadDto>();
+            return _serviceProvider.GetService<IGenericChargeProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto>>();
         }
 
-        public async Task<ChargeReadDto> CaptureChargeAsync(CaptureChargeDto captureChargeDto)
+        public IGenericChargeProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto> ForCreditCardWith3DsAuthCard()
         {
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, captureChargeDto.ChargeId, OrderEndpoint.Capture)
-                .WithOAuthBearerToken(Settings.Token)
-                .PostJsonAsync(new
-                {
-                    amount = new
-                    {
-                        value = captureChargeDto.AmountValue
-                    }
-                })
-                .ReceiveJson<ChargeReadDto>();
+            return _serviceProvider.GetService<IGenericChargeProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto>>();
         }
 
-        public async Task<ChargeReadDto> CancelChargeAsync(CancelChargeDto cancelChargeDto)
+        public IGenericChargeProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto> ForDebitCardWith3DsAuthCard()
         {
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, cancelChargeDto.ChargeId, OrderEndpoint.Cancel)
-                .WithOAuthBearerToken(Settings.Token)
-                .PostJsonAsync(new
-                {
-                    amount = new
-                    {
-                        value = cancelChargeDto.AmountValue
-                    }
-                })
-                .ReceiveJson<ChargeReadDto>();
+            return _serviceProvider.GetService<IGenericChargeProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto>>();
         }
     }
 }

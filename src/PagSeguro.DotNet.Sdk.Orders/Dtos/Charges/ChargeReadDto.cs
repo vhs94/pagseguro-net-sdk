@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges
 {

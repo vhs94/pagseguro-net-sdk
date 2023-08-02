@@ -4,7 +4,7 @@ using Flurl;
 using PagSeguro.DotNet.Sdk.Account.Dtos;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Providers;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers

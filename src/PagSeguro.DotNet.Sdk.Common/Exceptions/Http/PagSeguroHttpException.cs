@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace PagSeguro.DotNet.Sdk.Common.Exceptions
+namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
     public abstract class PagSeguroHttpException : Exception
     {

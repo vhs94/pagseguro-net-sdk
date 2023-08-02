@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 
-namespace PagSeguro.DotNet.Sdk.Common.Exceptions
+namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
     public class ConflictException : PagSeguroHttpException
     {

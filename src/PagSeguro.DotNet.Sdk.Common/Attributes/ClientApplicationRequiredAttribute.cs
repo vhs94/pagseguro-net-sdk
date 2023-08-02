@@ -1,4 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Exceptions;
+﻿using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 
 namespace PagSeguro.DotNet.Sdk.Common.Attributes
 {

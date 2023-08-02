@@ -1,6 +1,6 @@
 ﻿using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
 
-namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
+namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode
 {
     public class QrCodeReadDto : QrCodeDto
     {

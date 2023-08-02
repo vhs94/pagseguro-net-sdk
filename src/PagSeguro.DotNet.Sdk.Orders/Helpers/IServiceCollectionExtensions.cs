@@ -10,6 +10,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
         {
             services.AddScoped<IOrderProvider, OrderProvider>();
             services.AddScoped<IChargeProvider, ChargeProvider>();
+            services.AddScoped(typeof(IGenericChargeProvider<,>), typeof(GenericChargeProvider<,>));
         }
     }
 }
