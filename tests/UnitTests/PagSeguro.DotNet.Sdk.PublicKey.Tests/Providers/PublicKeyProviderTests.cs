@@ -33,9 +33,9 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
         }
 
         [Fact]
-        public async Task CreatePublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
+        public async Task CreateAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.CreatePublicKeyAsync();
+            PublicKeyReadDto result = await Provider.CreateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey))
@@ -52,9 +52,9 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
         }
 
         [Fact]
-        public async Task UpdatePublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
+        public async Task UpdateAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.UpdatePublicKeyAsync();
+            PublicKeyReadDto result = await Provider.UpdateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
@@ -70,9 +70,9 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
         }
 
         [Fact]
-        public async Task GetPublicKeyAsync_RequestIsValid_HttpRequestIsCreated()
+        public async Task GetAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.GetPublicKeyAsync();
+            PublicKeyReadDto result = await Provider.GetAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(

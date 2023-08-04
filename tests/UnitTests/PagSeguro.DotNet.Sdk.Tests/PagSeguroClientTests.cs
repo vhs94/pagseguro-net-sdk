@@ -31,11 +31,11 @@ namespace PagSeguro.DotNet.Sdk.Tests
             _authorizationCodeReadDto = CreateAuthorizationCodeReadDto();
             _challengeReadDto = CreateChallengeReadDto();
             _client
-                .Authorization
+                .ForAuthorization()
                 .CreateAccessTokenByCodeAsync(Arg.Any<AuthorizationCodeWriteDto>())
                 .Returns(_authorizationCodeReadDto);
             _client
-                .Authorization
+                .ForAuthorization()
                 .CreateAccessTokenByChallengeAsync()
                 .Returns(_challengeReadDto);
         }
@@ -57,7 +57,8 @@ namespace PagSeguro.DotNet.Sdk.Tests
 
             AuthorizationCodeReadDto result = await _client.ConnectAsync(writeDto);
 
-            await _client.Authorization
+            await _client
+                .ForAuthorization()
                 .Received(1)
                 .CreateAccessTokenByCodeAsync(writeDto);
             _client.Settings
@@ -78,7 +79,8 @@ namespace PagSeguro.DotNet.Sdk.Tests
         {
             await _client.ConnectChallengeAsync();
 
-            await _client.Authorization
+            await _client
+                .ForAuthorization()
                 .Received(1)
                 .CreateAccessTokenByChallengeAsync();
             _client.Settings

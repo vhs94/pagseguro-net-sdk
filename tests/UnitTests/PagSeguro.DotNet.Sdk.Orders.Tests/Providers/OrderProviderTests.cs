@@ -34,11 +34,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateOrderAsync_OrderIsValid_HttpRequestIsCreated()
+        public async Task CreateAsync_OrderIsValid_HttpRequestIsCreated()
         {
             OrderWriteDto orderWriteDto = CreateOrderWriteDto();
 
-            OrderReadDto result = await Provider.CreateOrderAsync(orderWriteDto);
+            OrderReadDto result = await Provider.CreateAsync(orderWriteDto);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
@@ -58,11 +58,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers
         }
 
         [Fact]
-        public async Task GetOrderByIdAsync_OrderIsValid_HttpRequestIsCreated()
+        public async Task GetByIdAsync_OrderIsValid_HttpRequestIsCreated()
         {
             string orderId = Guid.NewGuid().ToString();
 
-            OrderReadDto result = await Provider.GetOrderByIdAsync(orderId);
+            OrderReadDto result = await Provider.GetByIdAsync(orderId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, orderId))

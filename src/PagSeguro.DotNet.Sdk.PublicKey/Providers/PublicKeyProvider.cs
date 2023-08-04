@@ -14,7 +14,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
         {
         }
 
-        public async Task<PublicKeyReadDto> CreatePublicKeyAsync()
+        public async Task<PublicKeyReadDto> CreateAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
@@ -26,7 +26,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
                 .ReceiveJson<PublicKeyReadDto>();
         }
 
-        public async Task<PublicKeyReadDto> UpdatePublicKeyAsync()
+        public async Task<PublicKeyReadDto> UpdateAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
@@ -36,7 +36,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
                 .ReceiveJson<PublicKeyReadDto>();
         }
 
-        public async Task<PublicKeyReadDto> GetPublicKeyAsync()
+        public async Task<PublicKeyReadDto> GetAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)

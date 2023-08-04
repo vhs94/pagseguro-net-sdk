@@ -17,7 +17,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Providers
         }
 
         [ChallengeRequired]
-        public async Task<CertificateReadDto> CreateCertificateAsync()
+        public async Task<CertificateReadDto> CreateAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(CertificateEndpoints.Certificate)

@@ -10,12 +10,12 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
         /// Criar uma aplicação permite que você realize ações em nome dos usuários.
         /// <see href="https://dev.pagbank.uol.com.br/reference/criar-aplicacao">ler documentação</see>
         /// </summary>
-        Task<ApplicationReadDto> CreateApplicationAsync(ApplicationWriteDto applicationWriteDto);
+        Task<ApplicationReadDto> CreateAsync(ApplicationWriteDto applicationWriteDto);
 
         /// <summary>
         /// Este endpoint permite que você consulte detalhes de uma aplicação a partir do clientId
         /// <see href="https://dev.pagbank.uol.com.br/reference/consultar-aplicacao">ler documentação</see>
         /// </summary>
-        Task<ApplicationReadDto> GetApplicationAsync(string clientId);
+        Task<ApplicationReadDto> GetBydIdAsync(string clientId);
     }
 }
