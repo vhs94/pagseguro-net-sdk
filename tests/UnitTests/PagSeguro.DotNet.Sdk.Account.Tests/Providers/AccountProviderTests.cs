@@ -4,7 +4,7 @@ using Flurl;
 using PagSeguro.DotNet.Sdk.Account.Dtos;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Providers;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
@@ -44,11 +44,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateAccountAsync_AccountIdIsValid_HttpRequestIsCreated()
+        public async Task CreateAsync_AccountIdIsValid_HttpRequestIsCreated()
         {
             AccountWriteDto accountWriteDto = CreateAccountWriteDto();
 
-            CreatedAccountDto result = await Provider.CreateAccountAsync(accountWriteDto);
+            CreatedAccountDto result = await Provider.CreateAsync(accountWriteDto);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
@@ -75,12 +75,12 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateAccountAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
+        public async Task CreateAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
         {
             AccountWriteDto accountWriteDto = CreateAccountWriteDto();
             Settings.AccessToken = null;
 
-            Func<Task> task = async () => await Provider.CreateAccountAsync(accountWriteDto);
+            Func<Task> task = async () => await Provider.CreateAsync(accountWriteDto);
 
             await task
                 .Should()
@@ -88,13 +88,13 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateAccountAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
+        public async Task CreateAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
         {
             AccountWriteDto accountWriteDto = CreateAccountWriteDto();
             Settings.ClientId = null;
             Settings.ClientSecret = null;
 
-            Func<Task> task = async () => await Provider.CreateAccountAsync(accountWriteDto);
+            Func<Task> task = async () => await Provider.CreateAsync(accountWriteDto);
 
             await task
                 .Should()
@@ -102,11 +102,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task GetAccountByIdAsync_AccountIdIsValid_HttpRequestIsCreated()
+        public async Task GetByIdAsync_AccountIdIsValid_HttpRequestIsCreated()
         {
             string accountId = "accountId";
 
-            AccountReadDto result = await Provider.GetAccountByIdAsync(accountId);
+            AccountReadDto result = await Provider.GetByIdAsync(accountId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, accountId))
@@ -125,11 +125,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task GetAccountByIdAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
+        public async Task GetByIdAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
         {
             Settings.AccessToken = null;
 
-            Func<Task> task = async () => await Provider.GetAccountByIdAsync(null);
+            Func<Task> task = async () => await Provider.GetByIdAsync(null);
 
             await task
                 .Should()

@@ -1,5 +1,5 @@
 ﻿using Flurl.Http;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+using PagSeguro.DotNet.Sdk.Common.Exceptions.Http;
 
 namespace PagSeguro.DotNet.Sdk.Common.Interfaces
 {

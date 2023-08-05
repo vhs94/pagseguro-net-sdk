@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges
+namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Card
 {
     public class CardReadDto : CardDto
     {

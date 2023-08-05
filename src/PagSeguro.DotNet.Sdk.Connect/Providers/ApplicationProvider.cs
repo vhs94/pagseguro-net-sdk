@@ -14,7 +14,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
         {
         }
 
-        public async Task<ApplicationReadDto> CreateApplicationAsync(ApplicationWriteDto applicationWriteDto)
+        public async Task<ApplicationReadDto> CreateAsync(ApplicationWriteDto applicationWriteDto)
         {
             return await BaseUrl
                 .AppendPathSegment(ConnectEndpoints.Application)
@@ -23,7 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                 .ReceiveJson<ApplicationReadDto>();
         }
 
-        public async Task<ApplicationReadDto> GetApplicationAsync(string clientId)
+        public async Task<ApplicationReadDto> GetBydIdAsync(string clientId)
         {
             return await BaseUrl
                 .AppendPathSegment($"{ConnectEndpoints.Application}/{clientId}")

@@ -4,7 +4,7 @@ using Flurl;
 using PagSeguro.DotNet.Sdk.Certificate.Dtos;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Providers;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
@@ -33,9 +33,9 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateCertificateAsync_CertificateIsValid_HttpRequestIsCreated()
+        public async Task CreateAsync_CertificateIsValid_HttpRequestIsCreated()
         {
-            CertificateReadDto result = await Provider.CreateCertificateAsync();
+            CertificateReadDto result = await Provider.CreateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
@@ -49,11 +49,11 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateAccountAsync_ChallengeIsEmpty_ClientNotConnectedWithChallengeExceptionIsThrown()
+        public async Task CreateAsync_ChallengeIsEmpty_ClientNotConnectedWithChallengeExceptionIsThrown()
         {
             Settings.Challenge = null;
 
-            Func<Task> task = Provider.CreateCertificateAsync;
+            Func<Task> task = Provider.CreateAsync;
 
             await task
                 .Should()

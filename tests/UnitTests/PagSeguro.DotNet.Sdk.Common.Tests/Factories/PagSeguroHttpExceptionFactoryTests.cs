@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Flurl.Http;
 using NSubstitute;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Http;
 using PagSeguro.DotNet.Sdk.Common.Factories;
 using PagSeguro.DotNet.Sdk.Common.Helpers;

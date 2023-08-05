@@ -6,7 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Common
     {
         public string Street { get; set; }
         public string Number { get; set; }
-        public string Complement { get; set; }
         public string Locality { get; set; }
         public string City { get; set; }
         public string Region { get; set; }

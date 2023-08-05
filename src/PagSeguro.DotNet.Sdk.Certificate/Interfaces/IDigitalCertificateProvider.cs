@@ -5,6 +5,6 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Interfaces
 {
     public interface IDigitalCertificateProvider : IProvider
     {
-        Task<CertificateReadDto> CreateCertificateAsync();
+        Task<CertificateReadDto> CreateAsync();
     }
 }

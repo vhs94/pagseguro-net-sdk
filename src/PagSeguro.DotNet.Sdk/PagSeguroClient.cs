@@ -17,7 +17,8 @@ using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 using PagSeguro.DotNet.Sdk.Settings;
@@ -26,21 +27,26 @@ namespace PagSeguro.DotNet.Sdk
 {
     public class PagSeguroClient
     {
+        public PagSeguroSettings Settings { get; private set; }
         private ServiceCollection _services;
         private IServiceProvider _serviceProvider => _services.BuildServiceProvider();
         private IMapper _mapper => _serviceProvider.GetService<IMapper>();
-        public virtual IAuthorizationProvider Authorization => _serviceProvider.GetService<IAuthorizationProvider>();
-        public virtual IApplicationProvider Application => _serviceProvider.GetService<IApplicationProvider>();
-        public virtual IAccountProvider Account => _serviceProvider.GetService<IAccountProvider>();
-        public virtual IPublicKeyProvider PublicKey => _serviceProvider.GetService<IPublicKeyProvider>();
-        public virtual IOrderProvider Order => _serviceProvider.GetService<IOrderProvider>();
-        public virtual IChargeProvider Charge => _serviceProvider.GetService<IChargeProvider>();
-        public virtual IDigitalCertificateProvider DigitalCertificate
+        public virtual IAuthorizationProvider ForAuthorization()
+            => _serviceProvider.GetService<IAuthorizationProvider>();
+        public virtual IApplicationProvider ForApplication()
+            => _serviceProvider.GetService<IApplicationProvider>();
+        public virtual IAccountProvider ForAccount()
+            => _serviceProvider.GetService<IAccountProvider>();
+        public virtual IPublicKeyProvider ForPublicKey()
+            => _serviceProvider.GetService<IPublicKeyProvider>();
+        public virtual IOrderProvider ForOrder()
+            => _serviceProvider.GetService<IOrderProvider>();
+        public virtual IChargeProvider ForCharge()
+            => _serviceProvider.GetService<IChargeProvider>();
+        public virtual IDigitalCertificateProvider ForCertificate()
             => _serviceProvider.GetService<IDigitalCertificateProvider>();
         private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory
             => _serviceProvider.GetService<IPagSeguroHttpExceptionFactory>();
-
-        public PagSeguroSettings Settings { get; private set; }
 
         public PagSeguroClient(ClientSettings settings)
         {
@@ -94,8 +100,8 @@ namespace PagSeguro.DotNet.Sdk
         public async Task<AuthorizationCodeReadDto> ConnectAsync(
             AuthorizationCodeWriteDto authorizationCodeWriteDto)
         {
-            AuthorizationCodeReadDto result = await Authorization.CreateAccessTokenByCodeAsync(
-                authorizationCodeWriteDto);
+            AuthorizationCodeReadDto result = await ForAuthorization()
+                .CreateAccessTokenByCodeAsync(authorizationCodeWriteDto);
             Settings.AccessToken = result.AccessToken;
             ConfigureSettings();
             return result;
@@ -103,7 +109,8 @@ namespace PagSeguro.DotNet.Sdk
 
         public async Task ConnectChallengeAsync()
         {
-            ChallengeReadDto result = await Authorization.CreateAccessTokenByChallengeAsync();
+            ChallengeReadDto result = await ForAuthorization()
+                .CreateAccessTokenByChallengeAsync();
             Settings.AccessToken = result.AccessToken;
             Settings.Challenge = result.DecryptedChallenge;
             ConfigureSettings();

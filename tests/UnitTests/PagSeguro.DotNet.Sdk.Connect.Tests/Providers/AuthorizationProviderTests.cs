@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Flurl;
 using NSubstitute;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;

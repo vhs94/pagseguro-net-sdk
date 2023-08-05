@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
+namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item
 {
     public abstract class ItemDto
     {
