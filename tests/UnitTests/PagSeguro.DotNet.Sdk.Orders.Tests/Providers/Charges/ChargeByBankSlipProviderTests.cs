@@ -9,12 +9,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
     public class ChargeByBankSlipProviderTests : GenericChargeProviderTests<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
     {
-        private ChargeByBankSlipProvider _chargeByBankSlipProvider;
+        private ChargeByBankSlipProvider _chargeByBankSlipProviderMock;
 
         protected override GenericChargeProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> CreateProvider()
         {
-            _chargeByBankSlipProvider = new ChargeByBankSlipProvider(Settings);
-            return _chargeByBankSlipProvider;
+            _chargeByBankSlipProviderMock = new ChargeByBankSlipProvider(Settings);
+            return _chargeByBankSlipProviderMock;
         }
 
         protected override void AssertChargeResponse(
@@ -37,9 +37,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             BankSlipWriteDto bankSlipDto = CreateBankSlipWriteDto();
 
-            _chargeByBankSlipProvider.AddBankSlip(bankSlipDto);
+            _chargeByBankSlipProviderMock.AddBankSlip(bankSlipDto);
 
-            _chargeByBankSlipProvider
+            _chargeByBankSlipProviderMock
                 .Build()
                 .PaymentMethod
                 .BankSlip
@@ -56,9 +56,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             ChargeAmountWriteDto chargeAmountWriteDto = CreateChargeAmountWriteDto();
 
-            _chargeByBankSlipProvider.WithAmount(chargeAmountWriteDto);
+            _chargeByBankSlipProviderMock.WithAmount(chargeAmountWriteDto);
 
-            _chargeByBankSlipProvider
+            _chargeByBankSlipProviderMock
                 .Build()
                 .Amount
                 .Should().BeEquivalentTo(chargeAmountWriteDto);

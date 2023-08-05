@@ -1,4 +1,5 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Settings;
+﻿using AutoMapper;
+using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
@@ -10,8 +11,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             ChargeByDebitCardWith3DsAuthReadDto>,
         IDebitCardWith3DsAuthOrderProvider
     {
-        public DebitCardWith3DsAuthOrderProvider(PagSeguroSettings settings)
-            : base(settings)
+        public DebitCardWith3DsAuthOrderProvider(
+            PagSeguroSettings settings,
+            IMapper mapper)
+            : base(settings, mapper)
         {
         }
     }

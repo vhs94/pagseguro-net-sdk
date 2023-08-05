@@ -1,12 +1,10 @@
-﻿using Flurl.Http;
+﻿using AutoMapper;
+using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.ChargedOrder;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Shipping;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
@@ -18,11 +16,15 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         where TChargeReadDto : ChargeDto
     {
         private ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto;
+        private readonly IMapper _mapper;
 
-        public GenericOrderProvider(PagSeguroSettings settings)
+        public GenericOrderProvider(
+            PagSeguroSettings settings,
+            IMapper mapper)
             : base(settings)
         {
             InitOrder();
+            _mapper = mapper;
         }
 
         private void InitOrder()
@@ -45,66 +47,16 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             return this;
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithCustomer(CustomerDto customerDto)
+        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(
+            ChargedOrderWriteDto<TChargeWriteDto> chargedWriteDto)
         {
-            _chargedOrderWriteDto.Customer = customerDto;
+            _chargedOrderWriteDto = chargedWriteDto;
             return this;
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithItem(ItemWriteDto itemWriteDto)
+        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(OrderWriteDto orderWriteDto)
         {
-            _chargedOrderWriteDto.Items.Add(itemWriteDto);
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithItems(
-            ICollection<ItemWriteDto> itemWriteDtos)
-        {
-            List<ItemWriteDto> newItems = _chargedOrderWriteDto.Items.ToList();
-            newItems.AddRange(itemWriteDtos);
-            _chargedOrderWriteDto.Items = newItems;
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrl(string notificationUrl)
-        {
-            _chargedOrderWriteDto.NotificationUrls.Add(notificationUrl);
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrls(
-            ICollection<string> notificationUrls)
-        {
-            List<string> newNotificationUrls = _chargedOrderWriteDto.NotificationUrls.ToList();
-            newNotificationUrls.AddRange(notificationUrls);
-            _chargedOrderWriteDto.NotificationUrls = newNotificationUrls;
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithQrCode(QrCodeWriteDto qrCodeWriteDto)
-        {
-            _chargedOrderWriteDto.QrCodes.Add(qrCodeWriteDto);
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithQrCodes(
-            ICollection<QrCodeWriteDto> qrCodeWriteDtos)
-        {
-            List<QrCodeWriteDto> newQrCodes = _chargedOrderWriteDto.QrCodes.ToList();
-            newQrCodes.AddRange(qrCodeWriteDtos);
-            _chargedOrderWriteDto.QrCodes = newQrCodes;
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithReferenceId(string referenceId)
-        {
-            _chargedOrderWriteDto.ReferenceId = referenceId;
-            return this;
-        }
-
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithShipping(ShippingDto shippingDto)
-        {
-            _chargedOrderWriteDto.Shipping = shippingDto;
+            _chargedOrderWriteDto = _mapper.Map<ChargedOrderWriteDto<TChargeWriteDto>>(orderWriteDto);
             return this;
         }
 

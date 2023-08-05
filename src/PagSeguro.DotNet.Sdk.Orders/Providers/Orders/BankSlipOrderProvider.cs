@@ -1,4 +1,5 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Settings;
+﻿using AutoMapper;
+using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
@@ -10,8 +11,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             ChargeByBankSlipReadDto>,
         IBankSlipOrderProvider
     {
-        public BankSlipOrderProvider(PagSeguroSettings settings)
-            : base(settings)
+        public BankSlipOrderProvider(
+            PagSeguroSettings settings,
+            IMapper mapper)
+            : base(settings, mapper)
         {
         }
     }
