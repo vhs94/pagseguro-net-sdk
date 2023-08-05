@@ -11,6 +11,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrl(string notificationUrl);
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrls(ICollection<string> notificationUrls);
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithReferenceId(string referenceId);
+        TChargeWriteDto Build();
         Task<TChargeReadDto> ChargeAsync();
         Task<TChargeReadDto> GetByIdAsync(string chargeId);
         Task<TChargeReadDto> CaptureAsync(CaptureChargeDto captureChargeDto);

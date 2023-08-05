@@ -23,6 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
         IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithQrCodes(ICollection<QrCodeWriteDto> qrCodeWriteDtos);
         IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithReferenceId(string referenceId);
         IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> WithShipping(ShippingDto shippingDto);
+        ChargedOrderWriteDto<TChargeWriteDto> Build();
         Task<ChargedOrderReadDto<TChargeReadDto>> CreateAsync();
         Task<ChargedOrderReadDto<TChargeReadDto>> GetByIdAsync(string orderId);
         Task<ChargedOrderReadDto<TChargeReadDto>> PayAsync(string orderId);

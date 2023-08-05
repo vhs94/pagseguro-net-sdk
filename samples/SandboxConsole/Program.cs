@@ -50,9 +50,6 @@ var boleto = await client
     .WithNotificationUrl("https://yourserver.com/nas_ecommerce/277be731-3b7c-4dac-8c4e-4c3f4a1fdc46/")
     .WithReferenceId("ex0123")
     .WithDescription("ex0123")
-    .ChargeAsync(); ;
-
-
-
+    .ChargeAsync();
 
 Console.ReadLine();

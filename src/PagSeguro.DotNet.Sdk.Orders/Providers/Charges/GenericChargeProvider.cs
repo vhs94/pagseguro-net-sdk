@@ -12,10 +12,15 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
         where TChargeWriteDto : ChargeDto, new()
         where TChargeReadDto : ChargeDto
     {
-        protected TChargeWriteDto ChargeWriteDto { get; }
+        protected TChargeWriteDto ChargeWriteDto { get; private set; }
 
         public GenericChargeProvider(PagSeguroSettings settings)
             : base(settings)
+        {
+            InitCharge();
+        }
+
+        private void InitCharge()
         {
             ChargeWriteDto = new TChargeWriteDto();
         }
@@ -47,14 +52,23 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
             return this;
         }
 
+        public TChargeWriteDto Build()
+        {
+            TChargeWriteDto charge = ChargeWriteDto;
+            InitCharge();
+            return charge;
+        }
+
         public async Task<TChargeReadDto> ChargeAsync()
         {
-            return await BaseUrl
+            TChargeReadDto chargeReadDto = await BaseUrl
                 .AppendPathSegments(OrderEndpoint.Charges)
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(OrderHeaders.IdempotencyKey, Guid.NewGuid())
                 .PostJsonAsync(ChargeWriteDto)
                 .ReceiveJson<TChargeReadDto>();
+            InitCharge();
+            return chargeReadDto;
         }
 
         public async Task<TChargeReadDto> GetByIdAsync(string chargeId)

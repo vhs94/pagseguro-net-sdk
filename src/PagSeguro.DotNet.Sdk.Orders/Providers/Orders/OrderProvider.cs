@@ -2,9 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
@@ -42,24 +39,24 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
                 .GetJsonAsync<OrderReadDto>();
         }
 
-        public IGenericOrderProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> WithBankSlip()
+        public IBankSlipOrderProvider WithBankSlip()
         {
-            return _serviceProvider.GetService<IGenericOrderProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>>();
+            return _serviceProvider.GetService<IBankSlipOrderProvider>();
         }
 
-        public IGenericOrderProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto> WithCreditCard()
+        public ICreditCardOrderProvider WithCreditCard()
         {
-            return _serviceProvider.GetService<IGenericOrderProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto>>();
+            return _serviceProvider.GetService<ICreditCardOrderProvider>();
         }
 
-        public IGenericOrderProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto> WithCreditCardAnd3DsAuthentication()
+        public ICreditCardWith3DsAuthOrderProvider WithCreditCardAnd3DsAuthentication()
         {
-            return _serviceProvider.GetService<IGenericOrderProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto>>();
+            return _serviceProvider.GetService<ICreditCardWith3DsAuthOrderProvider>();
         }
 
-        public IGenericOrderProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto> WithDebitCardAnd3DsAuthentication()
+        public IDebitCardWith3DsAuthOrderProvider WithDebitCardAnd3DsAuthentication()
         {
-            return _serviceProvider.GetService<IGenericOrderProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto>>();
+            return _serviceProvider.GetService<IDebitCardWith3DsAuthOrderProvider>();
         }
     }
 }

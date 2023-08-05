@@ -16,7 +16,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
             services.AddTransient<IChargeByCreditCardProvider, ChargeByCreditCardProvider>();
             services.AddTransient<IChargeByCreditCardWith3DsAuthProvider, ChargeByCreditCardWith3DsAuthProvider>();
             services.AddTransient<IChargeByDebitCardWith3DsAuthProvider, ChargeByDebitCardWith3DsAuthProvider>();
-            services.AddTransient(typeof(IGenericOrderProvider<,>), typeof(GenericOrderProvider<,>));
+            services.AddTransient<IBankSlipOrderProvider, BankSlipOrderProvider>();
+            services.AddTransient<ICreditCardOrderProvider, CreditCardOrderProvider>();
+            services.AddTransient<ICreditCardWith3DsAuthOrderProvider, CreditCardWith3DsAuthOrderProvider>();
+            services.AddTransient<IDebitCardWith3DsAuthOrderProvider, DebitCardWith3DsAuthOrderProvider>();
         }
     }
 }

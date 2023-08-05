@@ -12,15 +12,20 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
-    public class GenericOrderProvider<TChargeWriteDto, TChargeReadDto> : BaseProvider,
+    public abstract class GenericOrderProvider<TChargeWriteDto, TChargeReadDto> : BaseProvider,
         IGenericOrderProvider<TChargeWriteDto, TChargeReadDto>
         where TChargeWriteDto : ChargeDto
         where TChargeReadDto : ChargeDto
     {
-        private readonly ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto;
+        private ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto;
 
         public GenericOrderProvider(PagSeguroSettings settings)
             : base(settings)
+        {
+            InitOrder();
+        }
+
+        private void InitOrder()
         {
             _chargedOrderWriteDto = new ChargedOrderWriteDto<TChargeWriteDto>();
         }
@@ -103,14 +108,23 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             return this;
         }
 
+        public ChargedOrderWriteDto<TChargeWriteDto> Build()
+        {
+            ChargedOrderWriteDto<TChargeWriteDto> order = _chargedOrderWriteDto;
+            InitOrder();
+            return order;
+        }
+
         public async Task<ChargedOrderReadDto<TChargeReadDto>> CreateAsync()
         {
-            return await BaseUrl
+            var orderReadDto = await BaseUrl
                 .AppendPathSegment(OrderEndpoint.Orders)
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(OrderHeaders.IdempotencyKey, Guid.NewGuid())
                 .PostJsonAsync(_chargedOrderWriteDto)
                 .ReceiveJson<ChargedOrderReadDto<TChargeReadDto>>();
+            InitOrder();
+            return orderReadDto;
         }
 
         public async Task<ChargedOrderReadDto<TChargeReadDto>> GetByIdAsync(string orderId)
@@ -124,7 +138,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 
         public async Task<ChargedOrderReadDto<TChargeReadDto>> PayAsync(string orderId)
         {
-            return await BaseUrl
+            var orderReadtDto = await BaseUrl
                 .AppendPathSegments(OrderEndpoint.Orders, orderId, OrderEndpoint.Pay)
                 .WithOAuthBearerToken(Settings.Token)
                 .PostJsonAsync(new
@@ -132,6 +146,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
                     charges = _chargedOrderWriteDto.Charges
                 })
                 .ReceiveJson<ChargedOrderReadDto<TChargeReadDto>>();
+            InitOrder();
+            return orderReadtDto;
         }
     }
 }
