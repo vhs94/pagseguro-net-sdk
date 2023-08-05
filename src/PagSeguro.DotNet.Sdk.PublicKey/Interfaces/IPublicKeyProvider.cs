@@ -5,8 +5,8 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Interfaces
 {
     public interface IPublicKeyProvider : IProvider
     {
-        Task<PublicKeyReadDto> CreatePublicKeyAsync();
-        Task<PublicKeyReadDto> UpdatePublicKeyAsync();
-        Task<PublicKeyReadDto> GetPublicKeyAsync();
+        Task<PublicKeyReadDto> CreateAsync();
+        Task<PublicKeyReadDto> UpdateAsync();
+        Task<PublicKeyReadDto> GetAsync();
     }
 }

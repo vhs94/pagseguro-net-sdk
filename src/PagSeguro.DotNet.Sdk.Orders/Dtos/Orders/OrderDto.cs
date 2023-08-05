@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Shipping;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 {

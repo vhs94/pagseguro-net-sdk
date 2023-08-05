@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 {
@@ -12,14 +13,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
         public ICollection<LinkDto> Links { get; set; }
         [JsonProperty("qr_codes")]
         public ICollection<QrCodeReadDto> QrCodes { get; set; }
-        public ICollection<ChargeReadDto> Charges { get; set; }
         public ICollection<ItemReadDto> Items { get; set; }
 
         public OrderReadDto()
         {
             Links = new List<LinkDto>();
             QrCodes = new List<QrCodeReadDto>();
-            Charges = new List<ChargeReadDto>();
             Items = new List<ItemReadDto>();
         }
     }

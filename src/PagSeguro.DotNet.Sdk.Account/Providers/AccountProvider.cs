@@ -18,7 +18,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Providers
 
         [AccessTokenRequired]
         [ClientApplicationRequired]
-        public async Task<CreatedAccountDto> CreateAccountAsync(AccountWriteDto accountWriteDto)
+        public async Task<CreatedAccountDto> CreateAsync(AccountWriteDto accountWriteDto)
         {
             return await BaseUrl
                 .AppendPathSegment(AccountEndpoints.Account)
@@ -30,7 +30,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Providers
         }
 
         [AccessTokenRequired]
-        public async Task<AccountReadDto> GetAccountByIdAsync(string accountId)
+        public async Task<AccountReadDto> GetByIdAsync(string accountId)
         {
             return await BaseUrl
                 .AppendPathSegment(AccountEndpoints.Account)

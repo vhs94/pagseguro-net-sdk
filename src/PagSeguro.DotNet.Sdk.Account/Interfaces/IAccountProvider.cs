@@ -5,7 +5,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Interfaces
 {
     public interface IAccountProvider : IProvider
     {
-        Task<CreatedAccountDto> CreateAccountAsync(AccountWriteDto accountWriteDto);
-        Task<AccountReadDto> GetAccountByIdAsync(string accountId);
+        Task<CreatedAccountDto> CreateAsync(AccountWriteDto accountWriteDto);
+        Task<AccountReadDto> GetByIdAsync(string accountId);
     }
 }
