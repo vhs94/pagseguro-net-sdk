@@ -5,10 +5,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName)</PackageId>
-		<PackageVersion>1.6.0</PackageVersion>
+		<PackageVersion>3.0.0</PackageVersion>
 		<Title>PagSeguro DotNet SDK</Title>
 		<Authors>victor_santana09</Authors>
-		<Description>Client moderno para APIs PagSeguro</Description>
+		<Description>Fluent Client para APIs PagSeguro</Description>
 		<PackageProjectUrl>https://github.com/vhs94/pagseguro-net-sdk</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
