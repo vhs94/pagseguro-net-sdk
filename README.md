@@ -2,10 +2,17 @@ Client moderno para APIs PagSeguro
 
 [![codecov](https://codecov.io/gh/vhs94/pagseguro-net-sdk/branch/main/graph/badge.svg?token=DBC135AXUC)](https://codecov.io/gh/vhs94/pagseguro-net-sdk)
 
-# Install
 
+## Install
+
+* **Package Manager Console (Visual Studio)**
 ```sh
-dotnet add package PagSeguro.DotNet.Sdk 
+Install-Package PagSeguro.DotNet.Sdk
+```
+
+* **dotnet cli**
+```sh
+dotnet add package PagSeguro.DotNet.Sdk
 ```
 
 # Como usar
@@ -18,80 +25,36 @@ var client = new PagSeguroClient(new ClientSettings
     Token = "<SEU_TOKEN>"
 });
 ```
-- Use os providers disponiveis para manipular as APIs
+- Use as fluent interfaces para manipular as APIs, ver todas as opções disponíveis [veja a Wiki.]()
 
 ```csharp
-var application = await client.Application.GetApplicationAsync("123");
+var creditCardOrder = await client
+    .ForOrder()
+    .WithReferenceId("ref-id")
+    .WithNotificationUrl("https://my.url")
+    .WithCreditCard()
+    .AddCharge(new ChargeByCreditCardWriteDto())
+    .CreateAsync();
 ```
+# Unit Testing
 
-## Autenticação
-O Client já faz a gestão da autenticação, realizando descriptografia de challenge inclusive. Podemos trabalhar de duas formas:
-
-### Connect AuthorizationCode
-Este tipo de conexão é o mais comum
-
-- Crie e conecte a instância
-```csharp
-var client = new PagSeguroClient(new ClientSettings
-{
-    Token = "<SEU_TOKEN>",
-    ClientId = "<SEU_CLIENT_ID>",
-    ClientSecret = "<SEU_CLIENT_SECRET>"
-});
-
-await client.ConnectAsync(new AuthorizationCodeWriteDto
-{
-    Code = "<CODIGO_REDIRECIONADO_URL>",
-    RedirectUri = "<URL_REDIRECIONAMENTO>",
-    Scope = ApiScopes.ReadAccounts //se omitido, utiliza todos os scopes
-});
-```
-- Com o client conectado, agora é possível utilizar as APIs autenticadas
+Compatível com Mocking frameworks como NSubstitute ou Moq. Devido ao design usando fluent interfaces, proporciona alta testabilidade.
 
 ```csharp
-var account = await client.Account.GetAccountByIdAsync("accountId");
+    [Fact]
+    public async Task ForOrder_GetByIdAsync_GetByIdAsyncIsCalledWithId()
+    {
+        var clientMock = Substitute.For<PagSeguroClient>(new ClientSettings());
+        string orderId = "order-id";
+
+        await clientMock
+            .ForOrder()
+            .GetByIdAsync(orderId);
+
+        await clientMock
+            .Received(1)
+            .ForOrder()
+            .GetByIdAsync(orderId);
+    }
 ```
 
-### Connect Challenge
-
-O Challenge é usado apenas no fluxo de criação de certificados digitais.
-
-- Crie a instância e solicite o challenge
-
-```csharp
-var client = new PagSeguroClient(new ClientSettings
-{
-    Token = "<SEU_TOKEN>",
-    ClientId = "<SEU_CLIENT_ID>",
-    ClientSecret = "<SEU_CLIENT_SECRET>",
-    PrivateKey = "<SUA_PRIVATE_KEY>" // private key usada para descriptografar o challenge
-});
-
-await client.ConnectChallengeAsync();
-```
-
-- Com o client conectado,agora é possível criar certificados
-
-```csharp
-var certificate = await client.DigitalCertificate.CreateCertificateAsync();
-```
-
-# Fluxos Disponíveis
-
-| Fluxo | Features |
-|----------|----------|
-| Connect Authorization   |  Obter access token (authorization_code e challenge)  |
-| Application   | Cria e consulta aplicações por Id |
-| Account   | Cria e consulta contas por Id |
-| DigitalCertificate   | Cria certificados digitais |
-| PublicKey   | Cria, atualiza e consulta public Keys por Id |
-| Orders   | Cria e consulta pedidos por Id |
-
-# Tests
-Todo o projeto está com alto nível de coverage. [click aqui](https://app.codecov.io/gh/vhs94/pagseguro-net-sdk) para mais detalhes.
-
-# Roadmap
-
-- Disponibilizar mais fluxos
-- Disponibilizar middlewares para a utilização com Dependency Injection
-- Integration Tests com sandbox para alertar possíveis mudanças feitas pelo time do pagseguro
