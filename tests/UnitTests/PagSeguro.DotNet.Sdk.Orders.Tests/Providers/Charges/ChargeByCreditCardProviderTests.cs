@@ -9,12 +9,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
     public class ChargeByCreditCardProviderTests : GenericChargeProviderTests<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto>
     {
-        private ChargeByCreditCardProvider _chargeByCreditCardProvider;
+        private ChargeByCreditCardProvider _chargeByCreditCardProviderMock;
         
         protected override GenericChargeProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto> CreateProvider()
         {
-            _chargeByCreditCardProvider = new ChargeByCreditCardProvider(Settings);
-            return _chargeByCreditCardProvider;
+            _chargeByCreditCardProviderMock = new ChargeByCreditCardProvider(Settings);
+            return _chargeByCreditCardProviderMock;
         }
 
         [Fact]
@@ -22,9 +22,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             CreditCardPaymentMethodWriteDto paymentMethodWriteDto = CreateCreditCardPaymentMethodWriteDto();
 
-            _chargeByCreditCardProvider.AddPaymentMethod(paymentMethodWriteDto);
+            _chargeByCreditCardProviderMock.AddPaymentMethod(paymentMethodWriteDto);
 
-            _chargeByCreditCardProvider
+            _chargeByCreditCardProviderMock
                 .Build()
                 .PaymentMethod
                 .Should().BeEquivalentTo(paymentMethodWriteDto);
@@ -40,9 +40,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             ChargeAmountWriteDto chargeAmountWriteDto = CreateChargeAmountWriteDto();
 
-            _chargeByCreditCardProvider.WithAmount(chargeAmountWriteDto);
+            _chargeByCreditCardProviderMock.WithAmount(chargeAmountWriteDto);
 
-            _chargeByCreditCardProvider
+            _chargeByCreditCardProviderMock
                 .Build()
                 .Amount
                 .Should().BeEquivalentTo(chargeAmountWriteDto);
@@ -53,9 +53,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             IDictionary<string, string> metadata = CreateMetadata();
 
-            _chargeByCreditCardProvider.WithMetadata(metadata);
+            _chargeByCreditCardProviderMock.WithMetadata(metadata);
 
-            _chargeByCreditCardProvider
+            _chargeByCreditCardProviderMock
                 .Build()
                 .Metadata
                 .Should().BeEquivalentTo(metadata);

@@ -12,12 +12,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             ChargeByDebitCardWith3DsAuthWriteDto,
             ChargeByDebitCardWith3DsAuthReadDto>
     {
-        private ChargeByDebitCardWith3DsAuthProvider _chargeByDebitCardWith3DsAuthProvider;
+        private ChargeByDebitCardWith3DsAuthProvider _chargeByDebitCardWith3DsAuthProviderMock;
 
         protected override GenericChargeProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto> CreateProvider()
         {
-            _chargeByDebitCardWith3DsAuthProvider = new ChargeByDebitCardWith3DsAuthProvider(Settings);
-            return _chargeByDebitCardWith3DsAuthProvider;
+            _chargeByDebitCardWith3DsAuthProviderMock = new ChargeByDebitCardWith3DsAuthProvider(Settings);
+            return _chargeByDebitCardWith3DsAuthProviderMock;
         }
 
         [Fact]
@@ -25,9 +25,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             DebitCardWith3DsAuthPaymentMethodWriteDto paymentMethodWriteDto = CreateDebitCardWith3DsAuthPaymentMethodWriteDto();
 
-            _chargeByDebitCardWith3DsAuthProvider.AddPaymentMethod(paymentMethodWriteDto);
+            _chargeByDebitCardWith3DsAuthProviderMock.AddPaymentMethod(paymentMethodWriteDto);
 
-            _chargeByDebitCardWith3DsAuthProvider
+            _chargeByDebitCardWith3DsAuthProviderMock
                 .Build()
                 .PaymentMethod
                 .Should().BeEquivalentTo(paymentMethodWriteDto);
@@ -43,9 +43,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             ChargeAmountWriteDto chargeAmountWriteDto = CreateChargeAmountWriteDto();
 
-            _chargeByDebitCardWith3DsAuthProvider.WithAmount(chargeAmountWriteDto);
+            _chargeByDebitCardWith3DsAuthProviderMock.WithAmount(chargeAmountWriteDto);
 
-            _chargeByDebitCardWith3DsAuthProvider
+            _chargeByDebitCardWith3DsAuthProviderMock
                 .Build()
                 .Amount
                 .Should().BeEquivalentTo(chargeAmountWriteDto);
@@ -56,9 +56,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             IDictionary<string, string> metadata = CreateMetadata();
 
-            _chargeByDebitCardWith3DsAuthProvider.WithMetadata(metadata);
+            _chargeByDebitCardWith3DsAuthProviderMock.WithMetadata(metadata);
 
-            _chargeByDebitCardWith3DsAuthProvider
+            _chargeByDebitCardWith3DsAuthProviderMock
                 .Build()
                 .Metadata
                 .Should().BeEquivalentTo(metadata);

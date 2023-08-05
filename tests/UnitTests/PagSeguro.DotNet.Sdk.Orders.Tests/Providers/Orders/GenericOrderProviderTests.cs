@@ -1,13 +1,12 @@
 ﻿using AutoFixture;
+using AutoMapper;
 using FluentAssertions;
 using Flurl;
+using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.ChargedOrder;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Shipping;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 
@@ -19,21 +18,38 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         where TChargeReadDto : ChargeDto
     {
         private ChargedOrderReadDto<TChargeReadDto> _orderReadDto;
+        private ChargedOrderWriteDto<TChargeWriteDto> _orderWriteDto;
+
+        public IMapper MapperMock { get; private set; }
+
+        protected override void CreateMocks()
+        {
+            MapperMock = Substitute.For<IMapper>();
+        }
 
         protected override void SetupMocks()
         {
             _orderReadDto = CreateOrderReadDto();
+            _orderWriteDto = CreateOrderWriteDto();
             HttpTestMock
                 .ForCallsTo(
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders),
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, "*"))
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
                 .RespondWithJson(_orderReadDto);
+            MapperMock
+                .Map<ChargedOrderWriteDto<TChargeWriteDto>>(Arg.Any<OrderWriteDto>())
+                .Returns(_orderWriteDto);
         }
 
         private ChargedOrderReadDto<TChargeReadDto> CreateOrderReadDto()
         {
             return Fixture.Create<ChargedOrderReadDto<TChargeReadDto>>();
+        }
+
+        private ChargedOrderWriteDto<TChargeWriteDto> CreateOrderWriteDto()
+        {
+            return Fixture.Create<ChargedOrderWriteDto<TChargeWriteDto>>();
         }
 
         [Fact]
@@ -72,171 +88,48 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         }
 
         [Fact]
-        public void WithCustomer_CustomerIsValid_CustomerIsSet()
-        {
-            CustomerDto customerDto = CreateCustomerDto();
-
-            Provider.WithCustomer(customerDto);
-
-            Provider.Build()
-                .Customer
-                .Should()
-                .BeEquivalentTo(customerDto);
-        }
-
-        private CustomerDto CreateCustomerDto()
-        {
-            return Fixture.Create<CustomerDto>();
-        }
-
-        [Fact]
-        public void WithItem_ItemIsValid_ItemIsSet()
-        {
-            ItemWriteDto itemWriteDto = CreateItemWriteDto();
-
-            Provider.WithItem(itemWriteDto);
-
-            Provider.Build()
-                .Items
-                .Should()
-                .BeEquivalentTo(new List<ItemWriteDto>() { itemWriteDto });
-        }
-
-        private ItemWriteDto CreateItemWriteDto()
-        {
-            return Fixture.Create<ItemWriteDto>();
-        }
-
-        [Fact]
-        public void WithItems_ItemIsValid_ItemIsSet()
-        {
-            ItemWriteDto itemWriteDto = CreateItemWriteDto();
-            var items = new List<ItemWriteDto>()
-            {
-                itemWriteDto
-            };
-
-            Provider.WithItems(items);
-
-            Provider.Build()
-                .Items
-                .Should()
-                .BeEquivalentTo(new List<ItemWriteDto>() { itemWriteDto });
-        }
-
-        [Fact]
-        public void WithNotificationUrl_UrlIsValid_UrlIsSet()
-        {
-            string notificationUrl = "http://google.com";
-
-            Provider.WithNotificationUrl(notificationUrl);
-
-            Provider.Build()
-                .NotificationUrls
-                .Should()
-                .BeEquivalentTo(new List<string>() { notificationUrl });
-        }
-
-        [Fact]
-        public void WithNotificationUrls_UrlIsValid_UrlIsSet()
-        {
-            string notificationUrl = "http://google.com";
-            var notificationUrls = new List<string>()
-            {
-                notificationUrl
-            };
-
-            Provider.WithNotificationUrls(notificationUrls);
-
-            Provider.Build()
-                .NotificationUrls
-                .Should()
-                .BeEquivalentTo(notificationUrls);
-        }
-
-        [Fact]
-        public void WithQrCode_QrCodeIsValid_QrCodeIsSet()
-        {
-            QrCodeWriteDto qrCodeWriteDto = CreateQrCodeWriteDto();
-
-            Provider.WithQrCode(qrCodeWriteDto);
-
-            Provider.Build()
-                .QrCodes
-                .Should()
-                .BeEquivalentTo(new List<QrCodeWriteDto>() { qrCodeWriteDto });
-        }
-
-        private QrCodeWriteDto CreateQrCodeWriteDto()
-        {
-            return Fixture.Create<QrCodeWriteDto>();
-        }
-
-        [Fact]
-        public void WithQrCodes_QrCodeIsValid_QrCodeIsSet()
-        {
-            QrCodeWriteDto qrCodeWriteDto = CreateQrCodeWriteDto();
-            var qrCodeWriteDtos = new List<QrCodeWriteDto>()
-            {
-                qrCodeWriteDto
-            };
-
-            Provider.WithQrCodes(qrCodeWriteDtos);
-
-            Provider.Build()
-                .QrCodes
-                .Should()
-                .BeEquivalentTo(qrCodeWriteDtos);
-        }
-
-        [Fact]
-        public void WithReferenceId_ReferenceIdIsValid_ReferenceIdIsSet()
+        public void Load_ByOrderWriteDto_MapperIsCalled()
         {
             string referenceId = "referenceId";
+            var expectedOrderWriteDto = new OrderWriteDto
+            {
+                ReferenceId = referenceId
+            };
 
-            Provider.WithReferenceId(referenceId);
+            ChargedOrderWriteDto<TChargeWriteDto> orderWriteDto = Provider
+                .Load(expectedOrderWriteDto)
+                .Build();
 
-            Provider.Build()
-                .ReferenceId
+            MapperMock
+                .Received(1)
+                .Map<ChargedOrderWriteDto<TChargeWriteDto>>(Arg.Is<OrderWriteDto>(
+                    order => order.ReferenceId == referenceId));
+            orderWriteDto
                 .Should()
-                .Be(referenceId);
-        }
-
-        [Fact]
-        public void WithShipping_ShippingIsValid_ShippingIdIsSet()
-        {
-            ShippingDto shippingDto = CreateShippingDto();
-
-            Provider.WithShipping(shippingDto);
-
-            Provider.Build()
-                .Shipping
-                .Should()
-                .BeEquivalentTo(shippingDto);
-        }
-
-        private ShippingDto CreateShippingDto()
-        {
-            return Fixture.Create<ShippingDto>();
+                .BeEquivalentTo(_orderWriteDto);
         }
 
         [Fact]
         public void Build_OrderIsReturned()
         {
             string referenceId = "referenceId";
+            var expectedOrderWriteDto = new ChargedOrderWriteDto<TChargeWriteDto>
+            {
+                ReferenceId = referenceId
+            };
 
-            ChargedOrderWriteDto<TChargeWriteDto> orderWriteDto = Provider
-                .WithReferenceId(referenceId)
+            var orderWriteDto = Provider
+                .Load(expectedOrderWriteDto)
                 .Build();
 
             ChargedOrderWriteDto<TChargeWriteDto> secondOrderWriteDto = Provider
                 .Build();
             orderWriteDto
-                .ReferenceId
-                .Should().Be(referenceId);
+                .Should()
+                .BeEquivalentTo(expectedOrderWriteDto);
             secondOrderWriteDto
-                .ReferenceId
-                .Should().NotBe(referenceId);
+                .Should()
+                .NotBeEquivalentTo(orderWriteDto);
         }
 
         [Fact]

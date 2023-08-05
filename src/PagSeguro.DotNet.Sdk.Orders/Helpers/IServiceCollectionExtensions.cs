@@ -20,6 +20,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
             services.AddTransient<ICreditCardOrderProvider, CreditCardOrderProvider>();
             services.AddTransient<ICreditCardWith3DsAuthOrderProvider, CreditCardWith3DsAuthOrderProvider>();
             services.AddTransient<IDebitCardWith3DsAuthOrderProvider, DebitCardWith3DsAuthOrderProvider>();
+            services.AddAutoMapper(typeof(OrderProvider));
         }
     }
 }

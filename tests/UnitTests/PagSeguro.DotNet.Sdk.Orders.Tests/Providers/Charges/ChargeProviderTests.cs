@@ -8,17 +8,17 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
     public class ChargeProviderTests : BaseProviderTests<ChargeProvider>
     {
-        private IServiceProvider _serviceProvider;
+        private IServiceProvider _serviceProviderMock;
 
         protected override void CreateMocks()
         {
-            _serviceProvider = Substitute.For<IServiceProvider>();
+            _serviceProviderMock = Substitute.For<IServiceProvider>();
         }
 
 
         protected override ChargeProvider CreateProvider()
         {
-            return new ChargeProvider(Settings, _serviceProvider);
+            return new ChargeProvider(Settings, _serviceProviderMock);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             Provider.WithBankSlip();
 
-            _serviceProvider
+            _serviceProviderMock
                 .Received(1)
                 .GetService<IChargeByBankSlipProvider>();
         }
@@ -36,7 +36,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             Provider.WithCreditCard();
 
-            _serviceProvider
+            _serviceProviderMock
                 .Received(1)
          
                 .GetService<IChargeByCreditCardProvider>();
@@ -47,7 +47,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             Provider.WithCreditCardAnd3DsAuthentication();
 
-            _serviceProvider
+            _serviceProviderMock
                 .Received(1)
                 .GetService<IChargeByCreditCardWith3DsAuthProvider>();
         }
@@ -57,7 +57,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         {
             Provider.WithDebitCardAnd3DsAuthentication();
 
-            _serviceProvider
+            _serviceProviderMock
                 .Received(1)
                 .GetService<IChargeByDebitCardWith3DsAuthProvider>();
         }

@@ -9,7 +9,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
     {
         protected override GenericOrderProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> CreateProvider()
         {
-            return new BankSlipOrderProvider(Settings);
+            return new BankSlipOrderProvider(Settings, MapperMock);
         }
 
         protected override void AssertChargeResponse(

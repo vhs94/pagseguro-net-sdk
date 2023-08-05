@@ -10,7 +10,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
     {
         protected override GenericOrderProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto> CreateProvider()
         {
-            return new CreditCardWith3DsAuthOrderProvider(Settings);
+            return new CreditCardWith3DsAuthOrderProvider(Settings, MapperMock);
         }
     }
 }
