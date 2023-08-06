@@ -25,7 +25,7 @@ var client = new PagSeguroClient(new ClientSettings
     Token = "<SEU_TOKEN>"
 });
 ```
-- Use as fluent interfaces para manipular as APIs, ver todas as opções disponíveis [veja a Wiki.]()
+- Use as fluent interfaces para manipular as APIs, para opções disponíveis [veja a Wiki.](https://github.com/vhs94/pagseguro-net-sdk/wiki)
 
 ```csharp
 var creditCardOrder = await client
