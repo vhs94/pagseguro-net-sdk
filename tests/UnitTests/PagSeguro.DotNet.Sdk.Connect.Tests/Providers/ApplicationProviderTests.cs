@@ -56,11 +56,11 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         }
 
         [Fact]
-        public async Task GetBydIdAsync_ApplicationIdIsValid_HttpRequestIsCreated()
+        public async Task GetByClientIdAsync_ApplicationIdIsValid_HttpRequestIsCreated()
         {
             string applicationId = "appId";
 
-            ApplicationReadDto result = await Provider.GetBydIdAsync(applicationId);
+            ApplicationReadDto result = await Provider.GetByClientIdAsync(applicationId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, applicationId))

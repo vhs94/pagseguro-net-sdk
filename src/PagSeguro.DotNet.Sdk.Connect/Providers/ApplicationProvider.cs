@@ -23,7 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                 .ReceiveJson<ApplicationReadDto>();
         }
 
-        public async Task<ApplicationReadDto> GetBydIdAsync(string clientId)
+        public async Task<ApplicationReadDto> GetByClientIdAsync(string clientId)
         {
             return await BaseUrl
                 .AppendPathSegment($"{ConnectEndpoints.Application}/{clientId}")
