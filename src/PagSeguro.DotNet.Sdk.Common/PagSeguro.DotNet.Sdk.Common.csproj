@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Flurl" Version="3.0.6" />
+		<PackageReference Include="Flurl" Version="3.0.7" />
 		<PackageReference Include="Flurl.Http" Version="3.2.4" />
 		<PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
