@@ -98,6 +98,24 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         }
 
         [Fact]
+        public void Load_ChargeIsLoaded()
+        {
+            string referenceId = "referenceId";
+            var expectedChargeWrite = new TChargeWriteDto
+            {
+                ReferenceId = referenceId
+            };
+
+            TChargeWriteDto chargeWriteDto = Provider
+                .Load(expectedChargeWrite)
+                .Build();
+
+            chargeWriteDto
+                .Should()
+                .BeEquivalentTo(expectedChargeWrite);
+        }
+
+        [Fact]
         public void Build_ChargeIsReturned()
         {
             string referenceId = "referenceId";

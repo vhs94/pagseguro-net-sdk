@@ -52,6 +52,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
             return this;
         }
 
+        public IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> Load(TChargeWriteDto chargeWriteDto)
+        {
+            ChargeWriteDto = chargeWriteDto;
+            return this;
+        }
+
         public TChargeWriteDto Build()
         {
             TChargeWriteDto charge = ChargeWriteDto;
