@@ -2,6 +2,7 @@
 using FluentAssertions;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Card;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard;
 
@@ -30,21 +31,8 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(chargeWriteDto, options => options.ExcludingMissingMembers());
-            result.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
-            result.PaidDate.Value.Date.Should().Be(DateTime.UtcNow.Date);
-            result.Status.Should().Be("PAID");
-            result.PaymentResponse.Message.Should().Be("SUCESSO");
-            result.PaymentResponse.Code.Should().Be(20000);
-            result.PaymentResponse.Reference.Should().Be("032416400102");
-            result.PaymentMethod.Card.Brand.Should().Be("visa");
-            result.PaymentMethod.Card.FirstDigits.Should().Be(411111);
-            result.PaymentMethod.Card.LastDigits.Should().Be(1111);
-            result.Links.Should().NotBeNullOrEmpty();
-            result.Amount.Summary.Paid.Should().Be(1000);
-            result.Amount.Summary.Total.Should().Be(1000);
-            result.Amount.Summary.Refunded.Should().Be(0);
+            AssertChargeByCardReadDto(result, chargeWriteDto);
+            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
         }
 
         private CreditCardPaymentMethodWriteDto CreateCreditCardPaymentMethodWriteDto()
@@ -78,6 +66,41 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 Currency = "BRL",
                 Value = 1000
             };
+        }
+
+        private void AssertChargeByCardReadDto(
+            ChargeByCardReadDto receivedChargeDto,
+            ChargeByCardWriteDto expectedChargeDto)
+        {
+            receivedChargeDto.Should().NotBeNull();
+            receivedChargeDto.Should().BeEquivalentTo(expectedChargeDto, options => options.ExcludingMissingMembers());
+            receivedChargeDto.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
+            receivedChargeDto.PaidDate.Value.Date.Should().Be(DateTime.UtcNow.Date);
+            receivedChargeDto.Status.Should().Be("PAID");
+            receivedChargeDto.PaymentResponse.Message.Should().Be("SUCESSO");
+            receivedChargeDto.PaymentResponse.Code.Should().Be(20000);
+            receivedChargeDto.PaymentResponse.Reference.Should().Be("032416400102");
+            receivedChargeDto.Links.Should().NotBeNullOrEmpty();
+            receivedChargeDto.Amount.Summary.Paid.Should().Be(1000);
+            receivedChargeDto.Amount.Summary.Total.Should().Be(1000);
+            receivedChargeDto.Amount.Summary.Refunded.Should().Be(0);
+        }
+
+        private void AssertCreditCardPaymentMethodReadDto(
+            CreditCardPaymentMethodReadDto receivedPaymentMethod,
+            CreditCardPaymentMethodWriteDto expectedPaymentMethod)
+        {
+            receivedPaymentMethod.Should().BeEquivalentTo(
+                expectedPaymentMethod,
+                options => options.ExcludingMissingMembers());
+            AssertCartReadDto(receivedPaymentMethod.Card);
+        }
+
+        private void AssertCartReadDto(CardReadDto cardReadDto)
+        {
+            cardReadDto.Brand.Should().Be("visa");
+            cardReadDto.FirstDigits.Should().Be(411111);
+            cardReadDto.LastDigits.Should().Be(1111);
         }
     }
 }
