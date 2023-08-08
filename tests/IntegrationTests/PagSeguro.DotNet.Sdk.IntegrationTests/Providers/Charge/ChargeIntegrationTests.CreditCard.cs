@@ -31,14 +31,16 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
-            AssertChargeByCardReadDto(result, chargeWriteDto);
+            AssertChargeWithAutoCapture(result, chargeWriteDto);
             AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
         }
 
-        private CreditCardPaymentMethodWriteDto CreateCreditCardPaymentMethodWriteDto()
+        private CreditCardPaymentMethodWriteDto CreateCreditCardPaymentMethodWriteDto(
+            bool capture = true)
         {
             return Fixture.Build<CreditCardPaymentMethodWriteDto>()
                 .With(pm => pm.Installments, 1)
+                .With(pm => pm.Capture, capture)
                 .With(pm => pm.SoftDescriptor, "MyStore")
                 .With(pm => pm.Card, CreateCardWriteDto())
                 .Create();
@@ -68,7 +70,16 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             };
         }
 
-        private void AssertChargeByCardReadDto(
+        private void AssertChargeWithAutoCapture(
+            ChargeByCardReadDto receivedChargeDto,
+            ChargeByCardWriteDto expectedChargeDto)
+        {
+            AssertChargeReadDto(receivedChargeDto, expectedChargeDto);
+            receivedChargeDto.PaymentResponse.Reference.Should().Be("032416400102");
+            receivedChargeDto.Amount.Summary.Paid.Should().Be(1000);
+        }
+
+        private void AssertChargeReadDto(
             ChargeByCardReadDto receivedChargeDto,
             ChargeByCardWriteDto expectedChargeDto)
         {
@@ -79,11 +90,9 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             receivedChargeDto.Status.Should().Be("PAID");
             receivedChargeDto.PaymentResponse.Message.Should().Be("SUCESSO");
             receivedChargeDto.PaymentResponse.Code.Should().Be(20000);
-            receivedChargeDto.PaymentResponse.Reference.Should().Be("032416400102");
-            receivedChargeDto.Links.Should().NotBeNullOrEmpty();
-            receivedChargeDto.Amount.Summary.Paid.Should().Be(1000);
             receivedChargeDto.Amount.Summary.Total.Should().Be(1000);
             receivedChargeDto.Amount.Summary.Refunded.Should().Be(0);
+            receivedChargeDto.Links.Should().NotBeNullOrEmpty();
         }
 
         private void AssertCreditCardPaymentMethodReadDto(
@@ -101,6 +110,46 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             cardReadDto.Brand.Should().Be("visa");
             cardReadDto.FirstDigits.Should().Be(411111);
             cardReadDto.LastDigits.Should().Be(1111);
+        }
+
+        [Fact]
+        public async Task CaptureAsync_WithCreditCard_ChargeIsCaptured()
+        {
+            CreditCardPaymentMethodWriteDto paymentMethodDto = CreateCreditCardPaymentMethodWriteDto(false);
+            ChargeByCreditCardWriteDto chargeWriteDto = Client
+                .ForCharge()
+                .WithCreditCard()
+                .AddPaymentMethod(paymentMethodDto)
+                .WithMetadata(CreateMetadata())
+                .WithAmount(CreateAmountWriteDto())
+                .WithReferenceId("ex-00001")
+                .WithDescription("Motivo do pagamento")
+                .WithNotificationUrl("https://myurl.com")
+                .Build();
+            ChargeByCreditCardReadDto chargeReadtDto = await Client
+               .ForCharge()
+               .WithCreditCard()
+               .Load(chargeWriteDto)
+               .ChargeAsync();
+            await Task.Delay(1000);
+
+            ChargeByCreditCardReadDto result = await Client
+               .ForCharge()
+               .WithCreditCard()
+               .WithId(chargeReadtDto.Id)
+               .CaptureAsync(100);
+
+            AssertChargeWithPreAuthorizedCapture(result, chargeWriteDto);
+            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
+        }
+
+        private void AssertChargeWithPreAuthorizedCapture(
+            ChargeByCardReadDto receivedChargeDto,
+            ChargeByCardWriteDto expectedChargeDto)
+        {
+            AssertChargeReadDto(receivedChargeDto, expectedChargeDto);
+            receivedChargeDto.PaymentResponse.Reference.Should().Be("31022400001");
+            receivedChargeDto.Amount.Summary.Paid.Should().Be(100);
         }
     }
 }

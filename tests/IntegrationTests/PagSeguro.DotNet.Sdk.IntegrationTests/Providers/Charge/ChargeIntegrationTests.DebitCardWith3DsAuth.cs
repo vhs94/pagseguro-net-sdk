@@ -31,7 +31,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
-            AssertChargeByCardReadDto(result, chargeWriteDto);
+            AssertChargeWithAutoCapture(result, chargeWriteDto);
             AssertDebitCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
             AssertAuthenticationMethodReadDto(result.PaymentMethod.AuthenticationMethod, authenticationMethodWriteDto);
         }
