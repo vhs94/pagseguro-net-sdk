@@ -52,6 +52,18 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
             return this;
         }
 
+        public IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithId(string chargeId)
+        {
+            ChargeWriteDto.Id = chargeId;
+            return this;
+        }
+
+        public IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> Load(TChargeWriteDto chargeWriteDto)
+        {
+            ChargeWriteDto = chargeWriteDto;
+            return this;
+        }
+
         public TChargeWriteDto Build()
         {
             TChargeWriteDto charge = ChargeWriteDto;
@@ -79,31 +91,31 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
                 .GetJsonAsync<TChargeReadDto>();
         }
 
-        public async Task<TChargeReadDto> CancelAsync(CancelChargeDto cancelChargeDto)
+        public async Task<TChargeReadDto> CancelAsync(int amountValue)
         {
             return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, cancelChargeDto.ChargeId, OrderEndpoint.Cancel)
+                .AppendPathSegments(OrderEndpoint.Charges, ChargeWriteDto.Id, OrderEndpoint.Cancel)
                 .WithOAuthBearerToken(Settings.Token)
                 .PostJsonAsync(new
                 {
                     amount = new
                     {
-                        value = cancelChargeDto.AmountValue
+                        value = amountValue
                     }
                 })
                 .ReceiveJson<TChargeReadDto>();
         }
 
-        public async Task<TChargeReadDto> CaptureAsync(CaptureChargeDto captureChargeDto)
+        public async Task<TChargeReadDto> CaptureAsync(int amountValue)
         {
             return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, captureChargeDto.ChargeId, OrderEndpoint.Capture)
+                .AppendPathSegments(OrderEndpoint.Charges, ChargeWriteDto.Id, OrderEndpoint.Capture)
                 .WithOAuthBearerToken(Settings.Token)
                 .PostJsonAsync(new
                 {
                     amount = new
                     {
-                        value = captureChargeDto.AmountValue
+                        value = amountValue
                     }
                 })
                 .ReceiveJson<TChargeReadDto>();

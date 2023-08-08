@@ -44,7 +44,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         }
 
         [Fact]
-        public async Task CreateAsync_AccountIdIsValid_HttpRequestIsCreated()
+        public async Task CreateAsync_AccountIsValid_HttpRequestIsCreated()
         {
             AccountWriteDto accountWriteDto = CreateAccountWriteDto();
 

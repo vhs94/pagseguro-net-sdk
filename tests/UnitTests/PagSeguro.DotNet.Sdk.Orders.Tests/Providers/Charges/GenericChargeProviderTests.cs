@@ -98,6 +98,24 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         }
 
         [Fact]
+        public void Load_ChargeIsLoaded()
+        {
+            string referenceId = "referenceId";
+            var expectedChargeWrite = new TChargeWriteDto
+            {
+                ReferenceId = referenceId
+            };
+
+            TChargeWriteDto chargeWriteDto = Provider
+                .Load(expectedChargeWrite)
+                .Build();
+
+            chargeWriteDto
+                .Should()
+                .BeEquivalentTo(expectedChargeWrite);
+        }
+
+        [Fact]
         public void Build_ChargeIsReturned()
         {
             string referenceId = "referenceId";
@@ -161,22 +179,22 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         [Fact]
         public async Task CancelAsync_ChargeIsValid_HttpRequestIsCreated()
         {
-            CancelChargeDto cancelChargeDto = CreateCancelChargeDto();
+            string chargeId = Guid.NewGuid().ToString();
 
-            TChargeReadDto result = await Provider.CancelAsync(cancelChargeDto);
+            TChargeReadDto result = await Provider.WithId(chargeId).CancelAsync(100);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
                     Provider.BaseUrl,
                     OrderEndpoint.Charges,
-                    cancelChargeDto.ChargeId,
+                    chargeId,
                     OrderEndpoint.Cancel))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithRequestJson(new
                 {
                     amount = new
                     {
-                        value = cancelChargeDto.AmountValue
+                        value = 100
                     }
                 })
                 .WithVerb(HttpMethod.Post)
@@ -184,40 +202,32 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             AssertChargeResponse(_chargeReadDto, result);
         }
 
-        private CancelChargeDto CreateCancelChargeDto()
-        {
-            return Fixture.Create<CancelChargeDto>();
-        }
-
         [Fact]
         public async Task CaptureAsync_ChargeIsValid_HttpRequestIsCreated()
         {
-            CaptureChargeDto captureChargeDto = CreateCaptureChargeDto();
+            string chargeId = Guid.NewGuid().ToString();
 
-            TChargeReadDto result = await Provider.CaptureAsync(captureChargeDto);
+            TChargeReadDto result = await Provider
+                .WithId(chargeId)
+                .CaptureAsync(100);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
                     Provider.BaseUrl,
                     OrderEndpoint.Charges,
-                    captureChargeDto.ChargeId,
+                    chargeId,
                     OrderEndpoint.Capture))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithRequestJson(new
                 {
                     amount = new
                     {
-                        value = captureChargeDto.AmountValue
+                        value = 100
                     }
                 })
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
             AssertChargeResponse(_chargeReadDto, result);
-        }
-
-        private CaptureChargeDto CreateCaptureChargeDto()
-        {
-            return Fixture.Create<CaptureChargeDto>();
         }
 
         protected ChargeAmountWriteDto CreateChargeAmountWriteDto()

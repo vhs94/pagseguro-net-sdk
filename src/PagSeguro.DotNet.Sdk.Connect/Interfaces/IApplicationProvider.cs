@@ -16,6 +16,6 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
         /// Este endpoint permite que você consulte detalhes de uma aplicação a partir do clientId
         /// <see href="https://dev.pagbank.uol.com.br/reference/consultar-aplicacao">ler documentação</see>
         /// </summary>
-        Task<ApplicationReadDto> GetBydIdAsync(string clientId);
+        Task<ApplicationReadDto> GetByClientIdAsync(string clientId);
     }
 }

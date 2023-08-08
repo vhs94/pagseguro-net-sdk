@@ -11,10 +11,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrl(string notificationUrl);
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithNotificationUrls(ICollection<string> notificationUrls);
         IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithReferenceId(string referenceId);
+        IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> WithId(string chargeId);
+        IGenericChargeProvider<TChargeWriteDto, TChargeReadDto> Load(TChargeWriteDto chargeWriteDto);
         TChargeWriteDto Build();
         Task<TChargeReadDto> ChargeAsync();
         Task<TChargeReadDto> GetByIdAsync(string chargeId);
-        Task<TChargeReadDto> CaptureAsync(CaptureChargeDto captureChargeDto);
-        Task<TChargeReadDto> CancelAsync(CancelChargeDto cancelChargeDto);
+        Task<TChargeReadDto> CaptureAsync(int amountValue);
+        Task<TChargeReadDto> CancelAsync(int amountValue);
     }
 }
