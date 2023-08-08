@@ -14,16 +14,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
         public async Task CreateAsync_WithCreditCard_ChargeIsCreated()
         {
             CreditCardPaymentMethodWriteDto paymentMethodDto = CreateCreditCardPaymentMethodWriteDto();
-            ChargeByCreditCardWriteDto chargeWriteDto = Client
-                .ForCharge()
-                .WithCreditCard()
-                .AddPaymentMethod(paymentMethodDto)
-                .WithMetadata(CreateMetadata())
-                .WithAmount(CreateAmountWriteDto())
-                .WithReferenceId("ex-00001")
-                .WithDescription("Motivo do pagamento")
-                .WithNotificationUrl("https://myurl.com")
-                .Build();
+            ChargeByCreditCardWriteDto chargeWriteDto = CreateChargeByCreditCardWriteDto(paymentMethodDto);
 
             ChargeByCreditCardReadDto result = await Client
                .ForCharge()
@@ -60,6 +51,21 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .With(cc => cc.ExpYear, 2023)
                 .With(cc => cc.SecurityCode, 123)
                 .Create();
+        }
+
+        private ChargeByCreditCardWriteDto CreateChargeByCreditCardWriteDto(
+            CreditCardPaymentMethodWriteDto paymentMethodDto)
+        {
+            return Client
+                .ForCharge()
+                .WithCreditCard()
+                .AddPaymentMethod(paymentMethodDto)
+                .WithMetadata(CreateMetadata())
+                .WithAmount(CreateAmountWriteDto())
+                .WithReferenceId("ex-00001")
+                .WithDescription("Motivo do pagamento")
+                .WithNotificationUrl("https://myurl.com")
+                .Build();
         }
 
         private IDictionary<string, string> CreateMetadata()

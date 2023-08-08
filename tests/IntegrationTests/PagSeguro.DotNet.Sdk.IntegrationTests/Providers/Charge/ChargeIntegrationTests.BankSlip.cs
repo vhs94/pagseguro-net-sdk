@@ -12,20 +12,8 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
         [Fact]
         public async Task CreateAsync_WithBankSlip_ChargeIsCreated()
         {
-            BankSlipWriteDto bankSlip = CreateBankSlip();
-            ChargeByBankSlipWriteDto chargeWriteDto = Client
-                .ForCharge()
-                .WithBankSlip()
-                .AddBankSlip(bankSlip)
-                .WithAmount(new ChargeAmountWriteDto
-                {
-                    Value = 1000,
-                    Currency = "BRL"
-                })
-                .WithReferenceId("ex-00001")
-                .WithDescription("Motivo do pagamento")
-                .WithNotificationUrl("https://myurl.com")
-                .Build();
+            BankSlipWriteDto bankSlipWriteDto = CreateBankSlip();
+            ChargeByBankSlipWriteDto chargeWriteDto = CreateChargeByBankSlipWriteDto(bankSlipWriteDto);
 
             ChargeByBankSlipReadDto result = await Client
                .ForCharge()
@@ -42,7 +30,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             result.Should().BeEquivalentTo(
                 chargeWriteDto,
                 options => options.Excluding(c => c.PaymentMethod.BankSlip.DueDate));
-            result.PaymentMethod.BankSlip.DueDate.Should().Be(bankSlip.DueDate.Date);
+            result.PaymentMethod.BankSlip.DueDate.Should().Be(bankSlipWriteDto.DueDate.Date);
             result.Id.Should().StartWith("CHAR");
             result.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
             result.Links.Should().NotBeNullOrEmpty();
@@ -52,6 +40,23 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             result.PaymentResponse.Message.Should().Be("SUCESSO");
             result.PaymentResponse.Code.Should().Be(20000);
             result.Should().BeEquivalentTo(chargeByBankSlipReadDto);
+        }
+
+        private ChargeByBankSlipWriteDto CreateChargeByBankSlipWriteDto(BankSlipWriteDto bankSlipWriteDto)
+        {
+            return Client
+                .ForCharge()
+                .WithBankSlip()
+                .AddBankSlip(bankSlipWriteDto)
+                .WithAmount(new ChargeAmountWriteDto
+                {
+                    Value = 1000,
+                    Currency = "BRL"
+                })
+                .WithReferenceId("ex-00001")
+                .WithDescription("Motivo do pagamento")
+                .WithNotificationUrl("https://myurl.com")
+                .Build();
         }
 
         private BankSlipWriteDto CreateBankSlip()
@@ -74,7 +79,6 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .With(b => b.DueDate, DateTime.Now.AddYears(1))
                 .With(b => b.Holder, holder)
                 .Create();
-
         }
     }
 }

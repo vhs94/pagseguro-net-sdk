@@ -17,6 +17,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
         Task<TChargeReadDto> ChargeAsync();
         Task<TChargeReadDto> GetByIdAsync(string chargeId);
         Task<TChargeReadDto> CaptureAsync(int amountValue);
-        Task<TChargeReadDto> CancelAsync(CancelChargeDto cancelChargeDto);
+        Task<TChargeReadDto> CancelAsync(int amountValue);
     }
 }

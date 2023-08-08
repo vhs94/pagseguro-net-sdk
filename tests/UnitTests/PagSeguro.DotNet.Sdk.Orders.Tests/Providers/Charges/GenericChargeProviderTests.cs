@@ -179,32 +179,27 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         [Fact]
         public async Task CancelAsync_ChargeIsValid_HttpRequestIsCreated()
         {
-            CancelChargeDto cancelChargeDto = CreateCancelChargeDto();
+            string chargeId = Guid.NewGuid().ToString();
 
-            TChargeReadDto result = await Provider.CancelAsync(cancelChargeDto);
+            TChargeReadDto result = await Provider.WithId(chargeId).CancelAsync(100);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
                     Provider.BaseUrl,
                     OrderEndpoint.Charges,
-                    cancelChargeDto.ChargeId,
+                    chargeId,
                     OrderEndpoint.Cancel))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithRequestJson(new
                 {
                     amount = new
                     {
-                        value = cancelChargeDto.AmountValue
+                        value = 100
                     }
                 })
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
             AssertChargeResponse(_chargeReadDto, result);
-        }
-
-        private CancelChargeDto CreateCancelChargeDto()
-        {
-            return Fixture.Create<CancelChargeDto>();
         }
 
         [Fact]

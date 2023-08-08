@@ -91,16 +91,16 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
                 .GetJsonAsync<TChargeReadDto>();
         }
 
-        public async Task<TChargeReadDto> CancelAsync(CancelChargeDto cancelChargeDto)
+        public async Task<TChargeReadDto> CancelAsync(int amountValue)
         {
             return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, cancelChargeDto.ChargeId, OrderEndpoint.Cancel)
+                .AppendPathSegments(OrderEndpoint.Charges, ChargeWriteDto.Id, OrderEndpoint.Cancel)
                 .WithOAuthBearerToken(Settings.Token)
                 .PostJsonAsync(new
                 {
                     amount = new
                     {
-                        value = cancelChargeDto.AmountValue
+                        value = amountValue
                     }
                 })
                 .ReceiveJson<TChargeReadDto>();
