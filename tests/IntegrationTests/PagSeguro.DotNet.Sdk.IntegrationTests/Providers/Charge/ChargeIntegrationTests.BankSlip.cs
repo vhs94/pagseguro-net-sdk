@@ -33,6 +33,11 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
+            await Task.Delay(1000);
+            ChargeByBankSlipReadDto chargeByBankSlipReadDto = await Client
+                .ForCharge()
+                .WithBankSlip()
+                .GetByIdAsync(result.Id);
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(
                 chargeWriteDto,
@@ -46,6 +51,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             result.Amount.Summary.Refunded.Should().Be(0);
             result.PaymentResponse.Message.Should().Be("SUCESSO");
             result.PaymentResponse.Code.Should().Be(20000);
+            result.Should().BeEquivalentTo(chargeByBankSlipReadDto);
         }
 
         private BankSlipWriteDto CreateBankSlip()

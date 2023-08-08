@@ -31,9 +31,18 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
+            await Task.Delay(1000);
+            ChargeByCreditCardWith3DsAuthReadDto chargeByCreditCardWith3DsAuthReadDto = await Client
+                .ForCharge()
+                .WithCreditCardAnd3DsAuthentication()
+                .GetByIdAsync(result.Id);
             AssertChargeWithAutoCapture(result, chargeWriteDto);
             AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
             AssertAuthenticationMethodReadDto(result.PaymentMethod.AuthenticationMethod, authenticationMethodWriteDto);
+            result.Should().BeEquivalentTo(
+                chargeByCreditCardWith3DsAuthReadDto,
+                options => options
+                    .Excluding(f => f.PaymentMethod.AuthenticationMethod));
         }
 
         private AuthenticationMethodWriteDto CreateAuthenticationMethodWriteDto()

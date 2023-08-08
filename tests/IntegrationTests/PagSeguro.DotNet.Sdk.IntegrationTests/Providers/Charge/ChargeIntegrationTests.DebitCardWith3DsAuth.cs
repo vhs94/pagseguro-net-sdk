@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.AuthenticationMethod;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.DebitCard;
 
@@ -31,9 +32,18 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
+            await Task.Delay(1000);
+            ChargeByDebitCardWith3DsAuthReadDto chargeByDebitCardWith3DsAuthReadDto = await Client
+                .ForCharge()
+                .WithDebitCardAnd3DsAuthentication()
+                .GetByIdAsync(result.Id);
             AssertChargeWithAutoCapture(result, chargeWriteDto);
             AssertDebitCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
             AssertAuthenticationMethodReadDto(result.PaymentMethod.AuthenticationMethod, authenticationMethodWriteDto);
+            result.Should().BeEquivalentTo(
+                chargeByDebitCardWith3DsAuthReadDto,
+                options => options
+                    .Excluding(f => f.PaymentMethod.AuthenticationMethod));
         }
 
         private DebitCardWith3DsAuthPaymentMethodWriteDto CreateDebitCardWith3DsAuthPaymentMethodWriteDto(

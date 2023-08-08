@@ -31,8 +31,14 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                .Load(chargeWriteDto)
                .ChargeAsync();
 
+            await Task.Delay(1000);
+            ChargeByCreditCardReadDto chargeByCreditCardReadDto = await Client
+                .ForCharge()
+                .WithCreditCard()
+                .GetByIdAsync(result.Id);
             AssertChargeWithAutoCapture(result, chargeWriteDto);
             AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
+            result.Should().BeEquivalentTo(chargeByCreditCardReadDto);
         }
 
         private CreditCardPaymentMethodWriteDto CreateCreditCardPaymentMethodWriteDto(
