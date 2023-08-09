@@ -41,8 +41,8 @@ namespace PagSeguro.DotNet.Sdk
             => _serviceProvider.GetService<IPublicKeyProvider>();
         public virtual IOrderProvider ForOrder()
             => _serviceProvider.GetService<IOrderProvider>();
-        public virtual IChargeProvider ForCharge()
-            => _serviceProvider.GetService<IChargeProvider>();
+        public virtual IChargeWithPaymentMethodProvider ForCharge()
+            => _serviceProvider.GetService<IChargeWithPaymentMethodProvider>();
         public virtual IDigitalCertificateProvider ForCertificate()
             => _serviceProvider.GetService<IDigitalCertificateProvider>();
         private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory

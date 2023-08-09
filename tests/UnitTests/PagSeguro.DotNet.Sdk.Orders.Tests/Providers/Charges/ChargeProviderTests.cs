@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Charges;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
-    public class ChargeProviderTests : BaseProviderTests<ChargeProvider>
+    public class ChargeProviderTests : BaseProviderTests<ChargeWithPaymentMethodProvider>
     {
         private IServiceProvider _serviceProviderMock;
 
@@ -16,9 +16,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         }
 
 
-        protected override ChargeProvider CreateProvider()
+        protected override ChargeWithPaymentMethodProvider CreateProvider()
         {
-            return new ChargeProvider(Settings, _serviceProviderMock);
+            return new ChargeWithPaymentMethodProvider(Settings, _serviceProviderMock);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             _serviceProviderMock
                 .Received(1)
-                .GetService<IChargeByBankSlipProvider>();
+                .GetService<IBankSlipChargeProvider>();
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             _serviceProviderMock
                 .Received(1)
          
-                .GetService<IChargeByCreditCardProvider>();
+                .GetService<ICreditCardChargeProvider>();
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             _serviceProviderMock
                 .Received(1)
-                .GetService<IChargeByCreditCardWith3DsAuthProvider>();
+                .GetService<ICreditCardWith3DsAuthChargeProvider>();
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             _serviceProviderMock
                 .Received(1)
-                .GetService<IChargeByDebitCardWith3DsAuthProvider>();
+                .GetService<IDebitCardWith3DsAuthChargeProvider>();
         }
     }
 }

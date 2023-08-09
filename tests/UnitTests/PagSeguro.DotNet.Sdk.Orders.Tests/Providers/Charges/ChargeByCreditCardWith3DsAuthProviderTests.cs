@@ -12,11 +12,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             ChargeByCreditCardWith3DsAuthWriteDto,
             ChargeByCreditCardWith3DsAuthReadDto>
     {
-        private ChargeByCreditCardWith3DsAuthProvider _chargeByCreditCardWith3DsAuthProviderMock;
+        private CreditCardWith3DsAuthChargeProvider _chargeByCreditCardWith3DsAuthProviderMock;
 
         protected override GenericChargeProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto> CreateProvider()
         {
-            _chargeByCreditCardWith3DsAuthProviderMock = new ChargeByCreditCardWith3DsAuthProvider(Settings);
+            _chargeByCreditCardWith3DsAuthProviderMock = new CreditCardWith3DsAuthChargeProvider(Settings);
             return _chargeByCreditCardWith3DsAuthProviderMock;
         }
 

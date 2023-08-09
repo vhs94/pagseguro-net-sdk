@@ -9,11 +9,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
     public class ChargeByCreditCardProviderTests : GenericChargeProviderTests<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto>
     {
-        private ChargeByCreditCardProvider _chargeByCreditCardProviderMock;
+        private CreditCardChargeProvider _chargeByCreditCardProviderMock;
         
         protected override GenericChargeProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto> CreateProvider()
         {
-            _chargeByCreditCardProviderMock = new ChargeByCreditCardProvider(Settings);
+            _chargeByCreditCardProviderMock = new CreditCardChargeProvider(Settings);
             return _chargeByCreditCardProviderMock;
         }
 

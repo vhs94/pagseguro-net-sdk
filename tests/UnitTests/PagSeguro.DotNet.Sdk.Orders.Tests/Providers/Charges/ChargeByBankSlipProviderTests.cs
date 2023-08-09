@@ -9,11 +9,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
     public class ChargeByBankSlipProviderTests : GenericChargeProviderTests<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
     {
-        private ChargeByBankSlipProvider _chargeByBankSlipProviderMock;
+        private BankSlipChargeProvider _chargeByBankSlipProviderMock;
 
         protected override GenericChargeProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> CreateProvider()
         {
-            _chargeByBankSlipProviderMock = new ChargeByBankSlipProvider(Settings);
+            _chargeByBankSlipProviderMock = new BankSlipChargeProvider(Settings);
             return _chargeByBankSlipProviderMock;
         }
 
