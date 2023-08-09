@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.AuthenticationMethod;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.DebitCard;
 

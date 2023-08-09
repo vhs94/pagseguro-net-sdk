@@ -5,32 +5,51 @@ using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Providers.Charges;
-
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
-    public abstract class GenericChargeProviderTests<TChargeWriteDto, TChargeReadDto>
-        : BaseProviderTests<GenericChargeProvider<TChargeWriteDto, TChargeReadDto>>
-        where TChargeWriteDto : ChargeDto, new()
+    public abstract class BaseChargeProviderTests<TTopLevelProvider, TChargeWriteDto, TChargeReadDto>
+        : BaseProviderTests<IChargeProviderOf<TTopLevelProvider, TChargeWriteDto, TChargeReadDto>>
+        where TChargeWriteDto : ChargeDto, IChargeWriteDto, new()
         where TChargeReadDto : ChargeDto
+        where TTopLevelProvider : IChargeProvider<TChargeWriteDto, TChargeReadDto>
     {
-        private TChargeReadDto _chargeReadDto;
+        public TChargeReadDto ChargeReadDto { get; private set; }
+        public TTopLevelProvider TopLevelProviderMock => (TTopLevelProvider)Provider;
 
         protected override void SetupMocks()
         {
-            _chargeReadDto = CreateChargeReadDto();
+            ChargeReadDto = CreateChargeReadDto();
             HttpTestMock
                 .ForCallsTo(
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges),
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges, "*"))
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
-                .RespondWithJson(_chargeReadDto);
+                .RespondWithJson(ChargeReadDto);
         }
 
         private TChargeReadDto CreateChargeReadDto()
         {
             return Fixture.Create<TChargeReadDto>();
+        }
+
+        [Fact]
+        public void WithAmount_AmountIsValid_AmountIsSet()
+        {
+            ChargeAmountWriteDto chargeAmountWriteDto = CreateChargeAmountWriteDto();
+
+            Provider.WithAmount(chargeAmountWriteDto);
+
+            Provider
+                .Build()
+                .Amount
+                .Should().BeEquivalentTo(chargeAmountWriteDto);
+        }
+
+        protected ChargeAmountWriteDto CreateChargeAmountWriteDto()
+        {
+            return Fixture.Create<ChargeAmountWriteDto>();
         }
 
         [Fact]
@@ -40,10 +59,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             Provider.WithDescription(description);
 
-            Provider.Build()
-                .Description
-                .Should()
-                .Be(description);
+            Provider.Build().Description.Should().Be(description);
         }
 
         [Fact]
@@ -78,10 +94,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             Provider.WithNotificationUrls(notificationUrls);
 
-            Provider.Build()
-                .NotificationUrls
-                .Should()
-                .BeEquivalentTo(notificationUrls);
+            Provider.Build().NotificationUrls.Should().BeEquivalentTo(notificationUrls);
         }
 
         [Fact]
@@ -91,10 +104,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             Provider.WithReferenceId(referenceId);
 
-            Provider.Build()
-                .ReferenceId
-                .Should()
-                .Be(referenceId);
+            Provider.Build().ReferenceId.Should().Be(referenceId);
         }
 
         [Fact]
@@ -106,11 +116,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
                 ReferenceId = referenceId
             };
 
-            TChargeWriteDto chargeWriteDto = Provider
-                .Load(expectedChargeWrite)
-                .Build();
+            Provider.Load(expectedChargeWrite);
 
-            chargeWriteDto
+            TopLevelProviderMock
+                .ChargeWriteDto
                 .Should()
                 .BeEquivalentTo(expectedChargeWrite);
         }
@@ -119,19 +128,17 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         public void Build_ChargeIsReturned()
         {
             string referenceId = "referenceId";
+            var expectedChargeWrite = new TChargeWriteDto
+            {
+                ReferenceId = referenceId
+            };
 
-            TChargeWriteDto chargeWriteDto = Provider
-                .WithReferenceId(referenceId)
-                .Build();
+            Provider.WithReferenceId(referenceId);
+            TChargeWriteDto chargeWriteDto = Provider.Build();
 
-            TChargeWriteDto secondChargeWriteDto = Provider
-                .Build();
-            chargeWriteDto
-                .ReferenceId
-                .Should().Be(referenceId);
-            secondChargeWriteDto
-                .ReferenceId
-                .Should().NotBe(referenceId);
+            TChargeWriteDto secondChargeWriteDto = Provider.Build();
+            chargeWriteDto.Should().BeEquivalentTo(expectedChargeWrite);
+            secondChargeWriteDto.Should().NotBeEquivalentTo(expectedChargeWrite);
         }
 
         [Fact]
@@ -146,16 +153,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
                 .WithRequestJson(Provider.Build())
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
-            AssertChargeResponse(_chargeReadDto, result);
+            AssertChargeReadDto(result);
         }
 
-        protected virtual void AssertChargeResponse(
-            TChargeReadDto expectedReadDto,
-            TChargeReadDto receivedReadDto)
+        protected virtual void AssertChargeReadDto(TChargeReadDto receivedChargeReadDto)
         {
-            receivedReadDto
+            receivedChargeReadDto
                 .Should()
-                .BeEquivalentTo(expectedReadDto);
+                .BeEquivalentTo(ChargeReadDto);
         }
 
         [Fact]
@@ -173,7 +178,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
-            AssertChargeResponse(_chargeReadDto, result);
+            AssertChargeReadDto(result);
         }
 
         [Fact]
@@ -199,45 +204,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
                 })
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
-            AssertChargeResponse(_chargeReadDto, result);
-        }
-
-        [Fact]
-        public async Task CaptureAsync_ChargeIsValid_HttpRequestIsCreated()
-        {
-            string chargeId = Guid.NewGuid().ToString();
-
-            TChargeReadDto result = await Provider
-                .WithId(chargeId)
-                .CaptureAsync(100);
-
-            HttpTestMock
-                .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
-                    OrderEndpoint.Charges,
-                    chargeId,
-                    OrderEndpoint.Capture))
-                .WithOAuthBearerToken(Settings.Token)
-                .WithRequestJson(new
-                {
-                    amount = new
-                    {
-                        value = 100
-                    }
-                })
-                .WithVerb(HttpMethod.Post)
-                .Times(1);
-            AssertChargeResponse(_chargeReadDto, result);
-        }
-
-        protected ChargeAmountWriteDto CreateChargeAmountWriteDto()
-        {
-            return Fixture.Create<ChargeAmountWriteDto>();
-        }
-
-        protected IDictionary<string, string> CreateMetadata()
-        {
-            return Fixture.Create<IDictionary<string, string>>();
+            AssertChargeReadDto(result);
         }
     }
 }
