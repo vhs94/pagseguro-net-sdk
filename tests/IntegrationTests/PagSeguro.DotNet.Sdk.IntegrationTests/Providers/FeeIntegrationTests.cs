@@ -7,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
     public class FeeIntegrationTests : BaseIntegrationTests
     {
         [Fact]
-        public async Task CreateAsync_RequestIsValid_PublicKeyIsCreated()
+        public async Task CalculateAsync_RequestIsValid_FeesAreReturned()
         {
             FeeReadDto feeReadDto = CreateFeeReadDto();
 
