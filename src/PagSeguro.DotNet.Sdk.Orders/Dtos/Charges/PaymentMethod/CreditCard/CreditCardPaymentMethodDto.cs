@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard
 {

@@ -28,5 +28,13 @@ namespace PagSeguro.DotNet.Sdk.Common.Helpers
             }
             throw new ArgumentException("Item not found.", nameof(enumValue));
         }
+
+        public static IList<string> GetValues<TEnum>()
+            where TEnum : Enum
+        {
+            return ((TEnum[])Enum.GetValues(typeof(TEnum)))
+                .Select(en => en.ToString().ToLower())
+                .ToList();
+        }
     }
 }

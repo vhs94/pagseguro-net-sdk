@@ -18,6 +18,7 @@ using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
@@ -45,6 +46,9 @@ namespace PagSeguro.DotNet.Sdk
             => _serviceProvider.GetService<IChargeWithPaymentMethodProvider>();
         public virtual IDigitalCertificateProvider ForCertificate()
             => _serviceProvider.GetService<IDigitalCertificateProvider>();
+        public virtual IFeeProvider ForFee()
+            => _serviceProvider.GetService<IFeeProvider>();
+
         private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory
             => _serviceProvider.GetService<IPagSeguroHttpExceptionFactory>();
 
@@ -74,9 +78,11 @@ namespace PagSeguro.DotNet.Sdk
             {
                 var jsonSettings = new JsonSerializerSettings
                 {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    
                 };
-                settings.JsonSerializer = new NewtonsoftJsonSerializer(jsonSettings);
+                var defaultSerializer = new NewtonsoftJsonSerializer(jsonSettings);
+                settings.JsonSerializer = defaultSerializer;
                 settings.OnErrorAsync = HandleExceptionAsync;
             });
         }
