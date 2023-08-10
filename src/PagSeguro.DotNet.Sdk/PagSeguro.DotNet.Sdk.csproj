@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName)</PackageId>
-		<PackageVersion>3.0.0</PackageVersion>
+		<PackageVersion>3.1.0</PackageVersion>
 		<Title>PagSeguro DotNet SDK</Title>
 		<Authors>victor_santana09</Authors>
 		<Description>Fluent Client para APIs PagSeguro</Description>
@@ -13,9 +13,15 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
 		<PackageTags>pagseguro;uol;pagbank;payment-gateway;payment;sdk;</PackageTags>
+		<PackageIcon>pagseguro-logo.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Include="..\..\assets\pagseguro-logo.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="..\..\README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
