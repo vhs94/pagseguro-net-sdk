@@ -4,11 +4,11 @@ using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 {
     public class CreditCardWith3DsAuthOrderProviderTests
-        : GenericOrderProviderTests<
+        : ChargedOrderProviderOfTests<
             ChargeByCreditCardWith3DsAuthWriteDto,
             ChargeByCreditCardWith3DsAuthReadDto>
     {
-        protected override GenericOrderProvider<ChargeByCreditCardWith3DsAuthWriteDto, ChargeByCreditCardWith3DsAuthReadDto> CreateProvider()
+        protected override CreditCardWith3DsAuthOrderProvider CreateProvider()
         {
             return new CreditCardWith3DsAuthOrderProvider(Settings, MapperMock);
         }

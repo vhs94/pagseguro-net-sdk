@@ -5,9 +5,9 @@ using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 {
-    public class BankSlipOrderProviderTests : GenericOrderProviderTests<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
+    public class BankSlipOrderProviderTests : ChargedOrderProviderOfTests<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
     {
-        protected override GenericOrderProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto> CreateProvider()
+        protected override BankSlipOrderProvider CreateProvider()
         {
             return new BankSlipOrderProvider(Settings, MapperMock);
         }

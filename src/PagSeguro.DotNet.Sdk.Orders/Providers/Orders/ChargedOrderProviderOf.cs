@@ -10,15 +10,15 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
-    public abstract class GenericOrderProvider<TChargeWriteDto, TChargeReadDto> : BaseProvider,
-        IGenericOrderProvider<TChargeWriteDto, TChargeReadDto>
+    public abstract class ChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> : BaseProvider,
+        IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto>
         where TChargeWriteDto : ChargeDto
         where TChargeReadDto : ChargeDto
     {
         private ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto;
         private readonly IMapper _mapper;
 
-        public GenericOrderProvider(
+        public ChargedOrderProviderOf(
             PagSeguroSettings settings,
             IMapper mapper)
             : base(settings)
@@ -32,13 +32,13 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             _chargedOrderWriteDto = new ChargedOrderWriteDto<TChargeWriteDto>();
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> AddCharge(TChargeWriteDto chargeWrite)
+        public IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> AddCharge(TChargeWriteDto chargeWrite)
         {
             _chargedOrderWriteDto.Charges.Add(chargeWrite);
             return this;
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> AddCharges(
+        public IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> AddCharges(
             ICollection<TChargeWriteDto> chargeWriteDtos)
         {
             List<TChargeWriteDto> newCharges = _chargedOrderWriteDto.Charges.ToList();
@@ -47,14 +47,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
             return this;
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(
+        public IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> Load(
             ChargedOrderWriteDto<TChargeWriteDto> chargedWriteDto)
         {
             _chargedOrderWriteDto = chargedWriteDto;
             return this;
         }
 
-        public IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(OrderWriteDto orderWriteDto)
+        public IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> Load(OrderWriteDto orderWriteDto)
         {
             _chargedOrderWriteDto = _mapper.Map<ChargedOrderWriteDto<TChargeWriteDto>>(orderWriteDto);
             return this;

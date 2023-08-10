@@ -5,14 +5,14 @@ using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.ChargedOrder;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
 {
-    public interface IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> : IProvider
+    public interface IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> : IProvider
         where TChargeWriteDto : ChargeDto
         where TChargeReadDto : ChargeDto
     {
-        IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> AddCharge(TChargeWriteDto chargeWriteDto);
-        IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> AddCharges(ICollection<TChargeWriteDto> chargeWriteDtos);
-        IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(ChargedOrderWriteDto<TChargeWriteDto> chargedWriteDto);
-        IGenericOrderProvider<TChargeWriteDto, TChargeReadDto> Load(OrderWriteDto orderWriteDto);
+        IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> AddCharge(TChargeWriteDto chargeWriteDto);
+        IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> AddCharges(ICollection<TChargeWriteDto> chargeWriteDtos);
+        IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> Load(ChargedOrderWriteDto<TChargeWriteDto> chargedWriteDto);
+        IChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto> Load(OrderWriteDto orderWriteDto);
         ChargedOrderWriteDto<TChargeWriteDto> Build();
         Task<ChargedOrderReadDto<TChargeReadDto>> CreateAsync();
         Task<ChargedOrderReadDto<TChargeReadDto>> GetByIdAsync(string orderId);

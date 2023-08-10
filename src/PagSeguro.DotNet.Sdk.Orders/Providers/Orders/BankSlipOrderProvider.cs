@@ -6,7 +6,7 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
     public class BankSlipOrderProvider
-        : GenericOrderProvider<
+        : ChargedOrderProviderOf<
             ChargeByBankSlipWriteDto,
             ChargeByBankSlipReadDto>,
         IBankSlipOrderProvider

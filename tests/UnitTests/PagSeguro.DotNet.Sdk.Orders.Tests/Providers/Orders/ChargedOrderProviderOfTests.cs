@@ -12,8 +12,8 @@ using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 {
-    public abstract class GenericOrderProviderTests<TChargeWriteDto, TChargeReadDto>
-        : BaseProviderTests<GenericOrderProvider<TChargeWriteDto, TChargeReadDto>>
+    public abstract class ChargedOrderProviderOfTests<TChargeWriteDto, TChargeReadDto>
+        : BaseProviderTests<ChargedOrderProviderOf<TChargeWriteDto, TChargeReadDto>>
         where TChargeWriteDto : ChargeDto, new()
         where TChargeReadDto : ChargeDto
     {
