@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Charges;
+using PagSeguro.DotNet.Sdk.Orders.Providers.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Helpers
@@ -21,6 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
             services.AddTransient<ICreditCardOrderProvider, CreditCardOrderProvider>();
             services.AddTransient<ICreditCardWith3DsAuthOrderProvider, CreditCardWith3DsAuthOrderProvider>();
             services.AddTransient<IDebitCardWith3DsAuthOrderProvider, DebitCardWith3DsAuthOrderProvider>();
+            services.AddTransient<IFeeProvider, FeeProvider>();
             services.AddAutoMapper(typeof(OrderProvider));
         }
     }

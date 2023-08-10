@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod
+namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Common
 {
     public enum PaymentMethodType
     {

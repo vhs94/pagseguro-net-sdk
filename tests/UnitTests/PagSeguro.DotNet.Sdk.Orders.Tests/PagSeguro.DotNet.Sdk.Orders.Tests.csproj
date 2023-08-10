@@ -29,4 +29,10 @@
 	  <ProjectReference Include="..\..\..\src\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
 	  <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common.Tests\PagSeguro.DotNet.Sdk.Common.Tests.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Assets\fees.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>

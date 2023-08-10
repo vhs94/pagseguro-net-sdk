@@ -331,7 +331,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
                 .WithOAuthBearerToken(Settings.Token)
-            .WithHeader(OrderHeaders.IdempotencyKey)
+                .WithHeader(OrderHeaders.IdempotencyKey)
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(_orderWriteDto)
                 .Times(1);
