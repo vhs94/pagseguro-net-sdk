@@ -2,7 +2,7 @@
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
 {
-    public interface IBankSlipOrderProvider : IGenericOrderProvider<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
+    public interface IBankSlipOrderProvider : IChargedOrderProviderOf<ChargeByBankSlipWriteDto, ChargeByBankSlipReadDto>
     {
     }
 }

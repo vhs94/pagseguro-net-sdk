@@ -6,7 +6,7 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
     public class DebitCardWith3DsAuthOrderProvider
-        : GenericOrderProvider<
+        : ChargedOrderProviderOf<
             ChargeByDebitCardWith3DsAuthWriteDto,
             ChargeByDebitCardWith3DsAuthReadDto>,
         IDebitCardWith3DsAuthOrderProvider

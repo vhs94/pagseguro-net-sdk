@@ -4,11 +4,11 @@ using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 {
     public class DebitCardWith3DsAuthOrderProviderTests
-        : GenericOrderProviderTests<
+        : ChargedOrderProviderOfTests<
             ChargeByDebitCardWith3DsAuthWriteDto,
             ChargeByDebitCardWith3DsAuthReadDto>
     {
-        protected override GenericOrderProvider<ChargeByDebitCardWith3DsAuthWriteDto, ChargeByDebitCardWith3DsAuthReadDto> CreateProvider()
+        protected override DebitCardWith3DsAuthOrderProvider CreateProvider()
         {
             return new DebitCardWith3DsAuthOrderProvider(Settings, MapperMock);
         }

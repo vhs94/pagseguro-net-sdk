@@ -3,7 +3,7 @@
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
 {
     public interface ICreditCardWith3DsAuthOrderProvider
-        : IGenericOrderProvider<
+        : IChargedOrderProviderOf<
             ChargeByCreditCardWith3DsAuthWriteDto,
             ChargeByCreditCardWith3DsAuthReadDto>
     {

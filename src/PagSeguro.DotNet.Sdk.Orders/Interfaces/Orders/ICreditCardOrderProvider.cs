@@ -2,7 +2,10 @@
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
 {
-    public interface ICreditCardOrderProvider : IGenericOrderProvider<ChargeByCreditCardWriteDto, ChargeByCreditCardReadDto>
+    public interface ICreditCardOrderProvider
+        : IChargedOrderProviderOf<
+            ChargeByCreditCardWriteDto,
+            ChargeByCreditCardReadDto>
     {
     }
 }
