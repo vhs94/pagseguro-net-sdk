@@ -11,10 +11,14 @@
 		<PackageReference Include="Flurl.Http" Version="3.2.4" />
 		<PackageReference Include="MethodDecorator.Fody" Version="1.1.1" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+		<PackageReference Include="NuGetizer" Version="1.1.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
 	</ItemGroup>
 
 </Project>
