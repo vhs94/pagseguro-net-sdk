@@ -1,0 +1,148 @@
+{
+    "payment_methods": {
+        "credit_card": {
+            "visa": {
+                "installment_plans": [
+                    {
+                        "installments": 1,
+                        "installment_value": 10000,
+                        "interest_free": true,
+                        "amount": {
+                            "value": 10000,
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 2,
+                        "installment_value": 5000,
+                        "interest_free": true,
+                        "amount": {
+                            "value": 10000,
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 3,
+                        "installment_value": 3333,
+                        "interest_free": true,
+                        "amount": {
+                            "value": 10000,
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 4,
+                        "installment_value": 2500,
+                        "interest_free": true,
+                        "amount": {
+                            "value": 10000,
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 5,
+                        "installment_value": 2070,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 10349,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 349,
+                                        "installments": 1
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 6,
+                        "installment_value": 1754,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 10526,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 526,
+                                        "installments": 2
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 7,
+                        "installment_value": 1529,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 10706,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 706,
+                                        "installments": 3
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 8,
+                        "installment_value": 1361,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 10887,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 887,
+                                        "installments": 4
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 9,
+                        "installment_value": 1230,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 11071,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 1071,
+                                        "installments": 5
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    },
+                    {
+                        "installments": 10,
+                        "installment_value": 1126,
+                        "interest_free": false,
+                        "amount": {
+                            "value": 11256,
+                            "fees": {
+                                "buyer": {
+                                    "interest": {
+                                        "total": 1256,
+                                        "installments": 6
+                                    }
+                                }
+                            },
+                            "currency": "BRL"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

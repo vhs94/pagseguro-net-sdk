@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>$(AssemblyName)</PackageId>
+		<PackageVersion>3.2.0</PackageVersion>
+		<Title>PagSeguro DotNet SDK</Title>
+		<Authors>victor_santana09</Authors>
+		<Description>Fluent Client para APIs PagSeguro</Description>
+		<PackageProjectUrl>https://github.com/vhs94/pagseguro-net-sdk</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/vhs94/pagseguro-net-sdk</RepositoryUrl>
+		<PackageTags>pagseguro;uol;pagbank;payment-gateway;payment;sdk;</PackageTags>
+		<PackageIcon>pagseguro-logo.png</PackageIcon>
+		<RepositoryType>git</RepositoryType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\assets\pagseguro-logo.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="NuGetizer" Version="1.1.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Account\PagSeguro.DotNet.Sdk.Account.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Certificate\PagSeguro.DotNet.Sdk.Certificate.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Connect\PagSeguro.DotNet.Sdk.Connect.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.PublicKey\PagSeguro.DotNet.Sdk.PublicKey.csproj" />
+	</ItemGroup>
+
+</Project>

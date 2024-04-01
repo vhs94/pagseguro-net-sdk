@@ -1,0 +1,28 @@
+name: .Net 7 CI Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: CI Build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.5.3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore Dependencies
+        run: dotnet restore PagSeguro.DotNet.Sdk.sln
+      - name: Build
+        run: dotnet build PagSeguro.DotNet.Sdk.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test PagSeguro.DotNet.Sdk.sln  --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.4
+        
