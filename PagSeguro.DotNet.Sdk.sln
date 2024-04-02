@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PagSeguro.DotNet.Sdk.Orders
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{A0BCACEC-3BC5-409D-9020-43120031EF7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagSeguro.DotNet.Sdk.IntegrationTests", "tests\IntegrationTests\PagSeguro.DotNet.Sdk.IntegrationTests\PagSeguro.DotNet.Sdk.IntegrationTests.csproj", "{7696F770-6D32-42A4-B076-E3E0BCC1E74E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PagSeguro.DotNet.Sdk.IntegrationTests", "tests\IntegrationTests\PagSeguro.DotNet.Sdk.IntegrationTests\PagSeguro.DotNet.Sdk.IntegrationTests.csproj", "{7696F770-6D32-42A4-B076-E3E0BCC1E74E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -137,7 +137,7 @@ Global
 		{23D547BC-EE22-490D-A0FA-32F84920155B} = {C68F4B8C-1781-44FC-949D-33D4C5BAF247}
 		{266B9684-B933-4608-93EA-27B726F8341B} = {714FBAB8-FC77-4EF1-A1F1-FCCFC8CF55BD}
 		{A0BCACEC-3BC5-409D-9020-43120031EF7C} = {71EBF301-B074-4EC5-BC4A-EDA1B3667C93}
-		{7696F770-6D32-42A4-B076-E3E0BCC1E74E} = {A0BCACEC-3BC5-409D-9020-43120031EF7C}
+		{7696F770-6D32-42A4-B076-E3E0BCC1E74E} = {714FBAB8-FC77-4EF1-A1F1-FCCFC8CF55BD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2784D496-E6E3-47DD-ACD5-CAF62A406F24}
