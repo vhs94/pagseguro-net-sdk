@@ -26,7 +26,7 @@ using PagSeguro.DotNet.Sdk.Settings;
 
 namespace PagSeguro.DotNet.Sdk
 {
-    public class PagSeguroClient
+    public class PagSeguroClient : IPagSeguroClient
     {
         public PagSeguroSettings Settings { get; private set; }
         private ServiceCollection _services;
@@ -79,7 +79,7 @@ namespace PagSeguro.DotNet.Sdk
                 var jsonSettings = new JsonSerializerSettings
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    
+
                 };
                 var defaultSerializer = new NewtonsoftJsonSerializer(jsonSettings);
                 settings.JsonSerializer = defaultSerializer;

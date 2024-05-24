@@ -19,7 +19,25 @@ dotnet add package PagSeguro.DotNet.Sdk
 
 # Como usar
 
-- Crie uma instância de PagSeguroClient, caso queira usar o ambiente de Produção, o Environment pode ser omitido.
+### ASP.NET
+
+No ASP.NET, use o middleware para injetar uma instância do ```IPagseguroClient```
+
+```csharp
+//configuracao credenciais pagseguro
+builder.Services.AddPagSeguro(options =>
+{
+    options.ClientId = "8815a5e2-616b-4754-a6d1-40d92b71674c";
+    options.ClientSecret = "45e5a4de-b8eb-4b78-9ce6-fad416b1953c";
+    options.Token = "BCABE5E7AA9D43BCBBB76E3C45C1567A";
+    options.Environment = PagSeguroEnvironment.Sandbox;
+});
+```
+
+### ConsoleApp
+
+Crie uma instância de PagSeguroClient, caso queira usar o ambiente de Produção, o Environment pode ser omitido.
+
 ```csharp
 var client = new PagSeguroClient(new ClientSettings
 {
@@ -27,7 +45,7 @@ var client = new PagSeguroClient(new ClientSettings
     Token = "<SEU_TOKEN>"
 });
 ```
-- Use as fluent interfaces para manipular as APIs, para opções disponíveis [veja a Wiki.](https://github.com/vhs94/pagseguro-net-sdk/wiki)
+Use as fluent interfaces para manipular as APIs, para opções disponíveis [veja a Wiki.](https://github.com/vhs94/pagseguro-net-sdk/wiki)
 
 ```csharp
 var creditCardOrder = await client

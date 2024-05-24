@@ -1,0 +1,6 @@
+@WebApi_HostAddress = http://localhost:5142
+
+GET {{WebApi_HostAddress}}/public-key/
+Accept: application/json
+
+###
