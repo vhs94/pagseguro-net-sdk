@@ -14,7 +14,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
     public class OrderProvider : BaseProvider, IOrderProvider
     {
         private readonly IServiceProvider _serviceProvider;
-        private OrderWriteDto _orderWriteDto;
+        private OrderWriteDto _orderWriteDto = null!;
 
         public OrderProvider(
             PagSeguroSettings settings,

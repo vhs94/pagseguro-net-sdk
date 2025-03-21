@@ -7,13 +7,10 @@ using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Providers
 {
-    public class ApplicationProvider : BaseProvider, IApplicationProvider
+    public class ApplicationProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        IApplicationProvider
     {
-        public ApplicationProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-        }
-
         public async Task<ApplicationReadDto> CreateAsync(ApplicationWriteDto applicationWriteDto)
         {
             return await BaseUrl

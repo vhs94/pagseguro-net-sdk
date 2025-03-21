@@ -1,13 +1,14 @@
 ﻿using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 
+
 namespace PagSeguro.DotNet.Sdk.Common.Attributes
 {
-    public class AccessTokenRequiredAttribute : RequiredValidationAttribute
+    public class PrivateKeyRequiredAttribute : RequiredValidationAttribute
     {
         protected override bool IsValid()
-            => !string.IsNullOrEmpty(Provider.Settings.AccessToken);
+            => !string.IsNullOrEmpty(Provider.Settings.PrivateKey);
 
         protected override Exception CreateCustomException()
-            => new ClientNotConnectedException();
+            => new PrivateKeyNotFoundException();
     }
 }

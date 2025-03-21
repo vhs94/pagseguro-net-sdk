@@ -1,16 +1,12 @@
-﻿using System.Net;
-using PagSeguro.DotNet.Sdk.Common.Helpers;
+﻿using PagSeguro.DotNet.Sdk.Common.Helpers;
+using System.Net;
 
 namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
-    public class ForbiddenException : PagSeguroHttpException
+    public class ForbiddenException(string response) : PagSeguroHttpException(
+        HttpStatusCode.Forbidden,
+        response,
+        ErrorMessages.ForbiddenExceptionMessage)
     {
-        public ForbiddenException(string response)
-            : base(
-                  HttpStatusCode.Forbidden,
-                  response,
-                  ErrorMessages.ForbiddenExceptionMessage)
-        {
-        }
     }
 }

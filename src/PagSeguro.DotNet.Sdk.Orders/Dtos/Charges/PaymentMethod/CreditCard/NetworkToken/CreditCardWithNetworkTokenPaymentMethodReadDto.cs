@@ -4,6 +4,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard.Netw
 {
     public class CreditCardWithNetworkTokenPaymentMethodReadDto : CreditCardWithNetworkTokenPaymentMethodDto
     {
-        public NetworkTokenCardReadDto Card { get; set; }
+        public NetworkTokenCardReadDto? Card { get; set; }
     }
 }

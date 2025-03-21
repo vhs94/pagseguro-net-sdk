@@ -5,6 +5,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
     public class PaymentMethodDto
     {
         [JsonProperty("credit_card")]
-        public CreditCardDto CreditCard { get; set; }
+        public CreditCardDto? CreditCard { get; set; }
     }
 }

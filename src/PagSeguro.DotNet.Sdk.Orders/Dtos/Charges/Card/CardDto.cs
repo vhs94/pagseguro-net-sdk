@@ -9,6 +9,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Card
         public int ExpMonth { get; set; }
         [JsonProperty("exp_year")]
         public int ExpYear { get; set; }
-        public HolderDto Holder { get; set; }
+        public HolderDto? Holder { get; set; }
     }
 }

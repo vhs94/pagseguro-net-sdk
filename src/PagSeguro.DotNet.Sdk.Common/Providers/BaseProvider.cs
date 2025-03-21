@@ -5,16 +5,11 @@ using PagSeguro.DotNet.Sdk.Common.Settings;
 
 namespace PagSeguro.DotNet.Sdk.Common.Providers
 {
-    public abstract class BaseProvider : IProvider
+    public abstract class BaseProvider(PagSeguroSettings settings) : IProvider
     {
-        public PagSeguroSettings Settings { get; set; }
+        public PagSeguroSettings Settings { get; set; } = settings;
         public Url BaseUrl => Settings.Environment == PagSeguroEnvironment.Sandbox
             ? CommonEndpoints.SandboxBaseUrl
             : CommonEndpoints.ProductionBaseUrl;
-
-        protected BaseProvider(PagSeguroSettings settings)
-        {
-            Settings = settings;
-        }
     }
 }

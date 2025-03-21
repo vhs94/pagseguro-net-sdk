@@ -12,8 +12,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 
         public OrderWriteDto()
         {
-            QrCodes = new List<QrCodeWriteDto>();
-            Items = new List<ItemWriteDto>();
+            QrCodes = [];
+            Items = [];
         }
     }
 }

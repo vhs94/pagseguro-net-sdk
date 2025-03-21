@@ -7,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 {
     public class OrderReadDto : OrderDto
     {
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [JsonProperty("created_at")]
         public DateTime CreateDate { get; set; }
         public ICollection<LinkDto> Links { get; set; }
@@ -17,9 +17,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders
 
         public OrderReadDto()
         {
-            Links = new List<LinkDto>();
-            QrCodes = new List<QrCodeReadDto>();
-            Items = new List<ItemReadDto>();
+            Links = [];
+            QrCodes = [];
+            Items = [];
         }
     }
 }

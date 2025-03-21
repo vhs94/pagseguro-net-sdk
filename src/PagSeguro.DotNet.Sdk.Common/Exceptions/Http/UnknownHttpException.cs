@@ -2,14 +2,10 @@
 
 namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
-    public class UnknownHttpException : PagSeguroHttpException
+    public class UnknownHttpException(
+        HttpStatusCode statusCode,
+        string response,
+        string message) : PagSeguroHttpException(statusCode, response, message)
     {
-        public UnknownHttpException(
-            HttpStatusCode statusCode,
-            string response,
-            string message)
-            : base(statusCode, response, message)
-        {
-        }
     }
 }

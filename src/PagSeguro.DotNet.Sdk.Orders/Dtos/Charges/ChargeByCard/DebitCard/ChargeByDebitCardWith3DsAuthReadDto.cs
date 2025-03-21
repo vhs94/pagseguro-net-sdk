@@ -6,6 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.DebitCard
     public class ChargeByDebitCardWith3DsAuthReadDto : ChargeByCardReadDto
     {
         [JsonProperty("payment_method")]
-        public DebitCardWith3DsAuthPaymentMethodReadDto PaymentMethod { get; set; }
+        public DebitCardWith3DsAuthPaymentMethodReadDto? PaymentMethod { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.BankSlip
     public class BankSlipPaymentMethodReadDto : BankSlipPaymentMethodDto
     {
         [JsonProperty("boleto")]
-        public BankSlipReadDto BankSlip { get; set; }
+        public BankSlipReadDto? BankSlip { get; set; }
     }
 }

@@ -9,6 +9,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
         public int InstallmentValue { get; set; }
         [JsonProperty("interest_free")]
         public bool InterestFree { get; set; }
-        public AmountDto Amount { get; set; }
+        public AmountDto? Amount { get; set; }
     }
 }

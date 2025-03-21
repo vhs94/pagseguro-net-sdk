@@ -15,6 +15,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Attributes.Providers
         [AccessTokenRequired]
         [ChallengeRequired]
         [ClientApplicationRequired]
+        [PrivateKeyRequired]
         public Task ExecuteAsync()
         {
             return Task.CompletedTask;

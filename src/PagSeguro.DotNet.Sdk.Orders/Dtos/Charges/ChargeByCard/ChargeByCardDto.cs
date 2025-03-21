@@ -4,9 +4,6 @@
     {
         public IDictionary<string, string> Metadata { get; set; }
 
-        public ChargeByCardDto()
-        {
-            Metadata = new Dictionary<string, string>();
-        }
+        public ChargeByCardDto() => Metadata = new Dictionary<string, string>();
     }
 }

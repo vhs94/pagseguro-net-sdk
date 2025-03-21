@@ -4,8 +4,8 @@ namespace PagSeguro.DotNet.Sdk.Account.Dtos
 {
     public class AccountWriteDto : AccountDto
     {
-        public CompanyWriteDto Company { get; set; }
+        public CompanyWriteDto? Company { get; set; }
         [JsonProperty("tos_acceptance")]
-        public TosAcceptance TosAcceptance { get; set; }
+        public TosAcceptance? TosAcceptance { get; set; }
     }
 }

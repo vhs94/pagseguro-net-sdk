@@ -3,6 +3,6 @@
     public class ItemReadDto : ItemDto
     {
         public int Weight { get; set; }
-        public DimensionDto Dimensions { get; set; }
+        public DimensionDto? Dimensions { get; set; }
     }
 }

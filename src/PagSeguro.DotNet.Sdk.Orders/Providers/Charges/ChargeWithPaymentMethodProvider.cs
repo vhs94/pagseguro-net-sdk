@@ -6,36 +6,22 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
 {
-    public class ChargeWithPaymentMethodProvider : BaseProvider, IChargeWithPaymentMethodProvider
+    public class ChargeWithPaymentMethodProvider(
+        PagSeguroSettings settings,
+        IServiceProvider serviceProvider)
+        : BaseProvider(settings),
+        IChargeWithPaymentMethodProvider
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public ChargeWithPaymentMethodProvider(
-            PagSeguroSettings settings,
-            IServiceProvider serviceProvider)
-            : base(settings)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
         public IBankSlipChargeProvider WithBankSlip()
-        {
-            return _serviceProvider.GetService<IBankSlipChargeProvider>();
-        }
+            => serviceProvider.GetRequiredService<IBankSlipChargeProvider>();
 
         public ICreditCardChargeProvider WithCreditCard()
-        {
-            return _serviceProvider.GetService<ICreditCardChargeProvider>();
-        }
+            => serviceProvider.GetRequiredService<ICreditCardChargeProvider>();
 
         public ICreditCardWith3DsAuthChargeProvider WithCreditCardAnd3DsAuthentication()
-        {
-            return _serviceProvider.GetService<ICreditCardWith3DsAuthChargeProvider>();
-        }
+            => serviceProvider.GetRequiredService<ICreditCardWith3DsAuthChargeProvider>();
 
         public IDebitCardWith3DsAuthChargeProvider WithDebitCardAnd3DsAuthentication()
-        {
-            return _serviceProvider.GetService<IDebitCardWith3DsAuthChargeProvider>();
-        }
+            => serviceProvider.GetRequiredService<IDebitCardWith3DsAuthChargeProvider>();
     }
 }

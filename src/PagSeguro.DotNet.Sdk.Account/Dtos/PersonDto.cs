@@ -8,17 +8,14 @@ namespace PagSeguro.DotNet.Sdk.Account.Dtos
         [JsonProperty("birth_date")]
         [JsonConverter(typeof(ShortDateConverter))]
         public DateTime BirthDate { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         [JsonProperty("mother_name")]
-        public string MotherName { get; set; }
+        public string? MotherName { get; set; }
         [JsonProperty("tax_id")]
-        public string TaxId { get; set; }
-        public AddressDto Address { get; set; }
+        public string? TaxId { get; set; }
+        public AddressDto? Address { get; set; }
         public ICollection<PhoneDto> Phones { get; set; }
 
-        public PersonDto()
-        {
-            Phones = new List<PhoneDto>();
-        }
+        public PersonDto() => Phones = [];
     }
 }

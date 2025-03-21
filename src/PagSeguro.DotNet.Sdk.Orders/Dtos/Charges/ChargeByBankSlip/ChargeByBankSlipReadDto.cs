@@ -7,20 +7,17 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip
 {
     public class ChargeByBankSlipReadDto : ChargeByBankSlipDto
     {
-        public string Id { get; set; }
-        public string Status { get; set; }
+        public new string? Id { get; set; }
+        public string? Status { get; set; }
         [JsonProperty("created_at")]
         public DateTime CreatedDate { get; set; }
-        public ChargeAmountReadDto Amount { get; set; }
+        public ChargeAmountReadDto? Amount { get; set; }
         [JsonProperty("payment_response")]
-        public PaymentResponseDto PaymentResponse { get; set; }
+        public PaymentResponseDto? PaymentResponse { get; set; }
         [JsonProperty("payment_method")]
-        public BankSlipPaymentMethodReadDto PaymentMethod { get; set; }
+        public BankSlipPaymentMethodReadDto? PaymentMethod { get; set; }
         public ICollection<LinkDto> Links { get; set; }
 
-        public ChargeByBankSlipReadDto()
-        {
-            Links = new List<LinkDto>();
-        }
+        public ChargeByBankSlipReadDto() => Links = [];
     }
 }

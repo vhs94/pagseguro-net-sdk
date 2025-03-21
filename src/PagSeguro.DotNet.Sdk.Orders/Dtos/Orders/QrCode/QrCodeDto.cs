@@ -6,6 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode
     {
         [JsonProperty("expiration_date")]
         public DateTime? ExpirationDate { get; set; }
-        public AmountDto Amount { get; set; }
+        public AmountDto? Amount { get; set; }
     }
 }

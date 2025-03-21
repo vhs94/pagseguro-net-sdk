@@ -1,9 +1,8 @@
-﻿using System.Net;
-using Flurl.Http;
-using PagSeguro.DotNet.Sdk.Common.Exceptions;
+﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Http;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using System.Net;
 
 namespace PagSeguro.DotNet.Sdk.Common.Factories
 {
@@ -13,28 +12,20 @@ namespace PagSeguro.DotNet.Sdk.Common.Factories
         {
             string responseBody = await response.GetStringAsync();
             HttpStatusCode httpStatusCode = (HttpStatusCode)response.StatusCode;
-            switch (httpStatusCode)
+            return httpStatusCode switch
             {
-                case HttpStatusCode.BadRequest:
-                    return new BadRequestException(responseBody);
-                case HttpStatusCode.Conflict:
-                    return new ConflictException(responseBody);
-                case HttpStatusCode.Forbidden:
-                    return new ForbiddenException(responseBody);
-                case HttpStatusCode.InternalServerError:
-                    return new InternalServerErrorException(responseBody);
-                case HttpStatusCode.NotAcceptable:
-                    return new NotAcceptableException(responseBody);
-                case HttpStatusCode.NotFound:
-                    return new NotFoundException(responseBody);
-                case HttpStatusCode.Unauthorized:
-                    return new UnauthorizedException(responseBody);
-                default:
-                    return new UnknownHttpException(
-                        httpStatusCode,
-                        responseBody,
-                        ErrorMessages.UnkownHttpExceptionMessage);
-            }
+                HttpStatusCode.BadRequest => new BadRequestException(responseBody),
+                HttpStatusCode.Conflict => new ConflictException(responseBody),
+                HttpStatusCode.Forbidden => new ForbiddenException(responseBody),
+                HttpStatusCode.InternalServerError => new InternalServerErrorException(responseBody),
+                HttpStatusCode.NotAcceptable => new NotAcceptableException(responseBody),
+                HttpStatusCode.NotFound => new NotFoundException(responseBody),
+                HttpStatusCode.Unauthorized => new UnauthorizedException(responseBody),
+                _ => new UnknownHttpException(
+                                        httpStatusCode,
+                                        responseBody,
+                                        ErrorMessages.UnkownHttpExceptionMessage)
+            };
         }
     }
 }

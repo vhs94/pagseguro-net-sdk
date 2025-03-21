@@ -2,8 +2,8 @@
 {
     public class CertificateReadDto
     {
-        public string Id { get; set; }
-        public string Key { get; set; }
-        public string Pem { get; set; }
+        public string? Id { get; set; }
+        public string? Key { get; set; }
+        public string? Pem { get; set; }
     }
 }

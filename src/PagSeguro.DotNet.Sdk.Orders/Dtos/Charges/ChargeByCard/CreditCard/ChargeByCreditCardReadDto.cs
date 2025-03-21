@@ -6,6 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard
     public class ChargeByCreditCardReadDto : ChargeByCardReadDto
     {
         [JsonProperty("payment_method")]
-        public CreditCardPaymentMethodReadDto PaymentMethod { get; set; }
+        public CreditCardPaymentMethodReadDto? PaymentMethod { get; set; }
     }
 }

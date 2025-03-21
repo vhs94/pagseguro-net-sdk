@@ -15,7 +15,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         where TChargeWriteDto : ChargeDto
         where TChargeReadDto : ChargeDto
     {
-        private ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto;
+        private ChargedOrderWriteDto<TChargeWriteDto> _chargedOrderWriteDto = null!;
         private readonly IMapper _mapper;
 
         public ChargedOrderProviderOf(

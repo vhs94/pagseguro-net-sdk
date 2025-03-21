@@ -24,6 +24,10 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
         {
             return Fixture.Build<PagSeguroSettings>()
                 .With(ps => ps.Environment, PagSeguroEnvironment.Sandbox)
+                .With(ps => ps.AccessToken)
+                .With(ps => ps.ClientId)
+                .With(ps => ps.ClientSecret)
+                .With(ps => ps.PrivateKey)
                 .Create();
         }
 

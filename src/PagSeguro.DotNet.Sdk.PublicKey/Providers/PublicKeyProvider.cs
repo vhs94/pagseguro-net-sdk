@@ -7,13 +7,10 @@ using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
 {
-    public class PublicKeyProvider : BaseProvider, IPublicKeyProvider
+    public class PublicKeyProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        IPublicKeyProvider
     {
-        public PublicKeyProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-        }
-
         public async Task<PublicKeyReadDto> CreateAsync()
         {
             return await BaseUrl

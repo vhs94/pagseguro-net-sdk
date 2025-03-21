@@ -35,7 +35,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
 
         public TTopLevelProvider WithNotificationUrls(ICollection<string> notificationUrls)
         {
-            List<string> newNotificationUrls = ChargeWriteDto.NotificationUrls.ToList();
+            var newNotificationUrls = ChargeWriteDto.NotificationUrls.ToList();
             newNotificationUrls.AddRange(notificationUrls);
             ChargeWriteDto.NotificationUrls = newNotificationUrls;
             return (TTopLevelProvider)this;

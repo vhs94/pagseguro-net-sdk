@@ -28,29 +28,29 @@ namespace PagSeguro.DotNet.Sdk
 {
     public class PagSeguroClient : IPagSeguroClient
     {
-        public PagSeguroSettings Settings { get; private set; }
-        private ServiceCollection _services;
-        private IServiceProvider _serviceProvider => _services.BuildServiceProvider();
-        private IMapper _mapper => _serviceProvider.GetService<IMapper>();
+        public PagSeguroSettings Settings { get; private set; } = null!;
+        private IServiceCollection _services = null!;
+        private IServiceProvider ServiceProvider => _services.BuildServiceProvider();
+        private IMapper Mapper => ServiceProvider.GetRequiredService<IMapper>();
         public virtual IAuthorizationProvider ForAuthorization()
-            => _serviceProvider.GetService<IAuthorizationProvider>();
+            => ServiceProvider.GetRequiredService<IAuthorizationProvider>()!;
         public virtual IApplicationProvider ForApplication()
-            => _serviceProvider.GetService<IApplicationProvider>();
+            => ServiceProvider.GetRequiredService<IApplicationProvider>();
         public virtual IAccountProvider ForAccount()
-            => _serviceProvider.GetService<IAccountProvider>();
+            => ServiceProvider.GetRequiredService<IAccountProvider>();
         public virtual IPublicKeyProvider ForPublicKey()
-            => _serviceProvider.GetService<IPublicKeyProvider>();
+            => ServiceProvider.GetRequiredService<IPublicKeyProvider>();
         public virtual IOrderProvider ForOrder()
-            => _serviceProvider.GetService<IOrderProvider>();
+            => ServiceProvider.GetRequiredService<IOrderProvider>();
         public virtual IChargeWithPaymentMethodProvider ForCharge()
-            => _serviceProvider.GetService<IChargeWithPaymentMethodProvider>();
+            => ServiceProvider.GetRequiredService<IChargeWithPaymentMethodProvider>();
         public virtual IDigitalCertificateProvider ForCertificate()
-            => _serviceProvider.GetService<IDigitalCertificateProvider>();
+            => ServiceProvider.GetRequiredService<IDigitalCertificateProvider>();
         public virtual IFeeProvider ForFee()
-            => _serviceProvider.GetService<IFeeProvider>();
+            => ServiceProvider.GetRequiredService<IFeeProvider>();
 
-        private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory
-            => _serviceProvider.GetService<IPagSeguroHttpExceptionFactory>();
+        private IPagSeguroHttpExceptionFactory PagSeguroHttpExceptionFactory
+            => ServiceProvider.GetRequiredService<IPagSeguroHttpExceptionFactory>();
 
         public PagSeguroClient(ClientSettings settings)
         {
@@ -88,13 +88,11 @@ namespace PagSeguro.DotNet.Sdk
         }
 
         private async Task HandleExceptionAsync(FlurlCall call)
-        {
-            throw await _pagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
-        }
+            => throw await PagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
 
         private void MapSettings(ClientSettings settings)
         {
-            Settings = _mapper.Map<PagSeguroSettings>(settings);
+            Settings = Mapper.Map<PagSeguroSettings>(settings);
         }
 
         private void ConfigureSettings()

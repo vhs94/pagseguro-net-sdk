@@ -6,8 +6,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip
 {
     public class ChargeByBankSlipWriteDto : ChargeByBankSlipDto, IChargeWriteDto
     {
-        public ChargeAmountWriteDto Amount { get; set; }
+        public ChargeAmountWriteDto? Amount { get; set; }
         [JsonProperty("payment_method")]
-        public BankSlipPaymentMethodWriteDto PaymentMethod { get; set; }
+        public BankSlipPaymentMethodWriteDto? PaymentMethod { get; set; }
     }
 }

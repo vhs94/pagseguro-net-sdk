@@ -7,9 +7,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.ChargedOrder
     {
         public ICollection<TChargeWriteDto> Charges { get; set; }
 
-        public ChargedOrderWriteDto()
-        {
-            Charges = new List<TChargeWriteDto>();
-        }
+        public ChargedOrderWriteDto() => Charges = [];
     }
 }

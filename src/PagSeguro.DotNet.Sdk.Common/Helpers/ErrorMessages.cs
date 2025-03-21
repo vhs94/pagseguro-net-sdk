@@ -5,6 +5,8 @@
         public const string MissingClientApplicationExceptionMessage = "Client Id and Secret is required";
         public const string ClientNotConnectedExceptionMessage =
             "Client not connected. Try calling ConnectAsync first.";
+        public const string PrivateKeyNotFoundMessage =
+            "Private Key not Found. Please load it on the configuration.";
         public const string ClientNotConnectedWithChallengeExceptionMessage =
             "Client not connected with challenge. Try calling ConnectChallengeAsync first.";
         public const string BadRequestExceptionMessage = "HTTP 400 Bad Request. Check the response for details.";

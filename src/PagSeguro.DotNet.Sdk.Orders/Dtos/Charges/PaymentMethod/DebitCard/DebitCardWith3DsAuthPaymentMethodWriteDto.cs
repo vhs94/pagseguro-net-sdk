@@ -6,6 +6,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.DebitCard
     public class DebitCardWith3DsAuthPaymentMethodWriteDto : DebitCardPaymentMethodWriteDto
     {
         [JsonProperty("authentication_method")]
-        public AuthenticationMethodWriteDto AuthenticationMethod { get; set; }
+        public AuthenticationMethodWriteDto? AuthenticationMethod { get; set; }
     }
 }
