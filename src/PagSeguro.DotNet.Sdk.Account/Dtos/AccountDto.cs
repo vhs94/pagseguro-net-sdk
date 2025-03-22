@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Account.Dtos
 {
@@ -6,7 +6,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Dtos
     {
         public string? Type { get; set; }
         public string? Email { get; set; }
-        [JsonProperty("business_category")]
+        [JsonPropertyName("business_category")]
         public string? BusinessCategory { get; set; }
         public PersonDto? Person { get; set; }
     }

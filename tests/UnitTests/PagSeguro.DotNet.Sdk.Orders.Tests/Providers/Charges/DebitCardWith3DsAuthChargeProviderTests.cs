@@ -44,35 +44,35 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             var provider = Substitute.For<IDebitCardWith3DsAuthChargeProvider>();
 
             provider
-                .AddPaymentMethod(null)
-                .WithReferenceId(null)
-                .WithId(null)
-                .WithAmount(null)
-                .WithDescription(null)
-                .WithNotificationUrl(null)
-                .WithNotificationUrls(null)
-                .WithMetadata(null)
-                .Load(null)
+                .AddPaymentMethod(null!)
+                .WithReferenceId(null!)
+                .WithId(null!)
+                .WithAmount(null!)
+                .WithDescription(null!)
+                .WithNotificationUrl(null!)
+                .WithNotificationUrls(null!)
+                .WithMetadata(null!)
+                .Load(null!)
                 .Build();
             await provider.CancelAsync(0);
             await provider.ChargeAsync();
-            await provider.GetByIdAsync(null);
+            await provider.GetByIdAsync(null!);
 
             provider
                 .Received(1)
-                .AddPaymentMethod(null)
-                .WithReferenceId(null)
-                .WithId(null)
-                .WithAmount(null)
-                .WithDescription(null)
-                .WithNotificationUrl(null)
-                .WithNotificationUrls(null)
-                .WithMetadata(null)
-                .Load(null)
+                .AddPaymentMethod(null!)
+                .WithReferenceId(null!)
+                .WithId(null!)
+                .WithAmount(null!)
+                .WithDescription(null!)
+                .WithNotificationUrl(null!)
+                .WithNotificationUrls(null!)
+                .WithMetadata(null!)
+                .Load(null!)
                 .Build();
             await provider.Received(1).CancelAsync(0);
             await provider.Received(1).ChargeAsync();
-            await provider.Received(1).GetByIdAsync(null);
+            await provider.Received(1).GetByIdAsync(null!);
         }
     }
 }

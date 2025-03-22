@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Account.Dtos
 {
-    public class TosAcceptance
+    public class TosAcceptanceDto
     {
-        [JsonProperty("user_ip")]
+        [JsonPropertyName("user_ip")]
         public string? UserIp { get; set; }
         public DateTime Date { get; set; }
     }

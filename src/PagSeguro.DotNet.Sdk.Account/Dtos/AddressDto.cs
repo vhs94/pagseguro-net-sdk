@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Account.Dtos
 {
     public class AddressDto
     {
-        [JsonProperty("region_code")]
+        [JsonPropertyName("region_code")]
         public string? RegionCode { get; set; }
         public string? City { get; set; }
-        [JsonProperty("postal_code")]
+        [JsonPropertyName("postal_code")]
         public string? PostalCode { get; set; }
         public string? Street { get; set; }
         public string? Number { get; set; }

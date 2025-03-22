@@ -13,15 +13,15 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
         IChargeWithPaymentMethodProvider
     {
         public IBankSlipChargeProvider WithBankSlip()
-            => serviceProvider.GetRequiredService<IBankSlipChargeProvider>();
+            => serviceProvider.GetService<IBankSlipChargeProvider>()!;
 
         public ICreditCardChargeProvider WithCreditCard()
-            => serviceProvider.GetRequiredService<ICreditCardChargeProvider>();
+            => serviceProvider.GetService<ICreditCardChargeProvider>()!;
 
         public ICreditCardWith3DsAuthChargeProvider WithCreditCardAnd3DsAuthentication()
-            => serviceProvider.GetRequiredService<ICreditCardWith3DsAuthChargeProvider>();
+            => serviceProvider.GetService<ICreditCardWith3DsAuthChargeProvider>()!;
 
         public IDebitCardWith3DsAuthChargeProvider WithDebitCardAnd3DsAuthentication()
-            => serviceProvider.GetRequiredService<IDebitCardWith3DsAuthChargeProvider>();
+            => serviceProvider.GetService<IDebitCardWith3DsAuthChargeProvider>()!;
     }
 }

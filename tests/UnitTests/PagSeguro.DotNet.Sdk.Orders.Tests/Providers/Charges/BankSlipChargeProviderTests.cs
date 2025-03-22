@@ -26,7 +26,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             TopLevelProviderMock.AddBankSlip(bankSlipDto);
 
-            TopLevelProviderMock.Build().PaymentMethod.BankSlip.Should().BeEquivalentTo(bankSlipDto);
+            TopLevelProviderMock.Build().PaymentMethod!.BankSlip.Should().BeEquivalentTo(bankSlipDto);
         }
 
         private BankSlipWriteDto CreateBankSlipWriteDto()
@@ -40,11 +40,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
                 .Should()
                 .BeEquivalentTo(
                     ChargeReadDto,
-                    options => options.Excluding(f => f.PaymentMethod.BankSlip.DueDate));
+                    options => options.Excluding(f => f.PaymentMethod!.BankSlip!.DueDate));
             receivedChargeReadDto
-                .PaymentMethod.BankSlip.DueDate
+                .PaymentMethod!.BankSlip!.DueDate
                 .Should()
-                .Be(ChargeReadDto.PaymentMethod.BankSlip.DueDate.Date);
+                .Be(ChargeReadDto.PaymentMethod!.BankSlip!.DueDate.Date);
         }
 
         [Fact]
@@ -53,33 +53,33 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             var provider = Substitute.For<IBankSlipChargeProvider>();
 
             provider
-                .AddBankSlip(null)
-                .WithReferenceId(null)
-                .WithId(null)
-                .WithAmount(null)
-                .WithDescription(null)
-                .WithNotificationUrl(null)
-                .WithNotificationUrls(null)
-                .Load(null)
+                .AddBankSlip(null!)
+                .WithReferenceId(null!)
+                .WithId(null!)
+                .WithAmount(null!)
+                .WithDescription(null!)
+                .WithNotificationUrl(null!)
+                .WithNotificationUrls(null!)
+                .Load(null!)
                 .Build();
             await provider.CancelAsync(0);
             await provider.ChargeAsync();
-            await provider.GetByIdAsync(null);
+            await provider.GetByIdAsync(null!);
 
             provider
                 .Received(1)
-                .AddBankSlip(null)
-                .WithReferenceId(null)
-                .WithId(null)
-                .WithAmount(null)
-                .WithDescription(null)
-                .WithNotificationUrl(null)
-                .WithNotificationUrls(null)
-                .Load(null)
+                .AddBankSlip(null!)
+                .WithReferenceId(null!)
+                .WithId(null!)
+                .WithAmount(null!)
+                .WithDescription(null!)
+                .WithNotificationUrl(null!)
+                .WithNotificationUrls(null!)
+                .Load(null!)
                 .Build();
             await provider.Received(1).CancelAsync(0);
             await provider.Received(1).ChargeAsync();
-            await provider.Received(1).GetByIdAsync(null);
+            await provider.Received(1).GetByIdAsync(null!);
         }
     }
 }

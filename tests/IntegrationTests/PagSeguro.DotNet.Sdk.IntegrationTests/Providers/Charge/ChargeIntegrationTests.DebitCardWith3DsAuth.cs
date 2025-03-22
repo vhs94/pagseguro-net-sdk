@@ -35,14 +35,14 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             ChargeByDebitCardWith3DsAuthReadDto chargeByDebitCardWith3DsAuthReadDto = await Client
                 .ForCharge()
                 .WithDebitCardAnd3DsAuthentication()
-                .GetByIdAsync(result.Id);
+                .GetByIdAsync(result.Id!);
             AssertChargeWithAutoCapture(result, chargeWriteDto);
-            AssertDebitCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
-            AssertAuthenticationMethodReadDto(result.PaymentMethod.AuthenticationMethod, authenticationMethodWriteDto);
+            AssertDebitCardPaymentMethodReadDto(result.PaymentMethod!, paymentMethodDto);
+            AssertAuthenticationMethodReadDto(result.PaymentMethod!.AuthenticationMethod!, authenticationMethodWriteDto);
             result.Should().BeEquivalentTo(
                 chargeByDebitCardWith3DsAuthReadDto,
                 options => options
-                    .Excluding(f => f.PaymentMethod.AuthenticationMethod));
+                    .Excluding(f => f.PaymentMethod!.AuthenticationMethod!));
         }
 
         private DebitCardWith3DsAuthPaymentMethodWriteDto CreateDebitCardWith3DsAuthPaymentMethodWriteDto(

@@ -10,7 +10,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
 {
     public class PublicKeyProviderTests : BaseProviderTests<PublicKeyProvider>
     {
-        private PublicKeyReadDto _publicKeyReadDto;
+        private PublicKeyReadDto _publicKeyReadDto = null!;
 
         protected override PublicKeyProvider CreateProvider()
         {

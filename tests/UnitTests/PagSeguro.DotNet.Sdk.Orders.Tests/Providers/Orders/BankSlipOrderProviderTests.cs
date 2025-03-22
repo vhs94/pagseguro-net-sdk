@@ -25,12 +25,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .Charges
                 .Should()
                 .BeEquivalentTo(expectedReadDto.Charges,
-                    options => options.Excluding(f => f.PaymentMethod.BankSlip.DueDate));
+                    options => options.Excluding(f => f.PaymentMethod!.BankSlip!.DueDate));
             receivedReadDto
                 .Charges
-                .Select(cg => cg.PaymentMethod.BankSlip.DueDate)
+                .Select(cg => cg.PaymentMethod!.BankSlip!.DueDate)
                 .Should()
-                .BeEquivalentTo(expectedReadDto.Charges.Select(cg => cg.PaymentMethod.BankSlip.DueDate.Date));
+                .BeEquivalentTo(expectedReadDto.Charges.Select(cg => cg.PaymentMethod!.BankSlip!.DueDate.Date));
         }
     }
 }

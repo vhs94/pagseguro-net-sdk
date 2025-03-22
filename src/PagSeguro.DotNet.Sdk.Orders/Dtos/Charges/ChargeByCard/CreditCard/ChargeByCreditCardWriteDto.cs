@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard;
+﻿using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard;
+using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard
 {
     public class ChargeByCreditCardWriteDto : ChargeByCardWriteDto
     {
-        [JsonProperty("payment_method")]
+        [JsonPropertyName("payment_method")]
         public CreditCardPaymentMethodWriteDto? PaymentMethod { get; set; }
     }
 }

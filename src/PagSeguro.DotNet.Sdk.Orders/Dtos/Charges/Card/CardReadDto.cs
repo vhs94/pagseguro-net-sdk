@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Card
 {
     public class CardReadDto : CardDto
     {
         public string? Brand { get; set; }
-        [JsonProperty("first_digits")]
+        [JsonPropertyName("first_digits")]
         public int FirstDigits { get; set; }
-        [JsonProperty("last_digits")]
+        [JsonPropertyName("last_digits")]
         public int LastDigits { get; set; }
     }
 }

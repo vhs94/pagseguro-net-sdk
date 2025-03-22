@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.AuthenticationMethod
 {
@@ -9,7 +9,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.AuthenticationMethod
         public string? Xid { get; set; }
         public string? Eci { get; set; }
         public string? Version { get; set; }
-        [JsonProperty("dstrans_id")]
+        [JsonPropertyName("dstrans_id")]
         public string? DstransId { get; set; }
     }
 }

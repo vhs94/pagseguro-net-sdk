@@ -35,17 +35,17 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             ChargeByCreditCardWith3DsAuthReadDto chargeByCreditCardWith3DsAuthReadDto = await Client
                 .ForCharge()
                 .WithCreditCardAnd3DsAuthentication()
-                .GetByIdAsync(result.Id);
+                .GetByIdAsync(result.Id!);
             AssertChargeWithAutoCapture(result, chargeWriteDto);
-            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
-            AssertAuthenticationMethodReadDto(result.PaymentMethod.AuthenticationMethod, authenticationMethodWriteDto);
+            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod!, paymentMethodDto);
+            AssertAuthenticationMethodReadDto(result.PaymentMethod!.AuthenticationMethod!, authenticationMethodWriteDto);
             result.Should().BeEquivalentTo(
                 chargeByCreditCardWith3DsAuthReadDto,
                 options => options
-                    .Excluding(f => f.PaymentMethod.AuthenticationMethod));
+                    .Excluding(f => f.PaymentMethod!.AuthenticationMethod!));
         }
 
-        private AuthenticationMethodWriteDto CreateAuthenticationMethodWriteDto()
+        private static AuthenticationMethodWriteDto CreateAuthenticationMethodWriteDto()
         {
             return new AuthenticationMethodWriteDto
             {
@@ -71,7 +71,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .Create();
         }
 
-        private void AssertAuthenticationMethodReadDto(
+        private static void AssertAuthenticationMethodReadDto(
             AuthenticationMethodReadDto receivedAuthenticationMethodDto,
             AuthenticationMethodWriteDto expectedAuthenticationMethodWriteDto)
         {
@@ -107,12 +107,12 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             ChargeByCreditCardWith3DsAuthReadDto result = await Client
                .ForCharge()
                .WithCreditCardAnd3DsAuthentication()
-               .WithId(chargeReadtDto.Id)
+               .WithId(chargeReadtDto.Id!)
                .CaptureAsync(100);
 
             AssertChargeWithPreAuthorizedCapture(result, chargeWriteDto);
-            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod, paymentMethodDto);
-            result.PaymentMethod.AuthenticationMethod.Type.Should().Be(authenticationMethodWriteDto.Type);
+            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod!, paymentMethodDto);
+            result.PaymentMethod!.AuthenticationMethod!.Type.Should().Be(authenticationMethodWriteDto.Type);
             result.PaymentMethod.AuthenticationMethod.Eci.Should().Be(authenticationMethodWriteDto.Eci);
             result.PaymentMethod.AuthenticationMethod.Cavv.Should().Be(authenticationMethodWriteDto.Cavv);
             result.PaymentMethod.AuthenticationMethod.Status.Should().Be("AUTHENTICATED");

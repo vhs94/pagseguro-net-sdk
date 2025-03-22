@@ -5,20 +5,12 @@ using PagSeguro.DotNet.Sdk.Common.Settings;
 [module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Common.Tests.Attributes.Providers
 {
-    public class TestProvider : BaseProvider
+    public class TestProvider(PagSeguroSettings settings) : BaseProvider(settings)
     {
-        public TestProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-        }
-
         [AccessTokenRequired]
         [ChallengeRequired]
         [ClientApplicationRequired]
         [PrivateKeyRequired]
-        public Task ExecuteAsync()
-        {
-            return Task.CompletedTask;
-        }
+        public Task ExecuteAsync() => Task.CompletedTask;
     }
 }

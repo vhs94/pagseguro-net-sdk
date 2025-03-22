@@ -10,10 +10,10 @@ namespace PagSeguro.DotNet.Sdk.Tests
 {
     public class PagSeguroClientTests : BaseTests
     {
-        private PagSeguroClient _client;
-        private ClientSettings _settings;
-        private AuthorizationCodeReadDto _authorizationCodeReadDto;
-        private ChallengeReadDto _challengeReadDto;
+        private PagSeguroClient _client = null!;
+        private ClientSettings _settings = null!;
+        private AuthorizationCodeReadDto _authorizationCodeReadDto = null!;
+        private ChallengeReadDto _challengeReadDto = null!;
 
         protected override void CreateMocks()
         {

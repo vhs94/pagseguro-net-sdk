@@ -17,7 +17,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
 
             ApplicationReadDto applicationReadDto = await Client
                 .ForApplication()
-                .GetByClientIdAsync(result.ClientId);
+                .GetByClientIdAsync(result.ClientId!);
             result
                 .Should()
                 .NotBeNull();

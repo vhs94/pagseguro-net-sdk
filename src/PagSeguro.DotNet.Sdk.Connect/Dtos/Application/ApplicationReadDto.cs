@@ -1,16 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Dtos.Application
 {
     public class ApplicationReadDto : ApplicationDto
     {
-        [JsonProperty("client_id")]
+        [JsonPropertyName("client_id")]
         public string? ClientId { get; set; }
-        [JsonProperty("client_secret")]
+        [JsonPropertyName("client_secret")]
         public string? ClientSecret { get; set; }
-        [JsonProperty("account_id")]
+        [JsonPropertyName("account_id")]
         public string? AccountId { get; set; }
-        [JsonProperty("client_type")]
+        [JsonPropertyName("client_type")]
         public string? ClientType { get; set; }
     }
 }

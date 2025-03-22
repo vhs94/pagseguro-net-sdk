@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk.Orders.Converters;
+﻿using PagSeguro.DotNet.Sdk.Orders.Converters;
+using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
 {

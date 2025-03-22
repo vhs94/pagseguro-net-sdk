@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.BankSlip;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
@@ -9,12 +9,12 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip
     {
         public new string? Id { get; set; }
         public string? Status { get; set; }
-        [JsonProperty("created_at")]
+        [JsonPropertyName("created_at")]
         public DateTime CreatedDate { get; set; }
         public ChargeAmountReadDto? Amount { get; set; }
-        [JsonProperty("payment_response")]
+        [JsonPropertyName("payment_response")]
         public PaymentResponseDto? PaymentResponse { get; set; }
-        [JsonProperty("payment_method")]
+        [JsonPropertyName("payment_method")]
         public BankSlipPaymentMethodReadDto? PaymentMethod { get; set; }
         public ICollection<LinkDto> Links { get; set; }
 

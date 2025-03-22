@@ -15,7 +15,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
         where TChargeReadDto : ChargeDto
         where TTopLevelProvider : IChargeProvider<TChargeWriteDto, TChargeReadDto>
     {
-        public TChargeReadDto ChargeReadDto { get; private set; }
+        public TChargeReadDto ChargeReadDto { get; private set; } = null!;
         public TTopLevelProvider TopLevelProviderMock => (TTopLevelProvider)Provider;
 
         protected override void SetupMocks()

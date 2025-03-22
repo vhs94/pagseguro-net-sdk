@@ -1,18 +1,19 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Flurl;
-using Newtonsoft.Json;
+using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Fees;
+using System.Text.Json;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
 {
     public class FeeProviderTests : BaseProviderTests<IFeeProvider>
     {
-        private FeeReadDto _feeReadDto;
+        private FeeReadDto _feeReadDto = null!;
 
         protected override IFeeProvider CreateProvider()
         {
@@ -22,7 +23,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
         protected override void SetupMocks()
         {
             string feeJson = File.ReadAllText("Assets/fees.json");
-            _feeReadDto = JsonConvert.DeserializeObject<FeeReadDto>(feeJson);
+            _feeReadDto = JsonSerializer.Deserialize<FeeReadDto>(feeJson, options: JsonOptions.Default)!;
             HttpTestMock
                 .ForCallsTo(
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges, "*"))

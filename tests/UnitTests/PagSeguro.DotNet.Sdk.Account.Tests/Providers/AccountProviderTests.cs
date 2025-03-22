@@ -11,8 +11,8 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
 {
     public class AccountProviderTests : BaseProviderTests<AccountProvider>
     {
-        private CreatedAccountDto _createdAccountDto;
-        private AccountReadDto _accountReadDto;
+        private CreatedAccountDto _createdAccountDto = null!;
+        private AccountReadDto _accountReadDto = null!;
 
         protected override AccountProvider CreateProvider()
         {
@@ -62,10 +62,10 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
                 .Should()
                 .BeEquivalentTo(
                     _createdAccountDto,
-                    options => options.Excluding(f => f.Person.BirthDate));
-            result.Person.BirthDate
+                    options => options.Excluding(f => f.Person!.BirthDate));
+            result.Person!.BirthDate
                 .Should()
-                .Be(_createdAccountDto.Person.BirthDate.Date);
+                .Be(_createdAccountDto.Person!.BirthDate.Date);
 
         }
 
@@ -118,10 +118,10 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
                 .Should()
                 .BeEquivalentTo(
                     _accountReadDto,
-                    options => options.Excluding(f => f.Person.BirthDate));
-            result.Person.BirthDate
+                    options => options.Excluding(f => f.Person!.BirthDate));
+            result.Person!.BirthDate
                 .Should()
-                .Be(_accountReadDto.Person.BirthDate.Date);
+                .Be(_accountReadDto.Person!.BirthDate.Date);
         }
 
         [Fact]
@@ -129,7 +129,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         {
             Settings.AccessToken = null;
 
-            Func<Task> task = async () => await Provider.GetByIdAsync(null);
+            Func<Task> task = async () => await Provider.GetByIdAsync("id");
 
             await task
                 .Should()

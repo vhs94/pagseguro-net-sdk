@@ -11,7 +11,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
 {
     public class DigitalCertificateProviderTests : BaseProviderTests<DigitalCertificateProvider>
     {
-        private CertificateReadDto _certificateReadDto;
+        private CertificateReadDto _certificateReadDto = null!;
 
         protected override DigitalCertificateProvider CreateProvider()
         {

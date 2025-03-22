@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Settings;
@@ -9,17 +10,21 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
     public abstract class BaseProviderTests<TProvider> : BaseTests
         where TProvider : IProvider
     {
-        public PagSeguroSettings Settings { get; private set; }
-        public TProvider Provider { get; private set; }
+        public PagSeguroSettings Settings { get; private set; } = null!;
+        public TProvider Provider { get; private set; } = default!;
+        protected IServiceProvider ServiceProviderMock { get; private set; } = null!;
 
         protected override void InitializeMocks()
         {
             CreateMocks();
+            ServiceProviderMock = CreateServiceProvider();
             Settings = CreateSettings();
             Provider = CreateProvider();
             SetupMocks();
         }
 
+        private IServiceProvider CreateServiceProvider()
+            => Substitute.For<IServiceProvider>();
         private PagSeguroSettings CreateSettings()
         {
             return Fixture.Build<PagSeguroSettings>()

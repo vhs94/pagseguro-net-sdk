@@ -19,13 +19,13 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 {
     public class OrderProviderTests : BaseProviderTests<OrderProvider>
     {
-        private IServiceProvider _serviceProviderMock;
-        private OrderReadDto _orderReadDto;
-        private OrderWriteDto _orderWriteDto;
-        private IBankSlipOrderProvider _bankSlipOrderProviderMock;
-        private ICreditCardOrderProvider _creditCardOrderProviderMock;
-        private ICreditCardWith3DsAuthOrderProvider _creditCardWith3DsAuthOrderProviderMock;
-        private IDebitCardWith3DsAuthOrderProvider _debitCardWith3DsAuthOrderProviderMock;
+        private IServiceProvider _serviceProviderMock = null!;
+        private OrderReadDto _orderReadDto = null!;
+        private OrderWriteDto _orderWriteDto = null!;
+        private IBankSlipOrderProvider _bankSlipOrderProviderMock = null!;
+        private ICreditCardOrderProvider _creditCardOrderProviderMock = null!;
+        private ICreditCardWith3DsAuthOrderProvider _creditCardWith3DsAuthOrderProviderMock = null!;
+        private IDebitCardWith3DsAuthOrderProvider _debitCardWith3DsAuthOrderProviderMock = null!;
 
         protected override void CreateMocks()
         {
@@ -105,7 +105,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             Provider.Build()
                 .Items
                 .Should()
-                .BeEquivalentTo(new List<ItemWriteDto>() { itemWriteDto });
+                .BeEquivalentTo([itemWriteDto]);
         }
 
         private ItemWriteDto CreateItemWriteDto()
@@ -127,7 +127,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             Provider.Build()
                 .Items
                 .Should()
-                .BeEquivalentTo(new List<ItemWriteDto>() { itemWriteDto });
+                .BeEquivalentTo([itemWriteDto]);
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             Provider.Build()
                 .QrCodes
                 .Should()
-                .BeEquivalentTo(new List<QrCodeWriteDto>() { qrCodeWriteDto });
+                .BeEquivalentTo([qrCodeWriteDto]);
         }
 
         private QrCodeWriteDto CreateQrCodeWriteDto()
