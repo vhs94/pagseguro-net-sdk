@@ -16,7 +16,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Serialization
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             PropertyNameCaseInsensitive = true,
             NumberHandling = JsonNumberHandling.AllowReadingFromString,
-            WriteIndented = false
+            WriteIndented = true
         };
     }
 }

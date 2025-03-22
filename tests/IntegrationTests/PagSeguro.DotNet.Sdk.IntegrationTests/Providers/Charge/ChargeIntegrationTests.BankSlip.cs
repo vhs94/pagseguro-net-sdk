@@ -9,7 +9,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
 {
     public partial class ChargeIntegrationTests : BaseIntegrationTests
     {
-        [Fact]
+        [Fact(Skip = "Payslip integration is broken. Waiting Pagseguro support")]
         public async Task CreateAsync_WithBankSlip_ChargeIsCreated()
         {
             BankSlipWriteDto bankSlipWriteDto = CreateBankSlip();
