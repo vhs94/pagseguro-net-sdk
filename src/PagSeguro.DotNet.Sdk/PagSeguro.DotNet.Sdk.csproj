@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName)</PackageId>
-		<PackageVersion>3.4.0</PackageVersion>
+		<PackageVersion>4.0.0</PackageVersion>
 		<Title>PagSeguro DotNet SDK</Title>
 		<Authors>victor_santana09</Authors>
 		<Description>Fluent Client para APIs PagSeguro</Description>
