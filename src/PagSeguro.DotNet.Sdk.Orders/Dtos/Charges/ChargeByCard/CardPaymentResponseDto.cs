@@ -2,6 +2,6 @@
 {
     public class CardPaymentResponseDto : PaymentResponseDto
     {
-        public string Reference { get; set; }
+        public string? Reference { get; set; }
     }
 }

@@ -5,17 +5,13 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
-    public class BankSlipOrderProvider
+    public class BankSlipOrderProvider(
+        PagSeguroSettings settings,
+        IMapper mapper)
         : ChargedOrderProviderOf<
             ChargeByBankSlipWriteDto,
-            ChargeByBankSlipReadDto>,
+            ChargeByBankSlipReadDto>(settings, mapper),
         IBankSlipOrderProvider
     {
-        public BankSlipOrderProvider(
-            PagSeguroSettings settings,
-            IMapper mapper)
-            : base(settings, mapper)
-        {
-        }
     }
 }

@@ -1,16 +1,12 @@
-﻿using System.Net;
-using PagSeguro.DotNet.Sdk.Common.Helpers;
+﻿using PagSeguro.DotNet.Sdk.Common.Helpers;
+using System.Net;
 
 namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
-    public class ConflictException : PagSeguroHttpException
+    public class ConflictException(string response) : PagSeguroHttpException(
+        HttpStatusCode.Conflict,
+        response,
+        ErrorMessages.ConflicExceptionMessage)
     {
-        public ConflictException(string response)
-            : base(
-                  HttpStatusCode.Conflict,
-                  response,
-                  ErrorMessages.ConflicExceptionMessage)
-        {
-        }
     }
 }

@@ -1,15 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
 {
     public class CreditCardBrandDto
     {
-        [JsonProperty("installment_plans")]
+        [JsonPropertyName("installment_plans")]
         public ICollection<InstallmentPlanDto> InstallmentPlans { get; set; }
 
-        public CreditCardBrandDto()
-        {
-            InstallmentPlans = new List<InstallmentPlanDto>();
-        }
+        public CreditCardBrandDto() => InstallmentPlans = [];
     }
 }

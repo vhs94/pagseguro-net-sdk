@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode
 {
     public abstract class QrCodeDto
     {
-        [JsonProperty("expiration_date")]
+        [JsonPropertyName("expiration_date")]
         public DateTime? ExpirationDate { get; set; }
-        public AmountDto Amount { get; set; }
+        public AmountDto? Amount { get; set; }
     }
 }

@@ -1,16 +1,12 @@
-﻿using System.Net;
-using PagSeguro.DotNet.Sdk.Common.Helpers;
+﻿using PagSeguro.DotNet.Sdk.Common.Helpers;
+using System.Net;
 
 namespace PagSeguro.DotNet.Sdk.Common.Exceptions.Http
 {
-    public class UnauthorizedException : PagSeguroHttpException
+    public class UnauthorizedException(string response) : PagSeguroHttpException(
+        HttpStatusCode.Unauthorized,
+        response,
+        ErrorMessages.UnauthorizedExceptionMessage)
     {
-        public UnauthorizedException(string response)
-            : base(
-                  HttpStatusCode.Unauthorized,
-                  response,
-                  ErrorMessages.UnauthorizedExceptionMessage)
-        {
-        }
     }
 }

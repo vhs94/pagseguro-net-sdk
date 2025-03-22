@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using Flurl.Http;
-using Flurl.Http.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
 using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
@@ -28,35 +26,35 @@ namespace PagSeguro.DotNet.Sdk
 {
     public class PagSeguroClient : IPagSeguroClient
     {
-        public PagSeguroSettings Settings { get; private set; }
-        private ServiceCollection _services;
-        private IServiceProvider _serviceProvider => _services.BuildServiceProvider();
-        private IMapper _mapper => _serviceProvider.GetService<IMapper>();
+        public PagSeguroSettings Settings { get; private set; } = null!;
+        private IServiceCollection _services = null!;
+        private IServiceProvider ServiceProvider => _services.BuildServiceProvider();
+        private IMapper Mapper => ServiceProvider.GetService<IMapper>()!;
         public virtual IAuthorizationProvider ForAuthorization()
-            => _serviceProvider.GetService<IAuthorizationProvider>();
+            => ServiceProvider.GetService<IAuthorizationProvider>()!;
         public virtual IApplicationProvider ForApplication()
-            => _serviceProvider.GetService<IApplicationProvider>();
+            => ServiceProvider.GetService<IApplicationProvider>()!;
         public virtual IAccountProvider ForAccount()
-            => _serviceProvider.GetService<IAccountProvider>();
+            => ServiceProvider.GetService<IAccountProvider>()!;
         public virtual IPublicKeyProvider ForPublicKey()
-            => _serviceProvider.GetService<IPublicKeyProvider>();
+            => ServiceProvider.GetService<IPublicKeyProvider>()!;
         public virtual IOrderProvider ForOrder()
-            => _serviceProvider.GetService<IOrderProvider>();
+            => ServiceProvider.GetService<IOrderProvider>()!;
         public virtual IChargeWithPaymentMethodProvider ForCharge()
-            => _serviceProvider.GetService<IChargeWithPaymentMethodProvider>();
+            => ServiceProvider.GetService<IChargeWithPaymentMethodProvider>()!;
         public virtual IDigitalCertificateProvider ForCertificate()
-            => _serviceProvider.GetService<IDigitalCertificateProvider>();
+            => ServiceProvider.GetService<IDigitalCertificateProvider>()!;
         public virtual IFeeProvider ForFee()
-            => _serviceProvider.GetService<IFeeProvider>();
+            => ServiceProvider.GetService<IFeeProvider>()!;
 
-        private IPagSeguroHttpExceptionFactory _pagSeguroHttpExceptionFactory
-            => _serviceProvider.GetService<IPagSeguroHttpExceptionFactory>();
+        private IPagSeguroHttpExceptionFactory PagSeguroHttpExceptionFactory
+            => ServiceProvider.GetService<IPagSeguroHttpExceptionFactory>()!;
 
         public PagSeguroClient(ClientSettings settings)
         {
             CreateServiceCollection();
-            ConfigureFlurlHttp();
             MapSettings(settings);
+            ConfigureFlurlHttp();
             ConfigureSettings();
         }
 
@@ -74,27 +72,25 @@ namespace PagSeguro.DotNet.Sdk
 
         private void ConfigureFlurlHttp()
         {
-            FlurlHttp.Configure(settings =>
-            {
-                var jsonSettings = new JsonSerializerSettings
+            FlurlHttp
+                .Clients.WithDefaults(config =>
                 {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-
-                };
-                var defaultSerializer = new NewtonsoftJsonSerializer(jsonSettings);
-                settings.JsonSerializer = defaultSerializer;
-                settings.OnErrorAsync = HandleExceptionAsync;
-            });
+                    config.Settings.JsonSerializer = DefaultSerializer.Build();
+                    config.OnError(HandleExceptionAsync);
+                });
         }
 
         private async Task HandleExceptionAsync(FlurlCall call)
         {
-            throw await _pagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
+            if (!call.Succeeded)
+            {
+                throw await PagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
+            }
         }
 
         private void MapSettings(ClientSettings settings)
         {
-            Settings = _mapper.Map<PagSeguroSettings>(settings);
+            Settings = Mapper.Map<PagSeguroSettings>(settings);
         }
 
         private void ConfigureSettings()

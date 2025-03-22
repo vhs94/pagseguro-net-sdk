@@ -10,7 +10,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
 {
     public class ApplicationProviderTests : BaseProviderTests<ApplicationProvider>
     {
-        private ApplicationReadDto _applicationReadDto;
+        private ApplicationReadDto _applicationReadDto = null!;
 
         protected override ApplicationProvider CreateProvider()
         {

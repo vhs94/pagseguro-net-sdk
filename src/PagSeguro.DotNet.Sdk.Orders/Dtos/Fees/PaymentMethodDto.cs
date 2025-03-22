@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
 {
     public class PaymentMethodDto
     {
-        [JsonProperty("credit_card")]
-        public CreditCardDto CreditCard { get; set; }
+        [JsonPropertyName("credit_card")]
+        public CreditCardDto? CreditCard { get; set; }
     }
 }

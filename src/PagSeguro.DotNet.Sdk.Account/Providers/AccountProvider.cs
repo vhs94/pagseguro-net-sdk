@@ -9,13 +9,10 @@ using PagSeguro.DotNet.Sdk.Common.Settings;
 [module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Account.Providers
 {
-    public class AccountProvider : BaseProvider, IAccountProvider
+    public class AccountProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        IAccountProvider
     {
-        public AccountProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-        }
-
         [AccessTokenRequired]
         [ClientApplicationRequired]
         public async Task<CreatedAccountDto> CreateAsync(AccountWriteDto accountWriteDto)

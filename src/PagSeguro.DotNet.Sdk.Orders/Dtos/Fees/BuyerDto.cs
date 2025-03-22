@@ -2,6 +2,6 @@
 {
     public class BuyerDto
     {
-        public InterestDto Interest { get; set; }
+        public InterestDto? Interest { get; set; }
     }
 }

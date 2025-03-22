@@ -2,6 +2,6 @@
 {
     public abstract class AuthorizationWriteDto
     {
-        internal virtual string GrantType { get; set; }
+        internal virtual string GrantType { get; set; } = null!;
     }
 }

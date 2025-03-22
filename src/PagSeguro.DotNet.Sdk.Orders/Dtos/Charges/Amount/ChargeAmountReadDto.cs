@@ -2,6 +2,6 @@
 {
     public class ChargeAmountReadDto : ChargeAmountDto
     {
-        public SummaryDto Summary { get; set; }
+        public SummaryDto? Summary { get; set; }
     }
 }

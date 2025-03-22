@@ -7,9 +7,9 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Services
 {
     public class CryptoServiceTests
     {
-        private ICryptoService _service;
-        private string _encryptedChallenge;
-        private string _decryptedChallenge;
+        private readonly ICryptoService _service;
+        private readonly string _encryptedChallenge;
+        private readonly string _decryptedChallenge;
 
         public CryptoServiceTests()
         {
@@ -18,7 +18,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Services
             _decryptedChallenge = File.ReadAllText("Assets/decrypted-challenge.txt");
         }
 
-        private ICryptoService CreateService()
+        private static ICryptoService CreateService()
         {
             PagSeguroSettings settings = CreateSettings();
             return new CryptoService(settings);

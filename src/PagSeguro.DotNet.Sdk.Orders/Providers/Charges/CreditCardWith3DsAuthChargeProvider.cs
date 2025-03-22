@@ -5,14 +5,10 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
 {
-    public class CreditCardWith3DsAuthChargeProvider : BaseProvider, ICreditCardWith3DsAuthChargeProvider
+    public class CreditCardWith3DsAuthChargeProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        ICreditCardWith3DsAuthChargeProvider
     {
-        public ChargeByCreditCardWith3DsAuthWriteDto ChargeWriteDto { get; set; }
-
-        public CreditCardWith3DsAuthChargeProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-            ChargeWriteDto = new ChargeByCreditCardWith3DsAuthWriteDto();
-        }
+        public ChargeByCreditCardWith3DsAuthWriteDto ChargeWriteDto { get; set; } = new ChargeByCreditCardWith3DsAuthWriteDto();
     }
 }

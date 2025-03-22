@@ -15,7 +15,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
 {
     public class AuthorizationProviderTests : BaseProviderTests<AuthorizationProvider>
     {
-        private ICryptoService _cryptoServiceMock;
+        private ICryptoService _cryptoServiceMock = null!;
 
         protected override AuthorizationProvider CreateProvider()
         {
@@ -77,7 +77,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             Settings.ClientId = null;
             Settings.ClientSecret = null;
 
-            Func<Task> task = async () => await Provider.CreateAccessTokenByCodeAsync(null);
+            Func<Task> task = async () => await Provider.CreateAccessTokenByCodeAsync(null!);
 
             await task
                 .Should()
@@ -92,7 +92,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
                 .RespondWithJson(challengeReadDto);
             _cryptoServiceMock
-                .Decrypt(challengeReadDto.Challenge)
+                .Decrypt(challengeReadDto.Challenge!)
                 .Returns(challengeReadDto.DecryptedChallenge);
 
             ChallengeReadDto result = await Provider.CreateAccessTokenByChallengeAsync();
@@ -111,7 +111,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .Times(1);
             _cryptoServiceMock
                 .Received(1)
-                .Decrypt(result.Challenge);
+                .Decrypt(result.Challenge!);
             result
                 .Should()
                 .BeEquivalentTo(challengeReadDto);
@@ -119,7 +119,11 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
 
         private ChallengeReadDto CreateChallengeReadDto()
         {
-            return Fixture.Create<ChallengeReadDto>();
+            return Fixture
+                .Build<ChallengeReadDto>()
+                .With(c => c.Challenge)
+                .With(c => c.DecryptedChallenge)
+                .Create();
         }
 
         [Fact]

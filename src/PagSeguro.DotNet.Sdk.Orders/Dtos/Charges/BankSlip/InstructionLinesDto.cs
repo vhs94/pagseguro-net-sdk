@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.BankSlip
 {
     public class InstructionLinesDto
     {
-        [JsonProperty("line_1")]
-        public string FirstLine { get; set; }
-        [JsonProperty("line_2")]
-        public string SecondLine { get; set; }
+        [JsonPropertyName("line_1")]
+        public string? FirstLine { get; set; }
+        [JsonPropertyName("line_2")]
+        public string? SecondLine { get; set; }
     }
 }

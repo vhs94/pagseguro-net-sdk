@@ -4,6 +4,6 @@ namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges
 {
     public interface IChargeWriteDto
     {
-        public ChargeAmountWriteDto Amount { get; set; }
+        public ChargeAmountWriteDto? Amount { get; set; }
     }
 }

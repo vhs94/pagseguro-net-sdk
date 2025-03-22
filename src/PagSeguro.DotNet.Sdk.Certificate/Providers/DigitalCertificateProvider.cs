@@ -9,13 +9,10 @@ using PagSeguro.DotNet.Sdk.Common.Settings;
 [module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Certificate.Providers
 {
-    public class DigitalCertificateProvider : BaseProvider, IDigitalCertificateProvider
+    public class DigitalCertificateProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        IDigitalCertificateProvider
     {
-        public DigitalCertificateProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-        }
-
         [ChallengeRequired]
         public async Task<CertificateReadDto> CreateAsync()
         {

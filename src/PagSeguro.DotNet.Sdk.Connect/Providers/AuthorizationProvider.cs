@@ -59,7 +59,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
 
             if (!string.IsNullOrEmpty(Settings.PrivateKey))
             {
-                challengeResult.DecryptedChallenge = _cryptoService.Decrypt(challengeResult.Challenge);
+                challengeResult.DecryptedChallenge = _cryptoService.Decrypt(challengeResult.Challenge!);
             }
             return challengeResult;
         }

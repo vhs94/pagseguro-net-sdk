@@ -5,14 +5,10 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
 {
-    public class BankSlipChargeProvider : BaseProvider, IBankSlipChargeProvider
+    public class BankSlipChargeProvider(PagSeguroSettings settings)
+        : BaseProvider(settings),
+        IBankSlipChargeProvider
     {
-        public ChargeByBankSlipWriteDto ChargeWriteDto { get; set; }
-
-        public BankSlipChargeProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-            ChargeWriteDto = new ChargeByBankSlipWriteDto();
-        }
+        public ChargeByBankSlipWriteDto ChargeWriteDto { get; set; } = new ChargeByBankSlipWriteDto();
     }
 }

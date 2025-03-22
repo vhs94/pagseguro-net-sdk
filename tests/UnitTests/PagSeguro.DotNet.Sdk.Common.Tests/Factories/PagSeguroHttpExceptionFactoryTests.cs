@@ -1,19 +1,18 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Flurl.Http;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Http;
 using PagSeguro.DotNet.Sdk.Common.Factories;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using System.Net;
 
 namespace PagSeguro.DotNet.Sdk.Common.Tests.Factories
 {
     public class PagSeguroHttpExceptionFactoryTests : BaseTests
     {
-        private IPagSeguroHttpExceptionFactory _factory;
-        private IFlurlResponse _response;
-        private string _responseBody;
+        private PagSeguroHttpExceptionFactory _factory = null!;
+        private IFlurlResponse _response = null!;
+        private string _responseBody = null!;
 
         protected override void InitializeMocks()
         {

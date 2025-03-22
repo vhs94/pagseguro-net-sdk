@@ -2,6 +2,6 @@
 {
     public class FeesDto
     {
-        public BuyerDto Buyer { get; set; }
+        public BuyerDto? Buyer { get; set; }
     }
 }

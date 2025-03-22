@@ -1,24 +1,21 @@
-﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk.Common.Converters;
+﻿using System.Text.Json.Serialization;
+using PagSeguro.DotNet.Sdk.Common.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Account.Dtos
 {
     public class PersonDto
     {
-        [JsonProperty("birth_date")]
+        [JsonPropertyName("birth_date")]
         [JsonConverter(typeof(ShortDateConverter))]
         public DateTime BirthDate { get; set; }
-        public string Name { get; set; }
-        [JsonProperty("mother_name")]
-        public string MotherName { get; set; }
-        [JsonProperty("tax_id")]
-        public string TaxId { get; set; }
-        public AddressDto Address { get; set; }
+        public string? Name { get; set; }
+        [JsonPropertyName("mother_name")]
+        public string? MotherName { get; set; }
+        [JsonPropertyName("tax_id")]
+        public string? TaxId { get; set; }
+        public AddressDto? Address { get; set; }
         public ICollection<PhoneDto> Phones { get; set; }
 
-        public PersonDto()
-        {
-            Phones = new List<PhoneDto>();
-        }
+        public PersonDto() => Phones = [];
     }
 }

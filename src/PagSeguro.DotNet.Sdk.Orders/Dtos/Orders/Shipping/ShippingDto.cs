@@ -2,6 +2,6 @@
 {
     public class ShippingDto
     {
-        public ShippingAddressDto Address { get; set; }
+        public ShippingAddressDto? Address { get; set; }
     }
 }

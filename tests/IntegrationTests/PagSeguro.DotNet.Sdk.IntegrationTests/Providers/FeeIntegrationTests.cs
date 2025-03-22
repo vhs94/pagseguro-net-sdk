@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Newtonsoft.Json;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
+using System.Text.Json;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
 {
@@ -23,8 +23,6 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
         }
 
         private FeeReadDto CreateFeeReadDto()
-        {
-            return JsonConvert.DeserializeObject<FeeReadDto>(File.ReadAllText("Assets/fees.json"));
-        }
+            => JsonSerializer.Deserialize<FeeReadDto>(File.ReadAllText("Assets/fees.json"))!;
     }
 }

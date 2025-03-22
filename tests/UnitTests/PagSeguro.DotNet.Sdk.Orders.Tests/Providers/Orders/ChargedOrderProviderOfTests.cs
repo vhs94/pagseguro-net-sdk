@@ -17,10 +17,10 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         where TChargeWriteDto : ChargeDto, new()
         where TChargeReadDto : ChargeDto
     {
-        private ChargedOrderReadDto<TChargeReadDto> _orderReadDto;
-        private ChargedOrderWriteDto<TChargeWriteDto> _orderWriteDto;
+        private ChargedOrderReadDto<TChargeReadDto> _orderReadDto = null!;
+        private ChargedOrderWriteDto<TChargeWriteDto> _orderWriteDto = null!;
 
-        public IMapper MapperMock { get; private set; }
+        public IMapper MapperMock { get; private set; } = null!;
 
         protected override void CreateMocks()
         {
@@ -62,7 +62,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             Provider.Build()
                 .Charges
                 .Should()
-                .BeEquivalentTo(new List<TChargeWriteDto>() { chargeWriteDto });
+                .BeEquivalentTo([chargeWriteDto]);
         }
 
         private TChargeWriteDto CreateChargeWriteDto()

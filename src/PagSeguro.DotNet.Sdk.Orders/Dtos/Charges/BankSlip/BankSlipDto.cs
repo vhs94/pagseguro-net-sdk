@@ -1,15 +1,15 @@
-﻿using Newtonsoft.Json;
-using PagSeguro.DotNet.Sdk.Common.Converters;
+﻿using System.Text.Json.Serialization;
+using PagSeguro.DotNet.Sdk.Common.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.BankSlip
 {
     public abstract class BankSlipDto
     {
-        [JsonProperty("due_date")]
+        [JsonPropertyName("due_date")]
         [JsonConverter(typeof(ShortDateConverter))]
         public DateTime DueDate { get; set; }
-        [JsonProperty("instruction_lines")]
-        public InstructionLinesDto InstructionLines { get; set; }
-        public BankSlipHolderDto Holder { get; set; }
+        [JsonPropertyName("instruction_lines")]
+        public InstructionLinesDto? InstructionLines { get; set; }
+        public BankSlipHolderDto? Holder { get; set; }
     }
 }

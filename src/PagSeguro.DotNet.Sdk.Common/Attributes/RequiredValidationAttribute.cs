@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using MethodDecorator.Fody.Interfaces;
+﻿using MethodDecorator.Fody.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Attributes;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using System.Reflection;
 
 [module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Common.Attributes
@@ -13,7 +13,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Attributes
         | AttributeTargets.Module)]
     public class RequiredValidationAttribute : Attribute, IMethodDecorator
     {
-        public IProvider Provider { get; private set; }
+        public IProvider Provider { get; private set; } = null!;
 
         public void Init(object instance, MethodBase method, object[] args)
         {
@@ -24,15 +24,9 @@ namespace PagSeguro.DotNet.Sdk.Common.Attributes
             }
         }
 
-        protected virtual bool IsValid()
-        {
-            throw new NotImplementedException();
-        }
+        protected virtual bool IsValid() => throw new NotImplementedException();
 
-        protected virtual Exception CreateCustomException()
-        {
-            throw new NotImplementedException();
-        }
+        protected virtual Exception CreateCustomException() => throw new NotImplementedException();
 
         public void OnEntry() { }
 

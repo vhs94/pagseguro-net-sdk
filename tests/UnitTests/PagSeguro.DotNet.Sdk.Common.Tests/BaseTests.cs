@@ -1,8 +1,6 @@
 ﻿using AutoFixture;
-using Flurl.Http.Configuration;
 using Flurl.Http.Testing;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using PagSeguro.DotNet.Sdk.Common.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Common.Tests
 {
@@ -21,14 +19,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests
         private static HttpTest CreateHttpTestMock()
         {
             var httpTestMock = new HttpTest();
-            httpTestMock.Configure(settings =>
-            {
-                var jsonSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
-                settings.JsonSerializer = new NewtonsoftJsonSerializer(jsonSettings);
-            });
+            httpTestMock.Settings.JsonSerializer = DefaultSerializer.Build();
             return httpTestMock;
         }
 
@@ -45,6 +36,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests
         public void Dispose()
         {
             HttpTestMock.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

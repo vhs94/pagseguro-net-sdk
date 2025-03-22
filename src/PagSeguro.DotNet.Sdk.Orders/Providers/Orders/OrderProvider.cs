@@ -14,7 +14,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
     public class OrderProvider : BaseProvider, IOrderProvider
     {
         private readonly IServiceProvider _serviceProvider;
-        private OrderWriteDto _orderWriteDto;
+        private OrderWriteDto _orderWriteDto = null!;
 
         public OrderProvider(
             PagSeguroSettings settings,
@@ -130,7 +130,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public IBankSlipOrderProvider WithBankSlip()
         {
             OrderWriteDto orderWriteDto = Build();
-            var chargedOrderProvider = _serviceProvider.GetService<IBankSlipOrderProvider>();
+            var chargedOrderProvider = _serviceProvider.GetService<IBankSlipOrderProvider>()!;
             chargedOrderProvider.Load(orderWriteDto);
             return chargedOrderProvider;
         }
@@ -138,7 +138,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public ICreditCardOrderProvider WithCreditCard()
         {
             OrderWriteDto orderWriteDto = Build();
-            var chargedOrderProvider = _serviceProvider.GetService<ICreditCardOrderProvider>();
+            var chargedOrderProvider = _serviceProvider.GetService<ICreditCardOrderProvider>()!;
             chargedOrderProvider.Load(orderWriteDto);
             return chargedOrderProvider;
         }
@@ -146,7 +146,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public ICreditCardWith3DsAuthOrderProvider WithCreditCardAnd3DsAuthentication()
         {
             OrderWriteDto orderWriteDto = Build();
-            var chargedOrderProvider = _serviceProvider.GetService<ICreditCardWith3DsAuthOrderProvider>();
+            var chargedOrderProvider = _serviceProvider.GetService<ICreditCardWith3DsAuthOrderProvider>()!;
             chargedOrderProvider.Load(orderWriteDto);
             return chargedOrderProvider;
         }
@@ -154,7 +154,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public IDebitCardWith3DsAuthOrderProvider WithDebitCardAnd3DsAuthentication()
         {
             OrderWriteDto orderWriteDto = Build();
-            var chargedOrderProvider = _serviceProvider.GetService<IDebitCardWith3DsAuthOrderProvider>();
+            var chargedOrderProvider = _serviceProvider.GetService<IDebitCardWith3DsAuthOrderProvider>()!;
             chargedOrderProvider.Load(orderWriteDto);
             return chargedOrderProvider;
         }

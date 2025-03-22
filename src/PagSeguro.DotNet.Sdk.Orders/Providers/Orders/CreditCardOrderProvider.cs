@@ -5,17 +5,13 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {
-    public class CreditCardOrderProvider
+    public class CreditCardOrderProvider(
+        PagSeguroSettings settings,
+        IMapper mapper)
         : ChargedOrderProviderOf<
             ChargeByCreditCardWriteDto,
-            ChargeByCreditCardReadDto>,
+            ChargeByCreditCardReadDto>(settings, mapper),
         ICreditCardOrderProvider
     {
-        public CreditCardOrderProvider(
-            PagSeguroSettings settings,
-            IMapper mapper)
-            : base(settings, mapper)
-        {
-        }
     }
 }

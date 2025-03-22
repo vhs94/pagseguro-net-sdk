@@ -7,17 +7,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Fees
 {
     public class FeeProvider : BaseProvider, IFeeProvider
     {
-        public FeeWriteDto Entity { get; set; }
+        public FeeWriteDto Entity { get; set; } = null!;
 
         public FeeProvider(PagSeguroSettings settings)
-            : base(settings)
-        {
-            Reset();
-        }
+            : base(settings) => Reset();
 
-        public void Reset()
-        {
-            Entity = new FeeWriteDto();
-        }
+        public void Reset() => Entity = new FeeWriteDto();
     }
 }
