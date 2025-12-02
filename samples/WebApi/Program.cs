@@ -31,4 +31,4 @@ app.MapGet("/public-key", async ([FromServices] IPagSeguroClient pagSeguroClient
 })
 .WithOpenApi();
 
-app.Run();
+await app.RunAsync();
