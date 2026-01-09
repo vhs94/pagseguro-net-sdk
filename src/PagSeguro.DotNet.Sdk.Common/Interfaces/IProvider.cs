@@ -7,5 +7,9 @@ namespace PagSeguro.DotNet.Sdk.Common.Interfaces
     {
         public PagSeguroSettings Settings { get; set; }
         public Url BaseUrl { get; }
+        void EnsureAccessToken();
+        void EnsureChallenge();
+        void EnsureClientApplication();
+        void EnsurePrivateKey();
     }
 }
