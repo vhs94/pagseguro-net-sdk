@@ -2,21 +2,20 @@
 using PagSeguro.DotNet.Sdk.Account.Dtos;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
-using PagSeguro.DotNet.Sdk.Common.Attributes;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 
-[module: RequiredValidation]
 namespace PagSeguro.DotNet.Sdk.Account.Providers
 {
     public class AccountProvider(PagSeguroSettings settings)
         : BaseProvider(settings),
         IAccountProvider
     {
-        [AccessTokenRequired]
-        [ClientApplicationRequired]
         public async Task<CreatedAccountDto> CreateAsync(AccountWriteDto accountWriteDto)
         {
+            EnsureAccessToken();
+            EnsureClientApplication();
+
             return await BaseUrl
                 .AppendPathSegment(AccountEndpoints.Account)
                 .WithOAuthBearerToken(Settings.Token)
@@ -26,9 +25,10 @@ namespace PagSeguro.DotNet.Sdk.Account.Providers
                 .ReceiveJson<CreatedAccountDto>();
         }
 
-        [AccessTokenRequired]
         public async Task<AccountReadDto> GetByIdAsync(string accountId)
         {
+            EnsureAccessToken();
+
             return await BaseUrl
                 .AppendPathSegment(AccountEndpoints.Account)
                 .AppendPathSegment(accountId)
