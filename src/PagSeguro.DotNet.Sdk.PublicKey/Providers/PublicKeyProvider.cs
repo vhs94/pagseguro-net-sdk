@@ -1,9 +1,9 @@
 ﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.PublicKey.Dtos;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
+using PagSeguro.DotNet.Sdk.PublicKey.Models.Response;
 
 namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
 {
@@ -11,7 +11,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
         : BaseProvider(settings),
         IPublicKeyProvider
     {
-        public async Task<PublicKeyReadDto> CreateAsync()
+        public async Task<PublicKeyResponse> CreateAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
@@ -20,26 +20,26 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
                 {
                     type = "card"
                 })
-                .ReceiveJson<PublicKeyReadDto>();
+                .ReceiveJson<PublicKeyResponse>();
         }
 
-        public async Task<PublicKeyReadDto> UpdateAsync()
+        public async Task<PublicKeyResponse> UpdateAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
                 .AppendPathSegment(PublicKeyEndpoints.Card)
                 .WithOAuthBearerToken(Settings.Token)
                 .PutAsync()
-                .ReceiveJson<PublicKeyReadDto>();
+                .ReceiveJson<PublicKeyResponse>();
         }
 
-        public async Task<PublicKeyReadDto> GetAsync()
+        public async Task<PublicKeyResponse> GetAsync()
         {
             return await BaseUrl
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
                 .AppendPathSegment(PublicKeyEndpoints.Card)
                 .WithOAuthBearerToken(Settings.Token)
-                .GetJsonAsync<PublicKeyReadDto>();
+                .GetJsonAsync<PublicKeyResponse>();
         }
     }
 }

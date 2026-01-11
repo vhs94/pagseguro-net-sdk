@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Providers;
-using PagSeguro.DotNet.Sdk.Connect.Services;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Helpers
 {
@@ -11,7 +10,6 @@ namespace PagSeguro.DotNet.Sdk.Connect.Helpers
         {
             services.AddScoped<IApplicationProvider, ApplicationProvider>();
             services.AddScoped<IAuthorizationProvider, AuthorizationProvider>();
-            services.AddScoped<ICryptoService, CryptoService>();
         }
     }
 }

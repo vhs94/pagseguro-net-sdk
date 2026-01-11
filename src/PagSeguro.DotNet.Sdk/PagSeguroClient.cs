@@ -10,10 +10,10 @@ using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
@@ -99,10 +99,10 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddSingleton(Settings);
         }
 
-        public async Task<AuthorizationCodeReadDto> ConnectAsync(
-            AuthorizationCodeWriteDto authorizationCodeWriteDto)
+        public async Task<AuthorizationCodeResponse> ConnectAsync(
+            AuthorizationCodeRequest authorizationCodeWriteDto)
         {
-            AuthorizationCodeReadDto result = await ForAuthorization()
+            AuthorizationCodeResponse result = await ForAuthorization()
                 .CreateAccessTokenByCodeAsync(authorizationCodeWriteDto);
             Settings.AccessToken = result.AccessToken;
             ConfigureSettings();
@@ -111,7 +111,7 @@ namespace PagSeguro.DotNet.Sdk
 
         public async Task ConnectChallengeAsync()
         {
-            ChallengeReadDto result = await ForAuthorization()
+            ChallengeResponse result = await ForAuthorization()
                 .CreateAccessTokenByChallengeAsync();
             Settings.AccessToken = result.AccessToken;
             Settings.Challenge = result.DecryptedChallenge;
