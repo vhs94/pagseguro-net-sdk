@@ -1,9 +1,9 @@
 ﻿using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
 
-namespace PagSeguro.DotNet.Sdk.Orders.Dtos.Fees
+namespace PagSeguro.DotNet.Sdk.Orders.Models.Requests
 {
-    public class FeeWriteDto
+    public class FeeRequest
     {
         public string PaymentMethods => PaymentMethodType.CreditCard.ToDescription();
         public int Value { get; set; }

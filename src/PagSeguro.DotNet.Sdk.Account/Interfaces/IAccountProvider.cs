@@ -8,7 +8,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Interfaces
 
         /// <summary>
         /// Creates an account asynchronously using the PagBank API.
-        /// <see href="http://developer.pagbank.com.br/reference/criar-conta">Read the docs</see>
+        /// <see href="https://developer.pagbank.com.br/reference/criar-conta">Read the docs</see>
         /// </summary>
         /// <param name="accountRequest">The account request payload.</param>
         /// <returns>A <see cref="CreatedAccountResponse"/> representing the created account.</returns>

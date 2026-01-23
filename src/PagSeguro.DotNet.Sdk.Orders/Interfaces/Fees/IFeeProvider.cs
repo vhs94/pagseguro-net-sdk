@@ -1,49 +1,32 @@
-﻿using Flurl;
-using Flurl.Http;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees
 {
-    public interface IFeeProvider : IProvider, IBuilder<IFeeProvider, FeeWriteDto>
+    public interface IFeeProvider
     {
-        public IFeeProvider WithCreditCardBin(int creditCardBin)
-        {
-            Entity.CreditCardBin = creditCardBin;
-            return this;
-        }
+        /// <summary>
+        /// Set the credit card bin. The first 6 digits of the card number
+        /// </summary>
+        IFeeProvider WithCreditCardBin(int creditCardBin);
 
-        public IFeeProvider WithMaxInstallments(int maxInstallments)
-        {
-            Entity.MaxInstallments = maxInstallments;
-            return this;
-        }
+        /// <summary>
+        /// Set the maximum quantity of allowed installments, regardless of the transfer.
+        /// </summary>
+        IFeeProvider WithMaxInstallments(int maxInstallments);
 
-        public IFeeProvider WithMaxInstallmentsNoInterest(int maxInstallmentsNoInterest)
-        {
-            Entity.MaxInstallmentsNoInterest = maxInstallmentsNoInterest;
-            return this;
-        }
+        /// <summary>
+        /// Set the maximum quantity of allowed installments without interest.
+        /// </summary>
+        IFeeProvider WithMaxInstallmentsNoInterest(int maxInstallmentsNoInterest);
 
-        public IFeeProvider WithValue(int amountValue)
-        {
-            Entity.Value = amountValue;
-            return this;
-        }
+        /// <summary>
+        /// Set the transaction amount value
+        /// </summary>
+        IFeeProvider WithValue(int amountValue);
 
-        public async Task<FeeReadDto> CalculateAsync()
-        {
-            FeeWriteDto feeWriteDto = Build();
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, OrderEndpoint.CalculateFee)
-                .WithOAuthBearerToken(Settings.Token)
-                .SetQueryParam("payment_methods", feeWriteDto.PaymentMethods)
-                .SetQueryParam("value", feeWriteDto.Value)
-                .SetQueryParam("max_installments", feeWriteDto.MaxInstallments)
-                .SetQueryParam("max_installments_no_interest", feeWriteDto.MaxInstallmentsNoInterest)
-                .SetQueryParam("credit_card_bin", feeWriteDto.CreditCardBin)
-                .GetJsonAsync<FeeReadDto>();
-        }
+        /// <summary>
+        /// Allows you to calculate fees for a given transaction
+        /// </summary>
+        Task<FeeResponse> CalculateAsync();
     }
 }

@@ -6,7 +6,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Interfaces
     {
         /// <summary>
         /// This endpoint allows you to generate a digital certificate
-        /// <see href="http://developer.pagbank.com.br/reference/criar-certificado-digital">Read the docs</see>
+        /// <see href="https://developer.pagbank.com.br/reference/criar-certificado-digital">Read the docs</see>
         /// </summary>
         /// <returns>An <see cref="CertificateResponse"/> containing the certificate details.</returns>
         /// <remarks>
