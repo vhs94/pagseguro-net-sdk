@@ -10,7 +10,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
     {
         protected override ChargeWithPaymentMethodProvider CreateProvider()
         {
-            return new ChargeWithPaymentMethodProvider(Settings, ServiceProviderMock);
+            return new ChargeWithPaymentMethodProvider(Settings, ServiceProviderMock, FlurlClientMock);
         }
 
         [Fact]

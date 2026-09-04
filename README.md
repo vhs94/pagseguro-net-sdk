@@ -53,7 +53,7 @@ var creditCardOrder = await client
     .WithReferenceId("ref-id")
     .WithNotificationUrl("https://my.url")
     .WithCreditCard()
-    .AddCharge(new ChargeByCreditCardWriteDto())
+    .AddCharge(new ChargeByCreditCardRequest())
     .CreateAsync();
 ```
 # Unit Testing

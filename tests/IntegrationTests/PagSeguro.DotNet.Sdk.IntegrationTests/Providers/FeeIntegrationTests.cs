@@ -1,5 +1,6 @@
-﻿using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
+using FluentAssertions;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using System.Text.Json;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
@@ -9,9 +10,9 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
         [Fact]
         public async Task CalculateAsync_RequestIsValid_FeesAreReturned()
         {
-            FeeReadDto feeReadDto = CreateFeeReadDto();
+            FeeResponse feeResponse = CreateFeeResponse();
 
-            FeeReadDto result = await Client.ForFee()
+            FeeResponse result = await Client.ForFee()
                 .WithValue(10000)
                 .WithMaxInstallments(10)
                 .WithMaxInstallmentsNoInterest(4)
@@ -19,10 +20,10 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
                 .CalculateAsync();
 
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(feeReadDto);
+            result.Should().BeEquivalentTo(feeResponse);
         }
 
-        private FeeReadDto CreateFeeReadDto()
-            => JsonSerializer.Deserialize<FeeReadDto>(File.ReadAllText("Assets/fees.json"))!;
+        private FeeResponse CreateFeeResponse()
+            => JsonSerializer.Deserialize<FeeResponse>(File.ReadAllText("Assets/fees.json"))!;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
@@ -10,10 +9,10 @@ using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
@@ -27,40 +26,39 @@ namespace PagSeguro.DotNet.Sdk
     public class PagSeguroClient : IPagSeguroClient
     {
         public PagSeguroSettings Settings { get; private set; } = null!;
+        private readonly string _flurlClientName = $"PagSeguroClient-{Guid.NewGuid()}";
         private IServiceCollection _services = null!;
-        private IServiceProvider ServiceProvider => _services.BuildServiceProvider();
-        private IMapper Mapper => ServiceProvider.GetService<IMapper>()!;
+        private IServiceProvider _serviceProvider = null!;
+        private IServiceProvider ServiceProvider => _serviceProvider;
+        private bool _disposed;
         public virtual IAuthorizationProvider ForAuthorization()
-            => ServiceProvider.GetService<IAuthorizationProvider>()!;
+            => ServiceProvider.GetRequiredService<IAuthorizationProvider>();
         public virtual IApplicationProvider ForApplication()
-            => ServiceProvider.GetService<IApplicationProvider>()!;
+            => ServiceProvider.GetRequiredService<IApplicationProvider>();
         public virtual IAccountProvider ForAccount()
-            => ServiceProvider.GetService<IAccountProvider>()!;
+            => ServiceProvider.GetRequiredService<IAccountProvider>();
         public virtual IPublicKeyProvider ForPublicKey()
-            => ServiceProvider.GetService<IPublicKeyProvider>()!;
+            => ServiceProvider.GetRequiredService<IPublicKeyProvider>();
         public virtual IOrderProvider ForOrder()
-            => ServiceProvider.GetService<IOrderProvider>()!;
+            => ServiceProvider.GetRequiredService<IOrderProvider>();
         public virtual IChargeWithPaymentMethodProvider ForCharge()
-            => ServiceProvider.GetService<IChargeWithPaymentMethodProvider>()!;
+            => ServiceProvider.GetRequiredService<IChargeWithPaymentMethodProvider>();
         public virtual IDigitalCertificateProvider ForCertificate()
-            => ServiceProvider.GetService<IDigitalCertificateProvider>()!;
+            => ServiceProvider.GetRequiredService<IDigitalCertificateProvider>();
         public virtual IFeeProvider ForFee()
-            => ServiceProvider.GetService<IFeeProvider>()!;
-
-        private IPagSeguroHttpExceptionFactory PagSeguroHttpExceptionFactory
-            => ServiceProvider.GetService<IPagSeguroHttpExceptionFactory>()!;
+            => ServiceProvider.GetRequiredService<IFeeProvider>();
 
         public PagSeguroClient(ClientSettings settings)
         {
             CreateServiceCollection();
             MapSettings(settings);
-            ConfigureFlurlHttp();
-            ConfigureSettings();
+            _serviceProvider = _services.BuildServiceProvider();
         }
 
         private void CreateServiceCollection()
         {
             _services = new ServiceCollection();
+            _services.AddSingleton(CreateFlurlClient());
             _services.AddPagSeguroCommon();
             _services.AddConnectClient();
             _services.AddCertificateClient();
@@ -70,52 +68,48 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddAutoMapper(typeof(PagSeguroClient));
         }
 
-        private void ConfigureFlurlHttp()
+        private IFlurlClient CreateFlurlClient()
         {
-            FlurlHttp
-                .Clients.WithDefaults(config =>
-                {
-                    config.Settings.JsonSerializer = DefaultSerializer.Build();
-                    config.OnError(HandleExceptionAsync);
-                });
+            return FlurlHttp.Clients.GetOrAdd(_flurlClientName, configure: builder =>
+            {
+                builder.Settings.JsonSerializer = DefaultSerializer.Build();
+                builder.OnError(HandleExceptionAsync);
+            });
         }
 
         private async Task HandleExceptionAsync(FlurlCall call)
         {
             if (!call.Succeeded)
             {
-                throw await PagSeguroHttpExceptionFactory.CreateHttpExceptionAsync(call.Response);
+                IPagSeguroHttpExceptionFactory exceptionFactory = ServiceProvider
+                    .GetRequiredService<IPagSeguroHttpExceptionFactory>();
+                throw await exceptionFactory.CreateHttpExceptionAsync(call.Response);
             }
         }
 
         private void MapSettings(ClientSettings settings)
         {
-            Settings = Mapper.Map<PagSeguroSettings>(settings);
-        }
-
-        private void ConfigureSettings()
-        {
-            _services.RemoveAll<PagSeguroSettings>();
+            using var mappingProvider = _services.BuildServiceProvider();
+            IMapper mapper = mappingProvider.GetRequiredService<IMapper>();
+            Settings = mapper.Map<PagSeguroSettings>(settings);
             _services.AddSingleton(Settings);
         }
 
-        public async Task<AuthorizationCodeReadDto> ConnectAsync(
-            AuthorizationCodeWriteDto authorizationCodeWriteDto)
+        public async Task<AuthorizationCodeResponse> ConnectAsync(
+            AuthorizationCodeRequest authorizationCodeRequest)
         {
-            AuthorizationCodeReadDto result = await ForAuthorization()
-                .CreateAccessTokenByCodeAsync(authorizationCodeWriteDto);
+            AuthorizationCodeResponse result = await ForAuthorization()
+                .CreateAccessTokenByCodeAsync(authorizationCodeRequest);
             Settings.AccessToken = result.AccessToken;
-            ConfigureSettings();
             return result;
         }
 
         public async Task ConnectChallengeAsync()
         {
-            ChallengeReadDto result = await ForAuthorization()
+            ChallengeResponse result = await ForAuthorization()
                 .CreateAccessTokenByChallengeAsync();
             Settings.AccessToken = result.AccessToken;
             Settings.Challenge = result.DecryptedChallenge;
-            ConfigureSettings();
         }
 
         public void ConfigureClientApplication(
@@ -124,7 +118,50 @@ namespace PagSeguro.DotNet.Sdk
         {
             Settings.ClientId = clientId;
             Settings.ClientSecret = clientSecret;
-            ConfigureSettings();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                (_serviceProvider as IDisposable)?.Dispose();
+                FlurlHttp.Clients.Remove(_flurlClientName);
+            }
+
+            _disposed = true;
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (_serviceProvider is IAsyncDisposable asyncDisposableProvider)
+            {
+                await asyncDisposableProvider.DisposeAsync();
+            }
+            else
+            {
+                (_serviceProvider as IDisposable)?.Dispose();
+            }
+
+            FlurlHttp.Clients.Remove(_flurlClientName);
+            _disposed = true;
+            GC.SuppressFinalize(this);
         }
     }
 }
+

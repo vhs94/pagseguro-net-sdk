@@ -2,50 +2,54 @@
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Providers
 {
+    /// <inheritdoc cref="IAuthorizationProvider" />
     public class AuthorizationProvider : BaseProvider, IAuthorizationProvider
     {
         private readonly ICryptoService _cryptoService;
 
         public AuthorizationProvider(
             ICryptoService cryptoService,
-            PagSeguroSettings settings)
-            : base(settings)
+            PagSeguroSettings settings,
+            IFlurlClient flurlClient)
+            : base(settings, flurlClient)
         {
             _cryptoService = cryptoService;
         }
 
-        public async Task<AuthorizationCodeReadDto> CreateAccessTokenByCodeAsync(
-            AuthorizationCodeWriteDto authorizationCodeWriteDto)
+        /// <inheritdoc />
+        public async Task<AuthorizationCodeResponse> CreateAccessTokenByCodeAsync(
+            AuthorizationCodeRequest authorizationCodeRequest)
         {
             EnsureClientApplication();
 
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment(ConnectEndpoints.Token)
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
                 .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
                 .PostJsonAsync(new
                 {
-                    grant_type = authorizationCodeWriteDto.GrantType,
-                    code = authorizationCodeWriteDto.Code,
-                    redirect_uri = authorizationCodeWriteDto.RedirectUri,
-                    scope = authorizationCodeWriteDto.Scope.ToStringApiScopes()
+                    grant_type = authorizationCodeRequest.GrantType,
+                    code = authorizationCodeRequest.Code,
+                    redirect_uri = authorizationCodeRequest.RedirectUri,
+                    scope = authorizationCodeRequest.Scope.ToStringApiScopes()
                 })
-                .ReceiveJson<AuthorizationCodeReadDto>();
+                .ReceiveJson<AuthorizationCodeResponse>();
         }
 
-        public async Task<ChallengeReadDto> CreateAccessTokenByChallengeAsync()
+        /// <inheritdoc />
+        public async Task<ChallengeResponse> CreateAccessTokenByChallengeAsync()
         {
             EnsureClientApplication();
 
-            var challengeResult = await BaseUrl
+            var challengeResult = await Request()
                 .AppendPathSegment(ConnectEndpoints.Token)
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
@@ -55,7 +59,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                     grant_type = ApiGrants.Challenge,
                     scope = ApiScopes.CreateCertificate.ToDescription()
                 })
-                .ReceiveJson<ChallengeReadDto>();
+                .ReceiveJson<ChallengeResponse>();
 
             if (!string.IsNullOrEmpty(Settings.PrivateKey))
             {

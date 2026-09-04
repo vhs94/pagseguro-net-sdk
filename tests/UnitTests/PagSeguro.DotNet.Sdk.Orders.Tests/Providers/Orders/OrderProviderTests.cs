@@ -1,16 +1,12 @@
-﻿using AutoFixture;
+using AutoFixture;
 using FluentAssertions;
 using Flurl;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.ChargedOrder;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Item;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.QrCode;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Orders.Shipping;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
+using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
@@ -20,8 +16,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
     public class OrderProviderTests : BaseProviderTests<OrderProvider>
     {
         private IServiceProvider _serviceProviderMock = null!;
-        private OrderReadDto _orderReadDto = null!;
-        private OrderWriteDto _orderWriteDto = null!;
+        private OrderResponse _orderResponse = null!;
+        private OrderRequest _orderRequest = null!;
         private IBankSlipOrderProvider _bankSlipOrderProviderMock = null!;
         private ICreditCardOrderProvider _creditCardOrderProviderMock = null!;
         private ICreditCardWith3DsAuthOrderProvider _creditCardWith3DsAuthOrderProviderMock = null!;
@@ -40,19 +36,19 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 
         protected override OrderProvider CreateProvider()
         {
-            return new OrderProvider(Settings, _serviceProviderMock);
+            return new OrderProvider(Settings, _serviceProviderMock, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
-            _orderReadDto = CreateOrderReadDto();
-            _orderWriteDto = CreateOrderWriteDto();
+            _orderResponse = CreateOrderResponse();
+            _orderRequest = CreateOrderRequest();
             HttpTestMock
                 .ForCallsTo(
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders),
                     Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, "*"))
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
-                .RespondWithJson(_orderReadDto);
+                .RespondWithJson(_orderResponse);
             _serviceProviderMock
                 .GetService<IBankSlipOrderProvider>()
                 .Returns(_bankSlipOrderProviderMock);
@@ -67,59 +63,59 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .Returns(_debitCardWith3DsAuthOrderProviderMock);
         }
 
-        private OrderReadDto CreateOrderReadDto()
+        private OrderResponse CreateOrderResponse()
         {
-            return Fixture.Create<OrderReadDto>();
+            return Fixture.Create<OrderResponse>();
         }
 
-        private OrderWriteDto CreateOrderWriteDto()
+        private OrderRequest CreateOrderRequest()
         {
-            return Fixture.Create<OrderWriteDto>();
+            return Fixture.Create<OrderRequest>();
         }
 
         [Fact]
         public void WithCustomer_CustomerIsValid_CustomerIsSet()
         {
-            CustomerDto customerDto = CreateCustomerDto();
+            Customer customer = CreateCustomer();
 
-            Provider.WithCustomer(customerDto);
+            Provider.WithCustomer(customer);
 
             Provider.Build()
                 .Customer
                 .Should()
-                .BeEquivalentTo(customerDto);
+                .BeEquivalentTo(customer);
         }
 
-        private CustomerDto CreateCustomerDto()
+        private Customer CreateCustomer()
         {
-            return Fixture.Create<CustomerDto>();
+            return Fixture.Create<Customer>();
         }
 
         [Fact]
         public void WithItem_ItemIsValid_ItemIsSet()
         {
-            ItemWriteDto itemWriteDto = CreateItemWriteDto();
+            ItemRequest itemRequest = CreateItemRequest();
 
-            Provider.WithItem(itemWriteDto);
+            Provider.WithItem(itemRequest);
 
             Provider.Build()
                 .Items
                 .Should()
-                .BeEquivalentTo([itemWriteDto]);
+                .BeEquivalentTo([itemRequest]);
         }
 
-        private ItemWriteDto CreateItemWriteDto()
+        private ItemRequest CreateItemRequest()
         {
-            return Fixture.Create<ItemWriteDto>();
+            return Fixture.Create<ItemRequest>();
         }
 
         [Fact]
         public void WithItems_ItemIsValid_ItemIsSet()
         {
-            ItemWriteDto itemWriteDto = CreateItemWriteDto();
-            var items = new List<ItemWriteDto>()
+            ItemRequest itemRequest = CreateItemRequest();
+            var items = new List<ItemRequest>()
             {
-                itemWriteDto
+                itemRequest
             };
 
             Provider.WithItems(items);
@@ -127,7 +123,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             Provider.Build()
                 .Items
                 .Should()
-                .BeEquivalentTo([itemWriteDto]);
+                .BeEquivalentTo([itemRequest]);
         }
 
         [Fact]
@@ -163,36 +159,36 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         [Fact]
         public void WithQrCode_QrCodeIsValid_QrCodeIsSet()
         {
-            QrCodeWriteDto qrCodeWriteDto = CreateQrCodeWriteDto();
+            QrCodeRequest qrCodeRequest = CreateQrCodeRequest();
 
-            Provider.WithQrCode(qrCodeWriteDto);
+            Provider.WithQrCode(qrCodeRequest);
 
             Provider.Build()
                 .QrCodes
                 .Should()
-                .BeEquivalentTo([qrCodeWriteDto]);
+                .BeEquivalentTo([qrCodeRequest]);
         }
 
-        private QrCodeWriteDto CreateQrCodeWriteDto()
+        private QrCodeRequest CreateQrCodeRequest()
         {
-            return Fixture.Create<QrCodeWriteDto>();
+            return Fixture.Create<QrCodeRequest>();
         }
 
         [Fact]
         public void WithQrCodes_QrCodeIsValid_QrCodeIsSet()
         {
-            QrCodeWriteDto qrCodeWriteDto = CreateQrCodeWriteDto();
-            var qrCodeWriteDtos = new List<QrCodeWriteDto>()
+            QrCodeRequest qrCodeRequest = CreateQrCodeRequest();
+            var qrCodeRequests = new List<QrCodeRequest>()
             {
-                qrCodeWriteDto
+                qrCodeRequest
             };
 
-            Provider.WithQrCodes(qrCodeWriteDtos);
+            Provider.WithQrCodes(qrCodeRequests);
 
             Provider.Build()
                 .QrCodes
                 .Should()
-                .BeEquivalentTo(qrCodeWriteDtos);
+                .BeEquivalentTo(qrCodeRequests);
         }
 
         [Fact]
@@ -209,51 +205,23 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         }
 
         [Fact]
-        public void WithShipping_ShippingIsValid_ShippingIdIsSet()
+        public void WithShipping_ShippingIsValid_ShippingIsSet()
         {
-            ShippingDto shippingDto = CreateShippingDto();
+            Shipping shipping = Fixture.Create<Shipping>();
 
-            Provider.WithShipping(shippingDto);
+            Provider.WithShipping(shipping);
 
             Provider.Build()
                 .Shipping
                 .Should()
-                .BeEquivalentTo(shippingDto);
-        }
-
-        private ShippingDto CreateShippingDto()
-        {
-            return Fixture.Create<ShippingDto>();
-        }
-
-        [Fact]
-        public void Build_OrderIsReturned()
-        {
-            string referenceId = "referenceId";
-            var expectedOrderWriteDto = new OrderWriteDto
-            {
-                ReferenceId = referenceId
-            };
-
-            var orderWriteDto = Provider
-                .Load(expectedOrderWriteDto)
-                .Build();
-
-            var secondOrderWriteDto = Provider
-                .Build();
-            orderWriteDto
-                .Should()
-                .BeEquivalentTo(expectedOrderWriteDto);
-            secondOrderWriteDto
-                .Should()
-                .NotBeEquivalentTo(orderWriteDto);
+                .BeEquivalentTo(shipping);
         }
 
         [Fact]
         public void WithBankSlip_ChargedOrderIsLoaded()
         {
-            ChargedOrderWriteDto<ChargeByBankSlipWriteDto> chargedOrderWriteDto = Provider
-                .Load(_orderWriteDto)
+            ChargedOrderRequest<ChargeByBankSlipRequest> chargedOrderRequest = Provider
+                .Load(_orderRequest)
                 .WithBankSlip()
                 .Build();
 
@@ -262,22 +230,22 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .GetService<IBankSlipOrderProvider>();
             _bankSlipOrderProviderMock
                 .Received(1)
-                .Load(Arg.Is<OrderWriteDto>(order => AssertLoadedOrder(order)));
+                .Load(Arg.Is<OrderRequest>(order => AssertLoadedOrder(order)));
         }
 
-        private bool AssertLoadedOrder(OrderWriteDto orderWriteDto)
+        private bool AssertLoadedOrder(OrderRequest orderRequest)
         {
-            orderWriteDto
+            orderRequest
                 .Should()
-                .BeEquivalentTo(_orderWriteDto);
+                .BeEquivalentTo(_orderRequest);
             return true;
         }
 
         [Fact]
         public void WithCreditCard_ChargedOrderIsLoaded()
         {
-            ChargedOrderWriteDto<ChargeByCreditCardWriteDto> chargedOrderWriteDto = Provider
-                .Load(_orderWriteDto)
+            ChargedOrderRequest<ChargeByCreditCardRequest> chargedOrderRequest = Provider
+                .Load(_orderRequest)
                 .WithCreditCard()
                 .Build();
 
@@ -286,14 +254,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .GetService<ICreditCardOrderProvider>();
             _creditCardOrderProviderMock
                 .Received(1)
-                .Load(Arg.Is<OrderWriteDto>(order => AssertLoadedOrder(order)));
+                .Load(Arg.Is<OrderRequest>(order => AssertLoadedOrder(order)));
         }
 
         [Fact]
         public void WithCreditCardAnd3DsAuthentication_ChargedOrderIsLoaded()
         {
-            ChargedOrderWriteDto<ChargeByCreditCardWith3DsAuthWriteDto> chargedOrderWriteDto = Provider
-                .Load(_orderWriteDto)
+            ChargedOrderRequest<ChargeByCreditCardWith3DsAuthRequest> chargedOrderRequest = Provider
+                .Load(_orderRequest)
                 .WithCreditCardAnd3DsAuthentication()
                 .Build();
 
@@ -302,14 +270,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .GetService<ICreditCardWith3DsAuthOrderProvider>();
             _creditCardWith3DsAuthOrderProviderMock
                 .Received(1)
-                .Load(Arg.Is<OrderWriteDto>(order => AssertLoadedOrder(order)));
+                .Load(Arg.Is<OrderRequest>(order => AssertLoadedOrder(order)));
         }
 
         [Fact]
         public void WithDebitCardAnd3DsAuthentication_ChargedOrderIsLoaded()
         {
-            var chargedOrderWriteDto = Provider
-                .Load(_orderWriteDto)
+            var chargedOrderRequest = Provider
+                .Load(_orderRequest)
                 .WithDebitCardAnd3DsAuthentication()
                 .Build();
 
@@ -318,14 +286,14 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .GetService<IDebitCardWith3DsAuthOrderProvider>();
             _debitCardWith3DsAuthOrderProviderMock
                 .Received(1)
-                .Load(Arg.Is<OrderWriteDto>(order => AssertLoadedOrder(order)));
+                .Load(Arg.Is<OrderRequest>(order => AssertLoadedOrder(order)));
         }
 
         [Fact]
         public async Task CreateAsync_OrderIsValid_HttpRequestIsCreated()
         {
             var result = await Provider
-                .Load(_orderWriteDto)
+                .Load(_orderRequest)
                 .CreateAsync();
 
             HttpTestMock
@@ -333,11 +301,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(OrderHeaders.IdempotencyKey)
                 .WithVerb(HttpMethod.Post)
-                .WithRequestJson(_orderWriteDto)
+                .WithRequestJson(_orderRequest)
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_orderReadDto);
+                .BeEquivalentTo(_orderResponse);
         }
 
         [Fact]
@@ -345,7 +313,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         {
             string orderId = Guid.NewGuid().ToString();
 
-            OrderReadDto result = await Provider.GetByIdAsync(orderId);
+            OrderResponse result = await Provider.GetByIdAsync(orderId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, orderId))
@@ -354,7 +322,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_orderReadDto);
+                .BeEquivalentTo(_orderResponse);
         }
     }
 }

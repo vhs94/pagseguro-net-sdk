@@ -2,8 +2,8 @@
 using FluentAssertions;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.AuthorizationCode;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Authorization.Challenge;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 using PagSeguro.DotNet.Sdk.Settings;
 
 namespace PagSeguro.DotNet.Sdk.Tests
@@ -12,8 +12,8 @@ namespace PagSeguro.DotNet.Sdk.Tests
     {
         private PagSeguroClient _client = null!;
         private ClientSettings _settings = null!;
-        private AuthorizationCodeReadDto _authorizationCodeReadDto = null!;
-        private ChallengeReadDto _challengeReadDto = null!;
+        private AuthorizationCodeResponse _authorizationCodeResponse = null!;
+        private ChallengeResponse _challengeResponse = null!;
 
         protected override void CreateMocks()
         {
@@ -28,50 +28,50 @@ namespace PagSeguro.DotNet.Sdk.Tests
 
         protected override void SetupMocks()
         {
-            _authorizationCodeReadDto = CreateAuthorizationCodeReadDto();
-            _challengeReadDto = CreateChallengeReadDto();
+            _authorizationCodeResponse = CreateAuthorizationCodeResponse();
+            _challengeResponse = CreateChallengeResponse();
             _client
                 .ForAuthorization()
-                .CreateAccessTokenByCodeAsync(Arg.Any<AuthorizationCodeWriteDto>())
-                .Returns(_authorizationCodeReadDto);
+                .CreateAccessTokenByCodeAsync(Arg.Any<AuthorizationCodeRequest>())
+                .Returns(_authorizationCodeResponse);
             _client
                 .ForAuthorization()
                 .CreateAccessTokenByChallengeAsync()
-                .Returns(_challengeReadDto);
+                .Returns(_challengeResponse);
         }
 
-        private AuthorizationCodeReadDto CreateAuthorizationCodeReadDto()
+        private AuthorizationCodeResponse CreateAuthorizationCodeResponse()
         {
-            return Fixture.Create<AuthorizationCodeReadDto>();
+            return Fixture.Create<AuthorizationCodeResponse>();
         }
 
-        private ChallengeReadDto CreateChallengeReadDto()
+        private ChallengeResponse CreateChallengeResponse()
         {
-            return Fixture.Create<ChallengeReadDto>();
+            return Fixture.Create<ChallengeResponse>();
         }
 
         [Fact]
         public async Task ConnectAsync_AuthorizationCodeIsValid_AcessTokenIsSet()
         {
-            AuthorizationCodeWriteDto writeDto = CreateAuthorizationCodeWriteDto();
+            AuthorizationCodeRequest request = CreateAuthorizationCodeRequest();
 
-            AuthorizationCodeReadDto result = await _client.ConnectAsync(writeDto);
+            AuthorizationCodeResponse result = await _client.ConnectAsync(request);
 
             await _client
                 .ForAuthorization()
                 .Received(1)
-                .CreateAccessTokenByCodeAsync(writeDto);
+                .CreateAccessTokenByCodeAsync(request);
             _client.Settings
                 .AccessToken
-                .Should().Be(_authorizationCodeReadDto.AccessToken);
+                .Should().Be(_authorizationCodeResponse.AccessToken);
             result
                 .Should()
-                .BeEquivalentTo(_authorizationCodeReadDto);
+                .BeEquivalentTo(_authorizationCodeResponse);
         }
 
-        private AuthorizationCodeWriteDto CreateAuthorizationCodeWriteDto()
+        private AuthorizationCodeRequest CreateAuthorizationCodeRequest()
         {
-            return Fixture.Create<AuthorizationCodeWriteDto>();
+            return Fixture.Create<AuthorizationCodeRequest>();
         }
 
         [Fact]
@@ -85,10 +85,10 @@ namespace PagSeguro.DotNet.Sdk.Tests
                 .CreateAccessTokenByChallengeAsync();
             _client.Settings
                 .AccessToken
-                .Should().Be(_challengeReadDto.AccessToken);
+                .Should().Be(_challengeResponse.AccessToken);
             _client.Settings
                 .Challenge
-                .Should().Be(_challengeReadDto.DecryptedChallenge);
+                .Should().Be(_challengeResponse.DecryptedChallenge);
         }
 
         [Fact]

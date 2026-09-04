@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Application;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
 {
@@ -9,13 +10,13 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
         [Fact]
         public async Task CreateAsync_RequestIsValid_ApplicationIsCreated()
         {
-            ApplicationWriteDto applicationWriteDto = CreateApplicationWriteDto();
+            ApplicationRequest applicationRequest = CreateApplicationRequest();
 
-            ApplicationReadDto result = await Client
+            ApplicationResponse result = await Client
                 .ForApplication()
-                .CreateAsync(applicationWriteDto);
+                .CreateAsync(applicationRequest);
 
-            ApplicationReadDto applicationReadDto = await Client
+            ApplicationResponse applicationResponse = await Client
                 .ForApplication()
                 .GetByClientIdAsync(result.ClientId!);
             result
@@ -23,17 +24,17 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
                 .NotBeNull();
             result
                 .Should()
-                .BeEquivalentTo(applicationWriteDto);
+                .BeEquivalentTo(applicationRequest);
             result
                 .Should()
-                .BeEquivalentTo(applicationReadDto, options => options.Excluding(app => app.ClientSecret));
+                .BeEquivalentTo(applicationResponse, options => options.Excluding(app => app.ClientSecret));
 
         }
 
-        private ApplicationWriteDto CreateApplicationWriteDto()
+        private ApplicationRequest CreateApplicationRequest()
         {
             string validUrl = "http://myurl.com";
-            return Fixture.Build<ApplicationWriteDto>()
+            return Fixture.Build<ApplicationRequest>()
                 .With(app => app.RedirectUrl, validUrl)
                 .With(app => app.Site, validUrl)
                 .Create();

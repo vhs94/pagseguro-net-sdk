@@ -2,42 +2,43 @@
 using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Application;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 using PagSeguro.DotNet.Sdk.Connect.Providers;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
 {
     public class ApplicationProviderTests : BaseProviderTests<ApplicationProvider>
     {
-        private ApplicationReadDto _applicationReadDto = null!;
+        private ApplicationResponse _applicationResponse = null!;
 
         protected override ApplicationProvider CreateProvider()
         {
-            return new ApplicationProvider(Settings);
+            return new ApplicationProvider(Settings, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
-            _applicationReadDto = CreateApplicationReadDto();
+            _applicationResponse = CreateApplicationResponse();
             HttpTestMock
                 .ForCallsTo(
                     Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application),
                     Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, "*"))
-                .RespondWithJson(_applicationReadDto);
+                .RespondWithJson(_applicationResponse);
         }
 
-        private ApplicationReadDto CreateApplicationReadDto()
+        private ApplicationResponse CreateApplicationResponse()
         {
-            return Fixture.Create<ApplicationReadDto>();
+            return Fixture.Create<ApplicationResponse>();
         }
 
         [Fact]
         public async Task CreateAsync_ApplicationIsValid_HttpRequestIsCreated()
         {
-            ApplicationWriteDto application = CreateApplication();
+            ApplicationRequest application = CreateApplication();
 
-            ApplicationReadDto result = await Provider.CreateAsync(application);
+            ApplicationResponse result = await Provider.CreateAsync(application);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application))
@@ -47,12 +48,12 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_applicationReadDto);
+                .BeEquivalentTo(_applicationResponse);
         }
 
-        private ApplicationWriteDto CreateApplication()
+        private ApplicationRequest CreateApplication()
         {
-            return Fixture.Create<ApplicationWriteDto>();
+            return Fixture.Create<ApplicationRequest>();
         }
 
         [Fact]
@@ -60,7 +61,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         {
             string applicationId = "appId";
 
-            ApplicationReadDto result = await Provider.GetByClientIdAsync(applicationId);
+            ApplicationResponse result = await Provider.GetByClientIdAsync(applicationId);
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, applicationId))
@@ -69,7 +70,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_applicationReadDto);
+                .BeEquivalentTo(_applicationResponse);
         }
     }
 }

@@ -1,0 +1,20 @@
+<Project>
+
+  <!-- Keep the repository-wide settings, then add the ones that only apply to the
+       shipping libraries under src/. Test and sample projects are unaffected. -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!--
+      Emit the XML documentation file so the ///-comments ship inside the NuGet
+      packages and show up as IntelliSense for consumers.
+      CS1591 (missing XML comment for a publicly visible type or member) is
+      suppressed: the public API surface - models, provider interfaces and their
+      implementations - is documented, but helpers, settings, exceptions and
+      serialization types are intentionally left undocumented.
+    -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+</Project>
