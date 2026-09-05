@@ -41,7 +41,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         /// <inheritdoc />
         public IOrderProvider WithItem(ItemRequest itemRequest)
         {
-            _orderRequest.Items.Add(itemRequest);
+            (_orderRequest.Items ??= []).Add(itemRequest);
             return this;
         }
 
@@ -49,7 +49,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public IOrderProvider WithItems(
             ICollection<ItemRequest> itemRequests)
         {
-            List<ItemRequest> newItems = _orderRequest.Items.ToList();
+            List<ItemRequest> newItems = (_orderRequest.Items ?? []).ToList();
             newItems.AddRange(itemRequests);
             _orderRequest.Items = newItems;
             return this;
@@ -75,7 +75,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         /// <inheritdoc />
         public IOrderProvider WithQrCode(QrCodeRequest qrCodeRequest)
         {
-            _orderRequest.QrCodes.Add(qrCodeRequest);
+            (_orderRequest.QrCodes ??= []).Add(qrCodeRequest);
             return this;
         }
 
@@ -83,7 +83,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         public IOrderProvider WithQrCodes(
             ICollection<QrCodeRequest> qrCodeRequests)
         {
-            List<QrCodeRequest> newQrCodes = _orderRequest.QrCodes.ToList();
+            List<QrCodeRequest> newQrCodes = (_orderRequest.QrCodes ?? []).ToList();
             newQrCodes.AddRange(qrCodeRequests);
             _orderRequest.QrCodes = newQrCodes;
             return this;
@@ -142,6 +142,16 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         }
 
         /// <inheritdoc />
+        public async Task<ICollection<OrderResponse>> GetByChargeIdAsync(string chargeId)
+        {
+            OrderSearchResponse response = await Request()
+                .AppendPathSegment(OrderEndpoint.Orders)
+                .SetQueryParam(OrderEndpoint.ChargeIdQueryParam, chargeId)
+                .WithOAuthBearerToken(Settings.Token)
+                .GetJsonAsync<OrderSearchResponse>();
+            return response.Orders;
+        }
+
         public IBankSlipOrderProvider WithBankSlip()
         {
             OrderRequest orderRequest = Build();

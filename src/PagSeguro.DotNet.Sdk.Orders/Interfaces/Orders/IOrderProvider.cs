@@ -89,5 +89,18 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
         /// <see href="https://developer.pagbank.com.br/reference/consultar-pedido">ler documentação</see>
         /// </summary>
         Task<OrderResponse> GetByIdAsync(string orderId);
+
+        /// <summary>
+        /// Busca os pedidos associados a uma cobrança.
+        /// Corresponde a GET /orders?charge_id={charge_id}.
+        /// <see href="https://developer.pagbank.com.br/reference/consultar-pedido-parametros">ler documentação</see>
+        /// </summary>
+        /// <param name="chargeId">Identificador da cobrança. Por exemplo, CHAR_123.</param>
+        /// <returns>
+        /// Os pedidos encontrados, ou uma lista vazia quando a cobrança não pertence a
+        /// nenhum pedido. As cobranças do pedido não fazem parte desta projeção: use os
+        /// providers de cobrança para obtê-las.
+        /// </returns>
+        Task<ICollection<OrderResponse>> GetByChargeIdAsync(string chargeId);
     }
 }

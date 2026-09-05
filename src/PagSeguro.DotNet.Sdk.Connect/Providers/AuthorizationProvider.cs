@@ -67,5 +67,41 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
             }
             return challengeResult;
         }
+
+        /// <inheritdoc />
+        public async Task<AuthorizationCodeResponse> RefreshAccessTokenAsync(
+            RefreshTokenRequest refreshTokenRequest)
+        {
+            EnsureClientApplication();
+
+            return await Request()
+                .AppendPathSegment(ConnectEndpoints.Refresh)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .PostJsonAsync(new
+                {
+                    grant_type = refreshTokenRequest.GrantType,
+                    refresh_token = refreshTokenRequest.RefreshToken
+                })
+                .ReceiveJson<AuthorizationCodeResponse>();
+        }
+
+        /// <inheritdoc />
+        public async Task RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest)
+        {
+            EnsureClientApplication();
+
+            await Request()
+                .AppendPathSegment(ConnectEndpoints.Revoke)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .PostJsonAsync(new
+                {
+                    token = revokeTokenRequest.Token,
+                    token_type_hint = revokeTokenRequest.TokenTypeHint.ToDescription()
+                });
+        }
     }
 }

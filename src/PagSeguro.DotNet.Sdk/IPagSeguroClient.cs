@@ -1,5 +1,6 @@
 ﻿using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
+using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
@@ -49,6 +50,11 @@ namespace PagSeguro.DotNet.Sdk
         /// Provider de simulação de taxas e parcelamento.
         /// </summary>
         IFeeProvider ForFee();
+
+        /// <summary>
+        /// Provider de criação e gerenciamento do checkout hospedado pelo PagBank.
+        /// </summary>
+        ICheckoutProvider ForCheckout();
         /// <summary>
         /// Troca o código de autorização por um access_token e passa a
         /// utilizá-lo nas chamadas seguintes.
@@ -63,6 +69,15 @@ namespace PagSeguro.DotNet.Sdk
         /// <see href="https://developer.pagbank.com.br/reference/solicitar-autorizacao-via-connect-authorization">ler documentação</see>
         /// </summary>
         Task ConnectChallengeAsync();
+
+        /// <summary>
+        /// Renova o access_token a partir do refresh_token e passa a utilizá-lo
+        /// nas chamadas seguintes.
+        /// <see href="https://developer.pagbank.com.br/reference/renovar-access-token">ler documentação</see>
+        /// </summary>
+        /// <param name="refreshTokenRequest">Refresh token recebido na emissão anterior.</param>
+        /// <returns>O novo access_token emitido, com um novo refresh_token.</returns>
+        Task<AuthorizationCodeResponse> RefreshAccessTokenAsync(RefreshTokenRequest refreshTokenRequest);
         /// <summary>
         /// Configura o clientId e o clientSecret da aplicação
         /// utilizados nas chamadas que exigem identificação da aplicação.

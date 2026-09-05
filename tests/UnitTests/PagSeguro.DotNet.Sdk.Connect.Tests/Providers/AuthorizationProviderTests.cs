@@ -60,6 +60,92 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .BeEquivalentTo(authorizationCodeResponse);
         }
 
+        [Fact]
+        public async Task RefreshAccessTokenAsync_PayloadIsValid_HttpRequestIsCreated()
+        {
+            AuthorizationCodeResponse authorizationCodeResponse = CreateAuthorizationCodeResponse();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Refresh))
+                .RespondWithJson(authorizationCodeResponse);
+            RefreshTokenRequest refreshTokenRequest = CreateRefreshTokenRequest();
+
+            AuthorizationCodeResponse result = await Provider.RefreshAccessTokenAsync(refreshTokenRequest);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Refresh))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(new
+                {
+                    grant_type = ApiGrants.RefreshToken,
+                    refresh_token = refreshTokenRequest.RefreshToken
+                })
+                .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(authorizationCodeResponse);
+        }
+
+        [Fact]
+        public async Task RefreshAccessTokenAsync_ClientApplicationIsNotSet_ThrowsValidationException()
+        {
+            Settings.ClientId = null;
+            RefreshTokenRequest refreshTokenRequest = CreateRefreshTokenRequest();
+
+            Func<Task> task = async () => await Provider.RefreshAccessTokenAsync(refreshTokenRequest);
+
+            await task.Should().ThrowAsync<MissingClientApplicationException>();
+        }
+
+        [Fact]
+        public async Task RevokeTokenAsync_PayloadIsValid_HttpRequestIsCreated()
+        {
+            HttpTestMock
+                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Revoke))
+                .RespondWithJson(new { });
+            RevokeTokenRequest revokeTokenRequest = CreateRevokeTokenRequest();
+
+            await Provider.RevokeTokenAsync(revokeTokenRequest);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Revoke))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(new
+                {
+                    token = revokeTokenRequest.Token,
+                    token_type_hint = revokeTokenRequest.TokenTypeHint.ToDescription()
+                })
+                .Times(1);
+        }
+
+        [Fact]
+        public async Task RevokeTokenAsync_ClientApplicationIsNotSet_ThrowsValidationException()
+        {
+            Settings.ClientId = null;
+            RevokeTokenRequest revokeTokenRequest = CreateRevokeTokenRequest();
+
+            Func<Task> task = async () => await Provider.RevokeTokenAsync(revokeTokenRequest);
+
+            await task.Should().ThrowAsync<MissingClientApplicationException>();
+        }
+
+        private RefreshTokenRequest CreateRefreshTokenRequest()
+        {
+            return Fixture.Create<RefreshTokenRequest>();
+        }
+
+        private RevokeTokenRequest CreateRevokeTokenRequest()
+        {
+            return Fixture.Build<RevokeTokenRequest>()
+                .With(rt => rt.TokenTypeHint, TokenTypeHint.RefreshToken)
+                .Create();
+        }
+
         private AuthorizationCodeResponse CreateAuthorizationCodeResponse()
         {
             return Fixture.Create<AuthorizationCodeResponse>();

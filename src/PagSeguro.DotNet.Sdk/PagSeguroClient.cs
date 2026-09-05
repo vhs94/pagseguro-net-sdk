@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
+using PagSeguro.DotNet.Sdk.Checkout.Helpers;
+using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
@@ -47,6 +49,8 @@ namespace PagSeguro.DotNet.Sdk
             => ServiceProvider.GetRequiredService<IDigitalCertificateProvider>();
         public virtual IFeeProvider ForFee()
             => ServiceProvider.GetRequiredService<IFeeProvider>();
+        public virtual ICheckoutProvider ForCheckout()
+            => ServiceProvider.GetRequiredService<ICheckoutProvider>();
 
         public PagSeguroClient(ClientSettings settings)
         {
@@ -65,6 +69,7 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddAccountClient();
             _services.AddAPublicKeyClient();
             _services.AddOrderClient();
+            _services.AddCheckoutClient();
             _services.AddAutoMapper(typeof(PagSeguroClient));
         }
 
@@ -110,6 +115,15 @@ namespace PagSeguro.DotNet.Sdk
                 .CreateAccessTokenByChallengeAsync();
             Settings.AccessToken = result.AccessToken;
             Settings.Challenge = result.DecryptedChallenge;
+        }
+
+        public async Task<AuthorizationCodeResponse> RefreshAccessTokenAsync(
+            RefreshTokenRequest refreshTokenRequest)
+        {
+            AuthorizationCodeResponse result = await ForAuthorization()
+                .RefreshAccessTokenAsync(refreshTokenRequest);
+            Settings.AccessToken = result.AccessToken;
+            return result;
         }
 
         public void ConfigureClientApplication(

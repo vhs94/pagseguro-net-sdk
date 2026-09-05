@@ -40,6 +40,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Account\PagSeguro.DotNet.Sdk.Account.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Certificate\PagSeguro.DotNet.Sdk.Certificate.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Checkout\PagSeguro.DotNet.Sdk.Checkout.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Connect\PagSeguro.DotNet.Sdk.Connect.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />

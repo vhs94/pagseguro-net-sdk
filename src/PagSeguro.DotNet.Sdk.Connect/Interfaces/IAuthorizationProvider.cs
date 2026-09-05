@@ -25,5 +25,32 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
         /// <see href="https://developer.pagbank.com.br/reference/solicitar-autorizacao-via-connect-authorization">ler documentação</see>
         /// </summary>
         Task<ChallengeResponse> CreateAccessTokenByChallengeAsync();
+
+        /// <summary>
+        /// Renova um access_token expirado a partir do refresh_token.
+        /// Cada renovação gera um novo refresh_token e invalida o anterior.
+        /// Corresponde a POST /oauth2/refresh.
+        /// <see href="https://developer.pagbank.com.br/reference/renovar-access-token">ler documentação</see>
+        /// </summary>
+        /// <param name="refreshTokenRequest">Refresh token recebido na emissão anterior.</param>
+        /// <returns>O novo access_token emitido, com um novo refresh_token.</returns>
+        /// <remarks>
+        /// <para><strong>Atenção:</strong> requer o ClientId e o ClientSecret configurados
+        /// com <c>ConfigureClientApplication()</c>.</para>
+        /// </remarks>
+        Task<AuthorizationCodeResponse> RefreshAccessTokenAsync(RefreshTokenRequest refreshTokenRequest);
+
+        /// <summary>
+        /// Revoga um token, encerrando o acesso à conta do usuário.
+        /// Revogar o refresh_token invalida também o access_token associado.
+        /// Corresponde a POST /oauth2/revoke.
+        /// <see href="https://developer.pagbank.com.br/reference/revogar-access-token">ler documentação</see>
+        /// </summary>
+        /// <param name="revokeTokenRequest">Token a ser revogado e o seu tipo.</param>
+        /// <remarks>
+        /// <para><strong>Atenção:</strong> requer o ClientId e o ClientSecret configurados
+        /// com <c>ConfigureClientApplication()</c>.</para>
+        /// </remarks>
+        Task RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest);
     }
 }
