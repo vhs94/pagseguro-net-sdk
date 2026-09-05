@@ -4,9 +4,11 @@ using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Cards;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Splits;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 
@@ -56,6 +58,23 @@ namespace PagSeguro.DotNet.Sdk
         /// Provider de criação e gerenciamento do checkout hospedado pelo PagBank.
         /// </summary>
         ICheckoutProvider ForCheckout();
+
+        /// <summary>
+        /// Provider de consulta e liberação da divisão de pagamento (split).
+        /// </summary>
+        ISplitProvider ForSplit();
+
+        /// <summary>
+        /// Provider de validação e armazenamento de cartões, que devolve um
+        /// token reutilizável nas cobranças.
+        /// </summary>
+        ICardTokenProvider ForCardToken();
+
+        /// <summary>
+        /// Provider de criação da sessão de autenticação 3DS consumida pelo SDK
+        /// de front-end.
+        /// </summary>
+        IAuthenticationSessionProvider ForAuthenticationSession();
 
         /// <summary>
         /// Provider de gerenciamento dos planos de assinatura.

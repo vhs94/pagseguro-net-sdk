@@ -26,6 +26,8 @@ Guias e referência completa da API: **https://vhs94.github.io/pagseguro-net-sdk
 - [Autenticação](https://vhs94.github.io/pagseguro-net-sdk/guia/autenticacao.html)
 - [Pedidos e cobranças](https://vhs94.github.io/pagseguro-net-sdk/guia/pedidos-e-cobrancas.html)
 - [Assinaturas](https://vhs94.github.io/pagseguro-net-sdk/guia/assinaturas.html)
+- [Split de pagamento](https://vhs94.github.io/pagseguro-net-sdk/guia/split-de-pagamento.html)
+- [Cartões e 3DS](https://vhs94.github.io/pagseguro-net-sdk/guia/cartoes-e-3ds.html)
 - [Referência da API](https://vhs94.github.io/pagseguro-net-sdk/api/)
 
 # Como usar

@@ -165,6 +165,94 @@ CouponResponse cupom = await client.ForCoupon().CreateAsync(new CouponRequest
 > `Discount.Type` aceita apenas `PERCENT` ou `AMOUNT`, e `Duration` é
 > obrigatório — mesmo que a documentação oficial sugira outra coisa.
 
+### Aplicando o cupom a uma assinatura
+
+Informe só o `Id` de um cupom ativo ao criar a assinatura:
+
+```csharp
+SubscriptionResponse assinatura = await client.ForSubscription().CreateAsync(
+    new SubscriptionRequest
+    {
+        Plan = new PlanReference { Id = plano.Id },
+        Customer = new CustomerReference { Id = assinante.Id },
+        Coupon = new CouponReference { Id = cupom.Id },
+        PaymentMethod = [new SubscriptionPaymentMethod { Type = "CREDIT_CARD" }]
+    });
+```
+
+### Removendo o cupom
+
+```csharp
+SubscriptionResponse atualizada = await client
+    .ForSubscription()
+    .RemoveCouponAsync(assinatura.Id!);
+```
+
+> [!IMPORTANT]
+> A remoção só vale **a partir da próxima recorrência**. No ciclo corrente o
+> desconto continua valendo e `atualizada.Coupon` continua preenchido — isso é
+> esperado, não é um erro.
+
+## Consultando um estorno
+
+Além de listar, dá para buscar um estorno pelo identificador:
+
+```csharp
+RefundResponse estorno = await client
+    .ForSubscriptionPayment()
+    .GetRefundByIdAsync("REFU_...");
+
+Console.WriteLine(estorno.Status);        // SUCCESS
+Console.WriteLine(estorno.Type);          // FULL
+Console.WriteLine(estorno.Payment!.Id);   // PAYM_...
+```
+
+## Retentativa de cobrança
+
+Quando uma fatura não é paga, o PagBank tenta cobrar de novo. A política é do
+vendedor inteiro e vale para todas as assinaturas:
+
+```csharp
+RetryPreferenceResponse atual = await client
+    .ForSubscriptionPreference()
+    .GetRetryPreferencesAsync();
+
+await client.ForSubscriptionPreference().UpdateRetryPreferencesAsync(
+    new RetryPreferenceRequest
+    {
+        FirstTry = 1,    // dias após o vencimento
+        SecondTry = 3,   // dias após a primeira tentativa
+        ThirdTry = 7,    // dias após a segunda
+        Finally = "SUSPEND"
+    });
+```
+
+`FirstTry`, `SecondTry` e `ThirdTry` aceitam apenas **1, 3, 5 ou 7**. `Finally`
+aceita `SUSPEND` ou `CANCEL`, e diz o que fazer com a assinatura depois da
+terceira tentativa sem sucesso.
+
+Para disparar uma cobrança manual imediatamente, use
+`client.ForSubscription().RetryAsync(assinaturaId)`.
+
+## Chave pública das cobranças recorrentes
+
+As Assinaturas têm a própria chave pública, separada da chave usada nos pedidos:
+
+```csharp
+SubscriptionPublicKeyResponse chave = await client
+    .ForSubscriptionPreference()
+    .GetPublicKeyAsync();
+
+// gera uma nova chave; a anterior deixa de valer
+SubscriptionPublicKeyResponse nova = await client
+    .ForSubscriptionPreference()
+    .CreatePublicKeyAsync();
+```
+
+> [!WARNING]
+> Criar uma chave nova invalida a anterior. Recriptografe os cartões com a chave
+> nova antes de enviá-los.
+
 ## Preferências de notificação
 
 ```csharp

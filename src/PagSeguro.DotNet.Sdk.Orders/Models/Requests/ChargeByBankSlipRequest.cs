@@ -10,6 +10,13 @@ namespace PagSeguro.DotNet.Sdk.Orders.Models.Requests
     public class ChargeByBankSlipRequest : ChargeByBankSlipBase, IChargeRequest
     {
         /// <summary>
+        /// Divisão do valor da cobrança entre várias contas PagBank. Só tem
+        /// efeito em contas habilitadas como marketplace.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public SplitRequest? Splits { get; set; }
+
+        /// <summary>
         /// Valor da cobrança.
         /// </summary>
         public ChargeAmountRequest? Amount { get; set; }
