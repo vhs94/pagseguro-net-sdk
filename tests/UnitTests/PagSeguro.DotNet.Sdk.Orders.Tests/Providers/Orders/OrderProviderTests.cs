@@ -309,6 +309,42 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         }
 
         [Fact]
+        public async Task CreateAsync_OrderHasQrCodes_QrCodesAreSentInThePayload()
+        {
+            OrderRequest orderRequest = Fixture.Build<OrderRequest>()
+                .With(o => o.QrCodes, [Fixture.Create<QrCodeRequest>()])
+                .With(o => o.Items, [Fixture.Create<ItemRequest>()])
+                .Create();
+
+            await Provider.Load(orderRequest).CreateAsync();
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(orderRequest)
+                .Times(1);
+        }
+
+        [Fact]
+        public async Task CreateAsync_OrderHasNoQrCodes_QrCodesAreOmittedFromThePayload()
+        {
+            // Regressão: a API recusa qr_codes: [] com 40002 "must have at least 1
+            // element", o que quebrava todo pedido pago por cartão ou boleto.
+            OrderRequest orderRequest = Fixture.Build<OrderRequest>()
+                .Without(o => o.QrCodes)
+                .With(o => o.Items, [Fixture.Create<ItemRequest>()])
+                .Create();
+
+            await Provider.Load(orderRequest).CreateAsync();
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .WithVerb(HttpMethod.Post)
+                .With(call => !call.RequestBody.Contains("qr_codes"))
+                .Times(1);
+        }
+
+        [Fact]
         public async Task GetByIdAsync_OrderIsValid_HttpRequestIsCreated()
         {
             string orderId = Guid.NewGuid().ToString();

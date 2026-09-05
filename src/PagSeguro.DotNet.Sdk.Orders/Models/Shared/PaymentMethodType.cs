@@ -13,6 +13,9 @@ namespace PagSeguro.DotNet.Sdk.Orders.Models.Shared
         [Description("DEBIT_CARD")]
         DebitCard,
         [Description("BOLETO")]
-        BankSlip
+        BankSlip,
+
+        [Description("PIX")]
+        Pix
     }
 }

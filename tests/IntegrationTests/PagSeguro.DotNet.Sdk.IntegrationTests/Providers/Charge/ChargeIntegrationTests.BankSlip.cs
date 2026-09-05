@@ -8,7 +8,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
 {
     public partial class ChargeIntegrationTests : BaseIntegrationTests
     {
-        [Fact(Skip = "Payslip integration is broken. Waiting Pagseguro support")]
+        [Fact]
         public async Task CreateAsync_WithBankSlip_ChargeIsCreated()
         {
             BankSlipRequest bankSlipRequest = CreateBankSlip();
@@ -72,7 +72,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             var holder = Fixture.Build<BankSlipHolder>()
                 .With(h => h.Address, holderAddress)
                 .With(h => h.Email, "email@teste.com")
-                .With(h => h.TaxId, "22222222222")
+                .With(h => h.TaxId, "12345678909")
                 .Create();
             return Fixture.Build<BankSlipRequest>()
                 .With(b => b.DueDate, DateTime.Now.AddYears(1))
