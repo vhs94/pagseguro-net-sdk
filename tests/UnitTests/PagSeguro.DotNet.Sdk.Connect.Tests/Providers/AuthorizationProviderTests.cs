@@ -237,5 +237,102 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
                 .Should()
                 .ThrowAsync<MissingClientApplicationException>();
         }
+
+        [Fact]
+        public async Task RequestSmsAuthorizationAsync_PayloadIsValid_HttpRequestIsCreated()
+        {
+            SmsAuthorizationResponse smsAuthorizationResponse = Fixture.Create<SmsAuthorizationResponse>();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.AuthorizeSms))
+                .RespondWithJson(smsAuthorizationResponse);
+            SmsAuthorizationRequest smsAuthorizationRequest = CreateSmsAuthorizationRequest();
+
+            SmsAuthorizationResponse result = await Provider
+                .RequestSmsAuthorizationAsync(smsAuthorizationRequest);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.AuthorizeSms))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(new
+                {
+                    bank_branch = smsAuthorizationRequest.BankBranch,
+                    account_number = smsAuthorizationRequest.AccountNumber
+                })
+                .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(smsAuthorizationResponse);
+        }
+
+        [Fact]
+        public async Task RequestSmsAuthorizationAsync_ClientApplicationIsNotSet_ThrowsValidationException()
+        {
+            Settings.ClientId = null;
+
+            Func<Task> task = async () => await Provider
+                .RequestSmsAuthorizationAsync(CreateSmsAuthorizationRequest());
+
+            await task
+                .Should()
+                .ThrowAsync<MissingClientApplicationException>();
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenBySmsAsync_PayloadIsValid_HttpRequestIsCreated()
+        {
+            AuthorizationCodeResponse authorizationCodeResponse = CreateAuthorizationCodeResponse();
+            HttpTestMock
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
+                .RespondWithJson(authorizationCodeResponse);
+            SmsTokenRequest smsTokenRequest = new()
+            {
+                AuthorizationId = "AUTH_1",
+                SmsCode = "123456"
+            };
+
+            AuthorizationCodeResponse result = await Provider.CreateAccessTokenBySmsAsync(smsTokenRequest);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .WithVerb(HttpMethod.Post)
+                .WithRequestJson(new
+                {
+                    grant_type = ApiGrants.Sms,
+                    authorization_id = smsTokenRequest.AuthorizationId,
+                    sms_code = smsTokenRequest.SmsCode
+                })
+                .Times(1);
+            result
+                .Should()
+                .BeEquivalentTo(authorizationCodeResponse);
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenBySmsAsync_ClientApplicationIsNotSet_ThrowsValidationException()
+        {
+            Settings.ClientSecret = null;
+
+            Func<Task> task = async () => await Provider
+                .CreateAccessTokenBySmsAsync(new SmsTokenRequest());
+
+            await task
+                .Should()
+                .ThrowAsync<MissingClientApplicationException>();
+        }
+
+        private static SmsAuthorizationRequest CreateSmsAuthorizationRequest()
+        {
+            return new SmsAuthorizationRequest
+            {
+                BankBranch = "0001",
+                AccountNumber = "12345678-9"
+            };
+        }
     }
 }

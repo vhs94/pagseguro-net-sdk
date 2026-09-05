@@ -94,10 +94,15 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
         {
             receivedChargeResponse.Should().NotBeNull();
             receivedChargeResponse.Should().BeEquivalentTo(expectedChargeRequest, options => options.ExcludingMissingMembers());
-            receivedChargeResponse.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
+            // created_at chega com o offset -03:00 e o System.Text.Json converte
+            // para o horario LOCAL da maquina. Comparar com DateTime.UtcNow.Date
+            // confrontaria uma data local com uma data UTC, o que falha sempre que
+            // os dois lados caem em dias diferentes. A janela abaixo compara o
+            // instante, nao o dia, e ainda verifica que o recurso foi criado agora.
+            receivedChargeResponse.CreatedDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(10));
             receivedChargeResponse.Status.Should().Be("PAID");
             receivedChargeResponse.PaidDate.Should().NotBeNull();
-            receivedChargeResponse.PaidDate!.Value.Date.Should().Be(DateTime.UtcNow.Date);
+            receivedChargeResponse.PaidDate!.Value.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(10));
             receivedChargeResponse.PaymentResponse!.Message!.Should().Be("SUCESSO");
             receivedChargeResponse.PaymentResponse.Code.Should().Be(20000);
             receivedChargeResponse.Amount!.Summary!.Total.Should().Be(1000);

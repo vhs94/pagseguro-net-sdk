@@ -15,8 +15,14 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses
         /// <summary>Valor estornado.</summary>
         public Money? Amount { get; set; }
 
-        /// <summary>Situação do estorno.</summary>
+        /// <summary>Pagamento que foi estornado.</summary>
+        public PaymentReference? Payment { get; set; }
+
+        /// <summary>Situação do estorno. Por exemplo, SUCCESS.</summary>
         public string? Status { get; set; }
+
+        /// <summary>Tipo do estorno. Por exemplo, FULL.</summary>
+        public string? Type { get; set; }
 
         /// <summary>Data e horário de criação do estorno.</summary>
         [JsonPropertyName("created_at")]

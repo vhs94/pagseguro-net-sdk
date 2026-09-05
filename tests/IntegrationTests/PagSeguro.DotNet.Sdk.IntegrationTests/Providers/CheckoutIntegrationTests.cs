@@ -21,7 +21,12 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
             result.Should().NotBeNull();
             result.Id.Should().StartWith("CHEC_");
             result.Status.Should().Be("ACTIVE");
-            result.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
+            // created_at chega com o offset -03:00 e o System.Text.Json converte
+            // para o horario LOCAL da maquina. Comparar com DateTime.UtcNow.Date
+            // confrontaria uma data local com uma data UTC, o que falha sempre que
+            // os dois lados caem em dias diferentes. A janela abaixo compara o
+            // instante, nao o dia, e ainda verifica que o recurso foi criado agora.
+            result.CreatedDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(10));
             result.ReferenceId.Should().Be(checkoutRequest.ReferenceId);
             result.Items.Should().BeEquivalentTo(checkoutRequest.Items);
             result.PaymentMethods.Should().BeEquivalentTo(checkoutRequest.PaymentMethods);

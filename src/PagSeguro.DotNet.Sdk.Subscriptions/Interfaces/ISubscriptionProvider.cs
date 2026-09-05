@@ -89,5 +89,16 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
         /// </summary>
         /// <param name="subscriptionId">Identificador da assinatura a ser recobrada.</param>
         Task RetryAsync(string subscriptionId);
+
+        /// <summary>
+        /// Remove o cupom de desconto aplicado à assinatura. A remoção só passa
+        /// a valer na próxima recorrência, então o ciclo corrente continua com o
+        /// desconto.
+        /// Corresponde a DELETE /subscriptions/{subscription_id}/coupons.
+        /// <see href="https://developer.pagbank.com.br/reference/deletar-cupons-de-assinatura">ler documentação</see>
+        /// </summary>
+        /// <param name="subscriptionId">Identificador da assinatura.</param>
+        /// <returns>A assinatura após a remoção do cupom.</returns>
+        Task<SubscriptionResponse> RemoveCouponAsync(string subscriptionId);
     }
 }

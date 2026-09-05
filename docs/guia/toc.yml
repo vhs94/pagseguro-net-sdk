@@ -6,6 +6,10 @@
   href: pedidos-e-cobrancas.md
 - name: Checkout
   href: checkout.md
+- name: Cartões e 3DS
+  href: cartoes-e-3ds.md
+- name: Split de pagamento
+  href: split-de-pagamento.md
 - name: Assinaturas
   href: assinaturas.md
 - name: Tratamento de erros

@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared;
+using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses
 {
@@ -16,5 +17,8 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses
         /// <summary>Data e horário de criação da chave.</summary>
         [JsonPropertyName("created_at")]
         public DateTime? CreatedDate { get; set; }
+
+        /// <summary>Links relacionados à chave pública.</summary>
+        public ICollection<SubscriptionLink> Links { get; set; } = [];
     }
 }

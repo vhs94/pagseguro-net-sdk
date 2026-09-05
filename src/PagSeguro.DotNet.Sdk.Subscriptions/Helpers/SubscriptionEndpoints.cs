@@ -21,9 +21,16 @@
         public const string Refunds = "/refunds";
         public const string PublicKeys = "/public-keys";
 
+        /// <summary>Preferências de retentativa de cobrança do vendedor.</summary>
+        public const string RetryPreferences = "/preferences/retries";
+
         public const string Activate = "activate";
         public const string Inactivate = "inactivate";
         public const string Cancel = "cancel";
         public const string Suspend = "suspend";
+        public const string Retry = "retry";
+        public const string CouponsSegment = "coupons";
+        public const string InvoicesSegment = "invoices";
+        public const string RefundsSegment = "refunds";
     }
 }

@@ -59,6 +59,13 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses
         [JsonPropertyName("updated_at")]
         public DateTime? UpdatedDate { get; set; }
 
+        /// <summary>
+        /// Cupom de desconto aplicado à assinatura, quando houver. Continua
+        /// preenchido no ciclo corrente mesmo depois de removido: a remoção só
+        /// vale a partir da próxima recorrência.
+        /// </summary>
+        public CouponReference? Coupon { get; set; }
+
         /// <summary>Links relacionados à assinatura.</summary>
         public ICollection<SubscriptionLink> Links { get; set; } = [];
     }
