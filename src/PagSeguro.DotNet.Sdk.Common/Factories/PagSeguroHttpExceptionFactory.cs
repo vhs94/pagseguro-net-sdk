@@ -20,6 +20,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Factories
                 HttpStatusCode.InternalServerError => new InternalServerErrorException(responseBody),
                 HttpStatusCode.NotAcceptable => new NotAcceptableException(responseBody),
                 HttpStatusCode.NotFound => new NotFoundException(responseBody),
+                HttpStatusCode.TooManyRequests => new TooManyRequestsException(responseBody),
                 HttpStatusCode.Unauthorized => new UnauthorizedException(responseBody),
                 _ => new UnknownHttpException(
                                         httpStatusCode,

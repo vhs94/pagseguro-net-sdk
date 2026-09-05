@@ -5,6 +5,8 @@ using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
 using PagSeguro.DotNet.Sdk.Checkout.Helpers;
+using PagSeguro.DotNet.Sdk.Subscriptions.Helpers;
+using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
@@ -51,6 +53,20 @@ namespace PagSeguro.DotNet.Sdk
             => ServiceProvider.GetRequiredService<IFeeProvider>();
         public virtual ICheckoutProvider ForCheckout()
             => ServiceProvider.GetRequiredService<ICheckoutProvider>();
+        public virtual IPlanProvider ForPlan()
+            => ServiceProvider.GetRequiredService<IPlanProvider>();
+        public virtual ICustomerProvider ForCustomer()
+            => ServiceProvider.GetRequiredService<ICustomerProvider>();
+        public virtual ISubscriptionProvider ForSubscription()
+            => ServiceProvider.GetRequiredService<ISubscriptionProvider>();
+        public virtual ICouponProvider ForCoupon()
+            => ServiceProvider.GetRequiredService<ICouponProvider>();
+        public virtual IInvoiceProvider ForInvoice()
+            => ServiceProvider.GetRequiredService<IInvoiceProvider>();
+        public virtual ISubscriptionPaymentProvider ForSubscriptionPayment()
+            => ServiceProvider.GetRequiredService<ISubscriptionPaymentProvider>();
+        public virtual ISubscriptionPreferenceProvider ForSubscriptionPreference()
+            => ServiceProvider.GetRequiredService<ISubscriptionPreferenceProvider>();
 
         public PagSeguroClient(ClientSettings settings)
         {
@@ -70,6 +86,7 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddAPublicKeyClient();
             _services.AddOrderClient();
             _services.AddCheckoutClient();
+            _services.AddSubscriptionsClient();
             _services.AddAutoMapper(typeof(PagSeguroClient));
         }
 

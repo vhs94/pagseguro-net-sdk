@@ -15,7 +15,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Providers
         /// <inheritdoc />
         public IFlurlClient FlurlClient { get; } = flurlClient;
         /// <inheritdoc />
-        public Url BaseUrl => Settings.Environment == PagSeguroEnvironment.Sandbox
+        public virtual Url BaseUrl => Settings.Environment == PagSeguroEnvironment.Sandbox
             ? CommonEndpoints.SandboxBaseUrl
             : CommonEndpoints.ProductionBaseUrl;
         /// <inheritdoc />

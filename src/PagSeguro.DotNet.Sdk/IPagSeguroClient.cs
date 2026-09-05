@@ -1,6 +1,7 @@
 ﻿using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
 using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
+using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
@@ -55,6 +56,42 @@ namespace PagSeguro.DotNet.Sdk
         /// Provider de criação e gerenciamento do checkout hospedado pelo PagBank.
         /// </summary>
         ICheckoutProvider ForCheckout();
+
+        /// <summary>
+        /// Provider de gerenciamento dos planos de assinatura.
+        /// </summary>
+        IPlanProvider ForPlan();
+
+        /// <summary>
+        /// Provider de gerenciamento dos assinantes das cobranças recorrentes.
+        /// </summary>
+        ICustomerProvider ForCustomer();
+
+        /// <summary>
+        /// Provider de gerenciamento das assinaturas.
+        /// </summary>
+        ISubscriptionProvider ForSubscription();
+
+        /// <summary>
+        /// Provider de gerenciamento dos cupons de desconto.
+        /// </summary>
+        ICouponProvider ForCoupon();
+
+        /// <summary>
+        /// Provider de consulta das faturas das assinaturas.
+        /// </summary>
+        IInvoiceProvider ForInvoice();
+
+        /// <summary>
+        /// Provider de consulta dos pagamentos das faturas e de criação de estornos.
+        /// </summary>
+        ISubscriptionPaymentProvider ForSubscriptionPayment();
+
+        /// <summary>
+        /// Provider das preferências de notificação e da chave pública das
+        /// cobranças recorrentes.
+        /// </summary>
+        ISubscriptionPreferenceProvider ForSubscriptionPreference();
         /// <summary>
         /// Troca o código de autorização por um access_token e passa a
         /// utilizá-lo nas chamadas seguintes.

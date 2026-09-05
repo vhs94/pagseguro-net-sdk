@@ -45,7 +45,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
         protected abstract TProvider CreateProvider();
 
         [Fact]
-        public void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
+        public virtual void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
         {
             Provider.BaseUrl.ToString()
                 .Should()
@@ -53,7 +53,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
         }
 
         [Fact]
-        public void BaseUrl_EnvironmentIsProduction_ProductionUrlIsAssigned()
+        public virtual void BaseUrl_EnvironmentIsProduction_ProductionUrlIsAssigned()
         {
             Settings.Environment = PagSeguroEnvironment.Production;
 
