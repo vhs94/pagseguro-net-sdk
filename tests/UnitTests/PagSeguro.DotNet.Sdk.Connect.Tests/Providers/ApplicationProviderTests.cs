@@ -23,8 +23,8 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             _applicationResponse = CreateApplicationResponse();
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application),
-                    Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, "*"))
+                    Url.Combine(ProviderBaseUrl, ConnectEndpoints.Application),
+                    Url.Combine(ProviderBaseUrl, ConnectEndpoints.Application, "*"))
                 .RespondWithJson(_applicationResponse);
         }
 
@@ -41,7 +41,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             ApplicationResponse result = await Provider.CreateAsync(application);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Application))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(application)
@@ -64,7 +64,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             ApplicationResponse result = await Provider.GetByClientIdAsync(applicationId);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Application, applicationId))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Application, applicationId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);

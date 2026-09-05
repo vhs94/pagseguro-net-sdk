@@ -35,14 +35,14 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         {
             AuthorizationCodeResponse authorizationCodeResponse = CreateAuthorizationCodeResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
                 .RespondWithJson(authorizationCodeResponse);
             AuthorizationCodeRequest authorizationCode = CreateAuthorizationCodeRequest();
 
             AuthorizationCodeResponse result = await Provider.CreateAccessTokenByCodeAsync(authorizationCode);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
                 .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
@@ -65,14 +65,14 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         {
             AuthorizationCodeResponse authorizationCodeResponse = CreateAuthorizationCodeResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Refresh))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Refresh))
                 .RespondWithJson(authorizationCodeResponse);
             RefreshTokenRequest refreshTokenRequest = CreateRefreshTokenRequest();
 
             AuthorizationCodeResponse result = await Provider.RefreshAccessTokenAsync(refreshTokenRequest);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Refresh))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Refresh))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
                 .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
@@ -103,14 +103,14 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         public async Task RevokeTokenAsync_PayloadIsValid_HttpRequestIsCreated()
         {
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Revoke))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Revoke))
                 .RespondWithJson(new { });
             RevokeTokenRequest revokeTokenRequest = CreateRevokeTokenRequest();
 
             await Provider.RevokeTokenAsync(revokeTokenRequest);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Revoke))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Revoke))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
                 .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
@@ -176,7 +176,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
         {
             ChallengeResponse challengeResponse = CreateChallengeResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
                 .RespondWithJson(challengeResponse);
             _cryptoServiceMock
                 .Decrypt(challengeResponse.Challenge!)
@@ -185,7 +185,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Tests.Providers
             ChallengeResponse result = await Provider.CreateAccessTokenByChallengeAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, ConnectEndpoints.Token))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, ConnectEndpoints.Token))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
                 .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)

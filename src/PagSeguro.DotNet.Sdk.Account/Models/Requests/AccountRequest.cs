@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using PagSeguro.DotNet.Sdk.Account.Models.Shared;
+﻿using PagSeguro.DotNet.Sdk.Account.Models.Shared;
+using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Account.Models.Requests
 {

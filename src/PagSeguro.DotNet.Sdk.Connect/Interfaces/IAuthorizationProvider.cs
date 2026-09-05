@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
     /// Emissão de access_token pelo Connect (OAuth2).
     /// <see href="https://developer.pagbank.com.br/reference/obter-access-token">ler documentação</see>
     /// </summary>
-    public interface IAuthorizationProvider : IProvider
+    public interface IAuthorizationProvider
     {
         /// <summary>
         /// Troca o código de autorização (authorization_code) obtido após o

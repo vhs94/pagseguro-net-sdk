@@ -3,19 +3,19 @@ using FluentAssertions;
 using Flurl;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
-using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Charges;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 {
-    public class CreditCardWith3DsAuthChargeProviderTests : BaseProviderTests<ICreditCardWith3DsAuthChargeProvider>
+    public class CreditCardWith3DsAuthChargeProviderTests : BaseProviderTests<CreditCardWith3DsAuthChargeProvider>
     {
         public ChargeByCreditCardWith3DsAuthResponse ChargeResponse { get; private set; } = null!;
 
-        protected override ICreditCardWith3DsAuthChargeProvider CreateProvider()
+        protected override CreditCardWith3DsAuthChargeProvider CreateProvider()
         {
             return new CreditCardWith3DsAuthChargeProvider(Settings, FlurlClientMock);
         }
@@ -25,8 +25,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             ChargeResponse = CreateChargeResponse();
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges),
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges, "*"))
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Charges),
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Charges, "*"))
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
                 .RespondWithJson(ChargeResponse);
         }
@@ -183,7 +183,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
             ChargeByCreditCardWith3DsAuthResponse result = await Provider.ChargeAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, OrderEndpoint.Charges))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(OrderHeaders.IdempotencyKey)
                 .WithRequestJson(Provider.Build())
@@ -201,7 +201,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     OrderEndpoint.Charges,
                     chargeId))
                 .WithOAuthBearerToken(Settings.Token)
@@ -219,7 +219,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     OrderEndpoint.Charges,
                     chargeId,
                     OrderEndpoint.Cancel))
@@ -247,7 +247,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Charges
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     OrderEndpoint.Charges,
                     chargeId,
                     OrderEndpoint.Capture))

@@ -22,8 +22,8 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
             _publicKeyResponse = CreatePublicKeyResponse();
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey),
-                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey, "*"))
+                    Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey),
+                    Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey, "*"))
                 .RespondWithJson(_publicKeyResponse);
         }
 
@@ -38,7 +38,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
             PublicKeyResponse result = await Provider.CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(new
@@ -58,7 +58,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     PublicKeyEndpoints.PublicKey,
                     PublicKeyEndpoints.Card))
                 .WithOAuthBearerToken(Settings.Token)
@@ -76,7 +76,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     PublicKeyEndpoints.PublicKey,
                     PublicKeyEndpoints.Card))
                 .WithOAuthBearerToken(Settings.Token)

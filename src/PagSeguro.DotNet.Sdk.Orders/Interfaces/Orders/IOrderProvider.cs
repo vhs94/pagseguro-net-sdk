@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
 
@@ -10,7 +9,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
     /// usado para pagá-lo.
     /// <see href="https://developer.pagbank.com.br/reference/objeto-order">ler documentação</see>
     /// </summary>
-    public interface IOrderProvider : IProvider
+    public interface IOrderProvider
     {
         /// <summary>
         /// Define as informações do cliente que está realizando o pedido.

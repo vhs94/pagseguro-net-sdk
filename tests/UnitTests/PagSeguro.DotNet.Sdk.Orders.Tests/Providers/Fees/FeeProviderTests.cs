@@ -3,20 +3,19 @@ using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
+using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Fees;
 using System.Text.Json;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
 {
-    public class FeeProviderTests : BaseProviderTests<IFeeProvider>
+    public class FeeProviderTests : BaseProviderTests<FeeProvider>
     {
         private FeeResponse _feeResponse = null!;
 
-        protected override IFeeProvider CreateProvider()
+        protected override FeeProvider CreateProvider()
         {
             return new FeeProvider(Settings, FlurlClientMock);
         }
@@ -27,7 +26,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
             _feeResponse = JsonSerializer.Deserialize<FeeResponse>(feeJson, options: JsonOptions.Default)!;
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges, "*"))
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Charges, "*"))
                 .WithVerb(HttpMethod.Get)
                 .RespondWith(feeJson);
         }
@@ -93,7 +92,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     OrderEndpoint.Charges,
                     OrderEndpoint.CalculateFee))
                 .WithOAuthBearerToken(Settings.Token)

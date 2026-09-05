@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared
+﻿namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared
 {
     /// <summary>Melhor data de faturamento da assinatura.</summary>
     public class BestInvoiceDate

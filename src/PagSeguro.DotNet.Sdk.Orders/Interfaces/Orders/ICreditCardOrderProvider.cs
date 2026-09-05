@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders
     /// Criação e consulta de pedidos pagos com cartão de crédito.
     /// <see href="https://developer.pagbank.com.br/reference/criar-pagar-pedido-com-cartao">ler documentação</see>
     /// </summary>
-    public interface ICreditCardOrderProvider : IProvider
+    public interface ICreditCardOrderProvider
     {
         /// <summary>
         /// Adiciona uma cobrança ao pedido.

@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// Preferências de notificação e chave pública das cobranças recorrentes.
     /// <see href="https://developer.pagbank.com.br/reference/consultar-preferencias-notificacoes">ler documentação</see>
     /// </summary>
-    public interface ISubscriptionPreferenceProvider : IProvider
+    public interface ISubscriptionPreferenceProvider
     {
         /// <summary>
         /// Consulta as preferências de notificação.

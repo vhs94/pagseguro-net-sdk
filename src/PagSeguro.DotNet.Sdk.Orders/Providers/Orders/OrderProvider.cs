@@ -2,11 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
+using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
 {

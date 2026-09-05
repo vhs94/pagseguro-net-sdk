@@ -25,11 +25,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
             _createdAccountResponse = CreateCreatedAccountResponse();
             _accountResponse = CreateAccountResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account))
                 .WithVerb(HttpMethod.Post)
                 .RespondWithJson(_createdAccountResponse);
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, "*"))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account, "*"))
                 .WithVerb(HttpMethod.Get)
                 .RespondWithJson(_accountResponse);
         }
@@ -52,7 +52,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
             CreatedAccountResponse result = await Provider.CreateAsync(accountRequest);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(AccountHeaders.ClientId, Settings.ClientId)
                 .WithHeader(AccountHeaders.ClientSecret, Settings.ClientSecret)
@@ -110,7 +110,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
             AccountResponse result = await Provider.GetByIdAsync(accountId);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, accountId))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account, accountId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(AccountHeaders.ClientToken, Settings.AccessToken)
                 .WithVerb(HttpMethod.Get)

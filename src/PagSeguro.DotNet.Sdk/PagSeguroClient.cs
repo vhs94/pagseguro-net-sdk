@@ -4,11 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
-using PagSeguro.DotNet.Sdk.Checkout.Helpers;
-using PagSeguro.DotNet.Sdk.Subscriptions.Helpers;
-using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
-using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
+using PagSeguro.DotNet.Sdk.Checkout.Helpers;
+using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Interfaces;
 using PagSeguro.DotNet.Sdk.Common.Serialization;
@@ -24,12 +22,17 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 using PagSeguro.DotNet.Sdk.Settings;
+using PagSeguro.DotNet.Sdk.Subscriptions.Helpers;
+using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk
 {
     public class PagSeguroClient : IPagSeguroClient
     {
-        public PagSeguroSettings Settings { get; private set; } = null!;
+        /// <summary>
+        /// Configurações da integração, incluindo as credenciais.
+        /// </summary>
+        internal PagSeguroSettings Settings { get; private set; } = null!;
         private readonly string _flurlClientName = $"PagSeguroClient-{Guid.NewGuid()}";
         private IServiceCollection _services = null!;
         private IServiceProvider _serviceProvider = null!;

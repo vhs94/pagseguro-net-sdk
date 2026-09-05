@@ -1,6 +1,5 @@
 ﻿using PagSeguro.DotNet.Sdk.Account.Models.Requests;
 using PagSeguro.DotNet.Sdk.Account.Models.Responses;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.Account.Interfaces
 {
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Account.Interfaces
     /// Operações de cadastro e consulta de contas PagBank.
     /// <see href="https://developer.pagbank.com.br/reference/criar-conta">ler documentação</see>
     /// </summary>
-    public interface IAccountProvider : IProvider
+    public interface IAccountProvider
     {
         /// <summary>
         /// Cria uma nova conta PagBank.

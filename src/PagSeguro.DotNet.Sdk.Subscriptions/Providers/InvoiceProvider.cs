@@ -2,7 +2,6 @@
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Subscriptions.Helpers;
 using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers

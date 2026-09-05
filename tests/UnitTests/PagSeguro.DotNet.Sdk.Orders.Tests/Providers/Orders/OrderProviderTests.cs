@@ -4,11 +4,11 @@ using Flurl;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
+using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
@@ -45,8 +45,8 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             _orderRequest = CreateOrderRequest();
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders),
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, "*"))
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders),
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders, "*"))
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
                 .RespondWithJson(_orderResponse);
             _serviceProviderMock
@@ -297,7 +297,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(OrderHeaders.IdempotencyKey)
                 .WithVerb(HttpMethod.Post)
@@ -319,7 +319,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             await Provider.Load(orderRequest).CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders))
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(orderRequest)
                 .Times(1);
@@ -338,7 +338,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             await Provider.Load(orderRequest).CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders))
                 .WithVerb(HttpMethod.Post)
                 .With(call => !call.RequestBody.Contains("qr_codes"))
                 .Times(1);
@@ -352,7 +352,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
             OrderResponse result = await Provider.GetByIdAsync(orderId);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, OrderEndpoint.Orders, orderId))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, OrderEndpoint.Orders, orderId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);

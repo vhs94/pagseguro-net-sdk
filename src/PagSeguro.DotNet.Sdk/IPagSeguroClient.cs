@@ -1,7 +1,6 @@
 ﻿using PagSeguro.DotNet.Sdk.Account.Interfaces;
 using PagSeguro.DotNet.Sdk.Certificate.Interfaces;
 using PagSeguro.DotNet.Sdk.Checkout.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
@@ -9,6 +8,7 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
+using PagSeguro.DotNet.Sdk.Subscriptions.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk
 {

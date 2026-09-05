@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
+﻿using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
 {
@@ -7,7 +6,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges
     /// Ponto de entrada para criar uma cobrança avulsa, escolhendo o meio de pagamento.
     /// <see href="https://developer.pagbank.com.br/reference/objeto-charge">ler documentação</see>
     /// </summary>
-    public interface IChargeWithPaymentMethodProvider : IProvider
+    public interface IChargeWithPaymentMethodProvider
     {
         /// <summary>
         /// Seleciona o fluxo de cobrança paga com boleto.

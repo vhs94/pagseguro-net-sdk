@@ -1,6 +1,5 @@
 ﻿using PagSeguro.DotNet.Sdk.Checkout.Models.Requests;
 using PagSeguro.DotNet.Sdk.Checkout.Models.Responses;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.Checkout.Interfaces
 {
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Checkout.Interfaces
     /// Criação e gerenciamento do checkout, a página de pagamento hospedada pelo PagBank.
     /// <see href="https://developer.pagbank.com.br/reference/criar-checkout">ler documentação</see>
     /// </summary>
-    public interface ICheckoutProvider : IProvider
+    public interface ICheckoutProvider
     {
         /// <summary>
         /// Cria um checkout e devolve, entre os links, a relação PAY com o endereço

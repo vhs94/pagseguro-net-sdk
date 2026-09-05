@@ -22,7 +22,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
         {
             _certificateResponse = CreateCertificateResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, CertificateEndpoints.Certificate))
                 .WithVerb(HttpMethod.Post)
                 .RespondWithJson(_certificateResponse);
         }
@@ -38,7 +38,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
             CertificateResponse result = await Provider.CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, CertificateEndpoints.Certificate))
                 .WithOAuthBearerToken(Settings.AccessToken)
                 .WithHeader(CertificateHeaders.Challenge, Settings.Challenge)
                 .WithVerb(HttpMethod.Post)

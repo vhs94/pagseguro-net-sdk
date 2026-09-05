@@ -14,7 +14,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
         : BaseProvider(settings, flurlClient)
     {
         /// <inheritdoc />
-        public override Url BaseUrl => Settings.Environment == PagSeguroEnvironment.Sandbox
+        protected override Url BaseUrl => Settings.Environment == PagSeguroEnvironment.Sandbox
             ? SubscriptionEndpoints.SandboxBaseUrl
             : SubscriptionEndpoints.ProductionBaseUrl;
 

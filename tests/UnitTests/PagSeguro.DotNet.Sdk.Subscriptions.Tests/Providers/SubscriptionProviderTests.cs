@@ -27,7 +27,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         [Fact]
         public override void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
         {
-            Provider.BaseUrl.ToString().Should().Be(SubscriptionEndpoints.SandboxBaseUrl);
+            ProviderBaseUrl.ToString().Should().Be(SubscriptionEndpoints.SandboxBaseUrl);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             Settings.Environment = PagSeguroEnvironment.Production;
 
-            Provider.BaseUrl.ToString().Should().Be(SubscriptionEndpoints.ProductionBaseUrl);
+            ProviderBaseUrl.ToString().Should().Be(SubscriptionEndpoints.ProductionBaseUrl);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             SubscriptionResponse response = Fixture.Create<SubscriptionResponse>();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Subscriptions))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
                 .RespondWithJson(response);
             SubscriptionRequest request = new()
             {
@@ -55,7 +55,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
             SubscriptionResponse result = await Provider.CreateAsync(request);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Subscriptions))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(SubscriptionHeaders.IdempotencyKey)
                 .WithVerb(HttpMethod.Post)
@@ -73,7 +73,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             string subscriptionId = "SUBS_" + Guid.NewGuid();
             string url = Url.Combine(
-                Provider.BaseUrl, SubscriptionEndpoints.Subscriptions, subscriptionId, action);
+                ProviderBaseUrl, SubscriptionEndpoints.Subscriptions, subscriptionId, action);
             HttpTestMock.ForCallsTo(url).RespondWith(status: 204);
 
             Task call = action switch
@@ -97,7 +97,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             string subscriptionId = "SUBS_" + Guid.NewGuid();
             string url = Url.Combine(
-                Provider.BaseUrl, SubscriptionEndpoints.Subscriptions, subscriptionId, "invoices");
+                ProviderBaseUrl, SubscriptionEndpoints.Subscriptions, subscriptionId, "invoices");
             HttpTestMock.ForCallsTo(url).RespondWithJson(Fixture.Create<InvoiceListResponse>());
 
             await Provider.ListInvoicesAsync(subscriptionId);

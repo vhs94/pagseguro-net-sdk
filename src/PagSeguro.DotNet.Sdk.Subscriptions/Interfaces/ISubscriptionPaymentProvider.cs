@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// Consulta dos pagamentos das faturas e criação de estornos.
     /// <see href="https://developer.pagbank.com.br/reference/listar-pagamentos">ler documentação</see>
     /// </summary>
-    public interface ISubscriptionPaymentProvider : IProvider
+    public interface ISubscriptionPaymentProvider
     {
         /// <summary>
         /// Consulta um pagamento pelo identificador. Corresponde a GET /payments/{payment_id}.

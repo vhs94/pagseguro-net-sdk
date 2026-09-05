@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared
+﻿namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared
 {
     /// <summary>Meio de pagamento cadastrado para o assinante.</summary>
     public class BillingInfo

@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Flurl;
-using PagSeguro.DotNet.Sdk.Common.Helpers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Subscriptions.Helpers;
@@ -27,7 +26,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         [Fact]
         public override void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
         {
-            Provider.BaseUrl.ToString().Should().Be(SubscriptionEndpoints.SandboxBaseUrl);
+            ProviderBaseUrl.ToString().Should().Be(SubscriptionEndpoints.SandboxBaseUrl);
         }
 
         [Fact]
@@ -35,7 +34,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             Settings.Environment = PagSeguroEnvironment.Production;
 
-            Provider.BaseUrl.ToString().Should().Be(SubscriptionEndpoints.ProductionBaseUrl);
+            ProviderBaseUrl.ToString().Should().Be(SubscriptionEndpoints.ProductionBaseUrl);
         }
 
         [Fact]
@@ -43,14 +42,14 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             PlanResponse planResponse = Fixture.Create<PlanResponse>();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .RespondWithJson(planResponse);
             PlanRequest planRequest = CreatePlanRequest();
 
             PlanResponse result = await Provider.CreateAsync(planRequest);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(SubscriptionHeaders.IdempotencyKey)
                 .WithVerb(HttpMethod.Post)
@@ -65,13 +64,13 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
             // Regressao: a API recusa setup_fee: 0 com "must contain only digits
             // greater than 0", o que quebrava a criacao de qualquer plano sem adesao.
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .RespondWithJson(Fixture.Create<PlanResponse>());
 
             await Provider.CreateAsync(CreatePlanRequest());
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .With(call => !call.RequestBody.Contains("setup_fee"))
                 .Times(1);
         }
@@ -81,13 +80,13 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             string planId = "PLAN_" + Guid.NewGuid();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans, planId))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans, planId))
                 .RespondWithJson(Fixture.Create<PlanResponse>());
 
             await Provider.GetByIdAsync(planId);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans, planId))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans, planId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
@@ -97,13 +96,13 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         public async Task ListAsync_PagingIsInformed_QueryParamsAreSent()
         {
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .RespondWithJson(Fixture.Create<PlanListResponse>());
 
             await Provider.ListAsync(offset: 20, limit: 10);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .WithQueryParam("offset", 20)
                 .WithQueryParam("limit", 10)
                 .WithVerb(HttpMethod.Get)
@@ -114,13 +113,13 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         public async Task ListAsync_PagingIsNotInformed_QueryParamsAreOmitted()
         {
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .RespondWithJson(Fixture.Create<PlanListResponse>());
 
             await Provider.ListAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, SubscriptionEndpoints.Plans))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Plans))
                 .WithoutQueryParam("offset")
                 .WithoutQueryParam("limit")
                 .Times(1);
@@ -131,7 +130,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             string planId = "PLAN_" + Guid.NewGuid();
             string url = Url.Combine(
-                Provider.BaseUrl, SubscriptionEndpoints.Plans, planId, SubscriptionEndpoints.Activate);
+                ProviderBaseUrl, SubscriptionEndpoints.Plans, planId, SubscriptionEndpoints.Activate);
             HttpTestMock.ForCallsTo(url).RespondWith(status: 200);
 
             await Provider.ActivateAsync(planId);
@@ -148,7 +147,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         {
             string planId = "PLAN_" + Guid.NewGuid();
             string url = Url.Combine(
-                Provider.BaseUrl, SubscriptionEndpoints.Plans, planId, SubscriptionEndpoints.Inactivate);
+                ProviderBaseUrl, SubscriptionEndpoints.Plans, planId, SubscriptionEndpoints.Inactivate);
             HttpTestMock.ForCallsTo(url).RespondWith(status: 200);
 
             await Provider.InactivateAsync(planId);

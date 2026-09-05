@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Serialization;
-using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Models.Responses
 {

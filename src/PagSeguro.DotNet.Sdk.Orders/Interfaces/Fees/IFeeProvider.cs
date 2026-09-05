@@ -1,9 +1,5 @@
-﻿using Flurl;
-using Flurl.Http;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees
 {
@@ -11,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees
     /// Simulação das taxas de venda e dos planos de parcelamento com repasse de juros.
     /// <see href="https://developer.pagbank.com.br/reference/consultar-taxas-transacao">ler documentação</see>
     /// </summary>
-    public interface IFeeProvider : IProvider
+    public interface IFeeProvider
     {
         /// <summary>
         /// Parâmetros da simulação em construção no builder.

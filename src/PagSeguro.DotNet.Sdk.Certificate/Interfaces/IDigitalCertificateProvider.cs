@@ -1,5 +1,4 @@
 ﻿using PagSeguro.DotNet.Sdk.Certificate.Models.Responses;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
 
 namespace PagSeguro.DotNet.Sdk.Certificate.Interfaces
 {
@@ -7,7 +6,7 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Interfaces
     /// Emissão do certificado digital utilizado na comunicação autenticada com o PagBank.
     /// <see href="https://developer.pagbank.com.br/reference/criar-certificado-digital">ler documentação</see>
     /// </summary>
-    public interface IDigitalCertificateProvider : IProvider
+    public interface IDigitalCertificateProvider
     {
         /// <summary>
         /// Gera um certificado digital para a conta autorizada.

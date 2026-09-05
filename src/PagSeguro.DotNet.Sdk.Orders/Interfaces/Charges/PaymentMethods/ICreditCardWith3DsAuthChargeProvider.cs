@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods
     /// Builder e operações de uma cobrança paga com cartão de crédito e autenticação 3DS.
     /// <see href="https://developer.pagbank.com.br/reference/criar-pagar-pedido-com-3ds-validacao-externa">ler documentação</see>
     /// </summary>
-    public interface ICreditCardWith3DsAuthChargeProvider : IProvider
+    public interface ICreditCardWith3DsAuthChargeProvider
     {
         /// <summary>
         /// Cobrança em construção no builder.

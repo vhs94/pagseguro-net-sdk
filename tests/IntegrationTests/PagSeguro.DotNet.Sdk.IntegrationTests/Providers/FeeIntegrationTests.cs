@@ -1,5 +1,4 @@
 using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using System.Text.Json;
 

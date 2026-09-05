@@ -1,16 +1,17 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using Flurl;
 using Flurl.Http;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 
 namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
 {
     public abstract class BaseProviderTests<TProvider> : BaseTests
-        where TProvider : IProvider
+        where TProvider : BaseProvider
     {
         public PagSeguroSettings Settings { get; private set; } = null!;
         public TProvider Provider { get; private set; } = default!;
@@ -41,6 +42,12 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
                 .With(ps => ps.PrivateKey)
                 .Create();
         }
+
+        /// <summary>
+        /// Repassa a URL base para as classes de teste dos outros assemblies:
+        /// BaseProvider.BaseUrl e protegida e so este assembly tem acesso interno.
+        /// </summary>
+        protected Url ProviderBaseUrl => Provider.BaseUrl;
 
         protected abstract TProvider CreateProvider();
 

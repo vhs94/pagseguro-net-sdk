@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// Gerenciamento dos cupons de desconto aplicáveis às assinaturas.
     /// <see href="https://developer.pagbank.com.br/reference/objeto-cupom">ler documentação</see>
     /// </summary>
-    public interface ICouponProvider : IProvider
+    public interface ICouponProvider
     {
         /// <summary>
         /// Cria um cupom de desconto. Corresponde a POST /coupons.

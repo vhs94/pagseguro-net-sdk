@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// Gerenciamento das assinaturas, o vínculo entre um assinante e um plano.
     /// <see href="https://developer.pagbank.com.br/reference/objeto-assinatura">ler documentação</see>
     /// </summary>
-    public interface ISubscriptionProvider : IProvider
+    public interface ISubscriptionProvider
     {
         /// <summary>
         /// Cria uma assinatura.

@@ -1,5 +1,5 @@
-﻿using System.Text.Json.Serialization;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Shared;
+using System.Text.Json.Serialization;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests
 {

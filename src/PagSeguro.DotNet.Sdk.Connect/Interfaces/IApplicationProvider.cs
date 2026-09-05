@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
     /// Criação e consulta das aplicações Connect usadas para agir em nome dos usuários.
     /// <see href="https://developer.pagbank.com.br/reference/criar-aplicacao">ler documentação</see>
     /// </summary>
-    public interface IApplicationProvider : IProvider
+    public interface IApplicationProvider
     {
         /// <summary>
         /// Este endpoint permite que você crie um recurso de aplicação.

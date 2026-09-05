@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.PublicKey.Models.Responses;
+﻿using PagSeguro.DotNet.Sdk.PublicKey.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.PublicKey.Interfaces
 {
@@ -8,7 +7,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Interfaces
     /// como os dados do cartão.
     /// <see href="https://developer.pagbank.com.br/reference/criar-chave-publica">ler documentação</see>
     /// </summary>
-    public interface IPublicKeyProvider : IProvider
+    public interface IPublicKeyProvider
     {
         /// <summary>
         /// Cria uma chave pública para a conta.

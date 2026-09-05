@@ -1,10 +1,10 @@
 ﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
-using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Providers.Charges
 {

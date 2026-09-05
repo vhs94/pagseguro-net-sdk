@@ -1,6 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
 {
@@ -8,7 +6,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// Consulta das faturas geradas pelas assinaturas.
     /// <see href="https://developer.pagbank.com.br/reference/consultar-fatura">ler documentação</see>
     /// </summary>
-    public interface IInvoiceProvider : IProvider
+    public interface IInvoiceProvider
     {
         /// <summary>
         /// Consulta uma fatura pelo identificador. Corresponde a GET /invoices/{invoice_id}.

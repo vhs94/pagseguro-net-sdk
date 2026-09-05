@@ -1,5 +1,4 @@
-﻿using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
+﻿using PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests;
 using PagSeguro.DotNet.Sdk.Subscriptions.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
@@ -9,7 +8,7 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
     /// periodicidade cobrados e é pré-requisito para criar assinaturas.
     /// <see href="https://developer.pagbank.com.br/reference/objeto-plano">ler documentação</see>
     /// </summary>
-    public interface IPlanProvider : IProvider
+    public interface IPlanProvider
     {
         /// <summary>
         /// Cria um plano de assinatura.
