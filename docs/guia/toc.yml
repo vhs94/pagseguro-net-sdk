@@ -1,0 +1,14 @@
+- name: Introdução
+  href: introducao.md
+- name: Autenticação
+  href: autenticacao.md
+- name: Pedidos e cobranças
+  href: pedidos-e-cobrancas.md
+- name: Checkout
+  href: checkout.md
+- name: Assinaturas
+  href: assinaturas.md
+- name: Tratamento de erros
+  href: erros.md
+- name: Ambientes e testes
+  href: ambientes-e-testes.md

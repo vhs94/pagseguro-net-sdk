@@ -1,0 +1,19 @@
+# Filtro da referência da API gerada pelo DocFX.
+#
+# As classes concretas de provider ficam de fora da documentação pública por dois
+# motivos:
+#
+#   1. Quem consome o SDK nunca as instancia. Os providers chegam pelo client
+#      (client.ForOrder(), client.ForPlan(), ...) já tipados pelas interfaces, que
+#      são o contrato de verdade e carregam toda a documentação.
+#   2. O DocFX publica membros protected por padrão, o que exporia de novo a
+#      infraestrutura interna (Settings, BaseUrl, FlurlClient, Request, Ensure*)
+#      justamente na documentação.
+apiRules:
+  - exclude:
+      uidRegex: ^PagSeguro\.DotNet\.Sdk(\.[A-Za-z]+)?\.Providers($|\.)
+      type: Namespace
+  - exclude:
+      uidRegex: ^PagSeguro\.DotNet\.Sdk\.Orders\.Providers\.
+  - exclude:
+      uidRegex: ^PagSeguro\.DotNet\.Sdk\.Subscriptions\.Providers\.

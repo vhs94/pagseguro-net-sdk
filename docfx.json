@@ -1,0 +1,65 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "src",
+          "files": [
+            "PagSeguro.DotNet.Sdk/PagSeguro.DotNet.Sdk.csproj",
+            "PagSeguro.DotNet.Sdk.Account/PagSeguro.DotNet.Sdk.Account.csproj",
+            "PagSeguro.DotNet.Sdk.Certificate/PagSeguro.DotNet.Sdk.Certificate.csproj",
+            "PagSeguro.DotNet.Sdk.Checkout/PagSeguro.DotNet.Sdk.Checkout.csproj",
+            "PagSeguro.DotNet.Sdk.Common/PagSeguro.DotNet.Sdk.Common.csproj",
+            "PagSeguro.DotNet.Sdk.Connect/PagSeguro.DotNet.Sdk.Connect.csproj",
+            "PagSeguro.DotNet.Sdk.Orders/PagSeguro.DotNet.Sdk.Orders.csproj",
+            "PagSeguro.DotNet.Sdk.PublicKey/PagSeguro.DotNet.Sdk.PublicKey.csproj",
+            "PagSeguro.DotNet.Sdk.Subscriptions/PagSeguro.DotNet.Sdk.Subscriptions.csproj"
+          ]
+        }
+      ],
+      "dest": "docs/api",
+      "outputFormat": "apiPage",
+      "memberLayout": "separatePages",
+      "enumSortOrder": "declaringOrder",
+      "filter": "filterConfig.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "src": "docs",
+        "dest": "."
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "assets/**"
+        ],
+        "src": "docs"
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appName": "PagSeguro .NET SDK",
+      "_appTitle": "PagSeguro .NET SDK",
+      "_appFooter": "PagSeguro .NET SDK &mdash; projeto open source, sem vínculo oficial com o PagBank.",
+      "_enableSearch": true,
+      "_gitContribute": {
+        "repo": "https://github.com/vhs94/pagseguro-net-sdk",
+        "branch": "main"
+      },
+      "pdf": false
+    },
+    "sitemap": {
+      "baseUrl": "https://vhs94.github.io/pagseguro-net-sdk/"
+    }
+  }
+}
