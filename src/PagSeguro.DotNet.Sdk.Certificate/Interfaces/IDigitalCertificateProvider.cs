@@ -1,10 +1,19 @@
-﻿using PagSeguro.DotNet.Sdk.Certificate.Dtos;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
+﻿using PagSeguro.DotNet.Sdk.Certificate.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Certificate.Interfaces
 {
-    public interface IDigitalCertificateProvider : IProvider
+    /// <summary>
+    /// Emissão do certificado digital utilizado na comunicação autenticada com o PagBank.
+    /// <see href="https://developer.pagbank.com.br/reference/criar-certificado-digital">ler documentação</see>
+    /// </summary>
+    public interface IDigitalCertificateProvider
     {
-        Task<CertificateReadDto> CreateAsync();
+        /// <summary>
+        /// Gera um certificado digital para a conta autorizada.
+        /// Requer um access_token obtido pelo fluxo de desafio (challenge).
+        /// Corresponde a POST /certificates.
+        /// <see href="https://developer.pagbank.com.br/reference/criar-certificado-digital">ler documentação</see>
+        /// </summary>
+        Task<CertificateResponse> CreateAsync();
     }
 }

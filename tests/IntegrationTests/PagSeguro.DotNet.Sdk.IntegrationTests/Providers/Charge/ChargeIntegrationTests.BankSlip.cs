@@ -1,36 +1,35 @@
-﻿using AutoFixture;
+using AutoFixture;
 using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.BankSlip;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByBankSlip;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Common;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
+using PagSeguro.DotNet.Sdk.Orders.Models.Shared;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
 {
     public partial class ChargeIntegrationTests : BaseIntegrationTests
     {
-        [Fact(Skip = "Payslip integration is broken. Waiting Pagseguro support")]
+        [Fact]
         public async Task CreateAsync_WithBankSlip_ChargeIsCreated()
         {
-            BankSlipWriteDto bankSlipWriteDto = CreateBankSlip();
-            ChargeByBankSlipWriteDto chargeWriteDto = CreateChargeByBankSlipWriteDto(bankSlipWriteDto);
+            BankSlipRequest bankSlipRequest = CreateBankSlip();
+            ChargeByBankSlipRequest chargeRequest = CreateChargeByBankSlipRequest(bankSlipRequest);
 
-            ChargeByBankSlipReadDto result = await Client
+            ChargeByBankSlipResponse result = await Client
                .ForCharge()
                .WithBankSlip()
-               .Load(chargeWriteDto)
+               .Load(chargeRequest)
                .ChargeAsync();
 
             await Task.Delay(1000);
-            ChargeByBankSlipReadDto chargeByBankSlipReadDto = await Client
+            ChargeByBankSlipResponse chargeByBankSlipResponse = await Client
                 .ForCharge()
                 .WithBankSlip()
                 .GetByIdAsync(result.Id!);
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(
-                chargeWriteDto,
+                chargeRequest,
                 options => options.Excluding(c => c.PaymentMethod!.BankSlip!.DueDate));
-            result.PaymentMethod!.BankSlip!.DueDate.Should().Be(bankSlipWriteDto.DueDate.Date);
+            result.PaymentMethod!.BankSlip!.DueDate.Should().Be(bankSlipRequest.DueDate.Date);
             result.Id.Should().StartWith("CHAR");
             result.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
             result.Links.Should().NotBeNullOrEmpty();
@@ -39,16 +38,16 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             result.Amount.Summary.Refunded.Should().Be(0);
             result.PaymentResponse!.Message.Should().Be("SUCESSO");
             result.PaymentResponse.Code.Should().Be(20000);
-            result.Should().BeEquivalentTo(chargeByBankSlipReadDto);
+            result.Should().BeEquivalentTo(chargeByBankSlipResponse);
         }
 
-        private ChargeByBankSlipWriteDto CreateChargeByBankSlipWriteDto(BankSlipWriteDto bankSlipWriteDto)
+        private ChargeByBankSlipRequest CreateChargeByBankSlipRequest(BankSlipRequest bankSlipRequest)
         {
             return Client
                 .ForCharge()
                 .WithBankSlip()
-                .AddBankSlip(bankSlipWriteDto)
-                .WithAmount(new ChargeAmountWriteDto
+                .AddBankSlip(bankSlipRequest)
+                .WithAmount(new ChargeAmountRequest
                 {
                     Value = 1000,
                     Currency = "BRL"
@@ -59,9 +58,9 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .Build();
         }
 
-        private BankSlipWriteDto CreateBankSlip()
+        private BankSlipRequest CreateBankSlip()
         {
-            var holderAddress = Fixture.Build<AddressDto>()
+            var holderAddress = Fixture.Build<Address>()
                 .With(h => h.Number, "1384")
                 .With(h => h.Locality, "Pinheiros")
                 .With(h => h.City, "Sao Paulo")
@@ -70,12 +69,12 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .With(h => h.Country, "Brasil")
                 .With(h => h.PostalCode, "01452002")
                 .Create();
-            var holder = Fixture.Build<BankSlipHolderDto>()
+            var holder = Fixture.Build<BankSlipHolder>()
                 .With(h => h.Address, holderAddress)
                 .With(h => h.Email, "email@teste.com")
-                .With(h => h.TaxId, "22222222222")
+                .With(h => h.TaxId, "12345678909")
                 .Create();
-            return Fixture.Build<BankSlipWriteDto>()
+            return Fixture.Build<BankSlipRequest>()
                 .With(b => b.DueDate, DateTime.Now.AddYears(1))
                 .With(b => b.Holder, holder)
                 .Create();

@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Flurl;
-using PagSeguro.DotNet.Sdk.Certificate.Dtos;
 using PagSeguro.DotNet.Sdk.Certificate.Helpers;
+using PagSeguro.DotNet.Sdk.Certificate.Models.Responses;
 using PagSeguro.DotNet.Sdk.Certificate.Providers;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
@@ -11,41 +11,41 @@ namespace PagSeguro.DotNet.Sdk.Certificate.Tests.Providers
 {
     public class DigitalCertificateProviderTests : BaseProviderTests<DigitalCertificateProvider>
     {
-        private CertificateReadDto _certificateReadDto = null!;
+        private CertificateResponse _certificateResponse = null!;
 
         protected override DigitalCertificateProvider CreateProvider()
         {
-            return new DigitalCertificateProvider(Settings);
+            return new DigitalCertificateProvider(Settings, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
-            _certificateReadDto = CreateCertificateReadDto();
+            _certificateResponse = CreateCertificateResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, CertificateEndpoints.Certificate))
                 .WithVerb(HttpMethod.Post)
-                .RespondWithJson(_certificateReadDto);
+                .RespondWithJson(_certificateResponse);
         }
 
-        private CertificateReadDto CreateCertificateReadDto()
+        private CertificateResponse CreateCertificateResponse()
         {
-            return Fixture.Create<CertificateReadDto>();
+            return Fixture.Create<CertificateResponse>();
         }
 
         [Fact]
         public async Task CreateAsync_CertificateIsValid_HttpRequestIsCreated()
         {
-            CertificateReadDto result = await Provider.CreateAsync();
+            CertificateResponse result = await Provider.CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, CertificateEndpoints.Certificate))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, CertificateEndpoints.Certificate))
                 .WithOAuthBearerToken(Settings.AccessToken)
                 .WithHeader(CertificateHeaders.Challenge, Settings.Challenge)
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_certificateReadDto);
+                .BeEquivalentTo(_certificateResponse);
         }
 
         [Fact]

@@ -2,43 +2,43 @@
 using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.PublicKey.Dtos;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
+using PagSeguro.DotNet.Sdk.PublicKey.Models.Responses;
 using PagSeguro.DotNet.Sdk.PublicKey.Providers;
 
 namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
 {
     public class PublicKeyProviderTests : BaseProviderTests<PublicKeyProvider>
     {
-        private PublicKeyReadDto _publicKeyReadDto = null!;
+        private PublicKeyResponse _publicKeyResponse = null!;
 
         protected override PublicKeyProvider CreateProvider()
         {
-            return new PublicKeyProvider(Settings);
+            return new PublicKeyProvider(Settings, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
-            _publicKeyReadDto = CreatePublicKeyReadDto();
+            _publicKeyResponse = CreatePublicKeyResponse();
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey),
-                    Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey, "*"))
-                .RespondWithJson(_publicKeyReadDto);
+                    Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey),
+                    Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey, "*"))
+                .RespondWithJson(_publicKeyResponse);
         }
 
-        private PublicKeyReadDto CreatePublicKeyReadDto()
+        private PublicKeyResponse CreatePublicKeyResponse()
         {
-            return Fixture.Create<PublicKeyReadDto>();
+            return Fixture.Create<PublicKeyResponse>();
         }
 
         [Fact]
         public async Task CreateAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.CreateAsync();
+            PublicKeyResponse result = await Provider.CreateAsync();
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, PublicKeyEndpoints.PublicKey))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, PublicKeyEndpoints.PublicKey))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithVerb(HttpMethod.Post)
                 .WithRequestJson(new
@@ -48,17 +48,17 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_publicKeyReadDto);
+                .BeEquivalentTo(_publicKeyResponse);
         }
 
         [Fact]
         public async Task UpdateAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.UpdateAsync();
+            PublicKeyResponse result = await Provider.UpdateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     PublicKeyEndpoints.PublicKey,
                     PublicKeyEndpoints.Card))
                 .WithOAuthBearerToken(Settings.Token)
@@ -66,17 +66,17 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_publicKeyReadDto);
+                .BeEquivalentTo(_publicKeyResponse);
         }
 
         [Fact]
         public async Task GetAsync_RequestIsValid_HttpRequestIsCreated()
         {
-            PublicKeyReadDto result = await Provider.GetAsync();
+            PublicKeyResponse result = await Provider.GetAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     PublicKeyEndpoints.PublicKey,
                     PublicKeyEndpoints.Card))
                 .WithOAuthBearerToken(Settings.Token)
@@ -84,7 +84,7 @@ namespace PagSeguro.DotNet.Sdk.PublicKey.Tests.Providers
                 .Times(1);
             result
                 .Should()
-                .BeEquivalentTo(_publicKeyReadDto);
+                .BeEquivalentTo(_publicKeyResponse);
         }
     }
 }

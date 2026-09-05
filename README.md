@@ -3,6 +3,7 @@ Client moderno para APIs PagSeguro
 
 [![Version](https://img.shields.io/nuget/vpre/PagSeguro.DotNet.Sdk.svg)](https://www.nuget.org/packages/PagSeguro.DotNet.Sdk)
 [![codecov](https://codecov.io/gh/vhs94/pagseguro-net-sdk/branch/main/graph/badge.svg?token=DBC135AXUC)](https://codecov.io/gh/vhs94/pagseguro-net-sdk)
+[![Docs](https://img.shields.io/badge/docs-github%20pages-blue)](https://vhs94.github.io/pagseguro-net-sdk/)
 
 
 ## Install
@@ -16,6 +17,16 @@ Install-Package PagSeguro.DotNet.Sdk
 ```sh
 dotnet add package PagSeguro.DotNet.Sdk
 ```
+
+## Documentação
+
+Guias e referência completa da API: **https://vhs94.github.io/pagseguro-net-sdk/**
+
+- [Introdução](https://vhs94.github.io/pagseguro-net-sdk/guia/introducao.html)
+- [Autenticação](https://vhs94.github.io/pagseguro-net-sdk/guia/autenticacao.html)
+- [Pedidos e cobranças](https://vhs94.github.io/pagseguro-net-sdk/guia/pedidos-e-cobrancas.html)
+- [Assinaturas](https://vhs94.github.io/pagseguro-net-sdk/guia/assinaturas.html)
+- [Referência da API](https://vhs94.github.io/pagseguro-net-sdk/api/)
 
 # Como usar
 
@@ -53,7 +64,7 @@ var creditCardOrder = await client
     .WithReferenceId("ref-id")
     .WithNotificationUrl("https://my.url")
     .WithCreditCard()
-    .AddCharge(new ChargeByCreditCardWriteDto())
+    .AddCharge(new ChargeByCreditCardRequest())
     .CreateAsync();
 ```
 # Unit Testing

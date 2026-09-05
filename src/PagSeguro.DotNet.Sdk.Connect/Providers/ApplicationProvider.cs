@@ -1,31 +1,35 @@
 ﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.Connect.Dtos.Application;
 using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
+using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
+using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Connect.Providers
 {
-    public class ApplicationProvider(PagSeguroSettings settings)
-        : BaseProvider(settings),
+    /// <inheritdoc cref="IApplicationProvider" />
+    public class ApplicationProvider(PagSeguroSettings settings, IFlurlClient flurlClient)
+        : BaseProvider(settings, flurlClient),
         IApplicationProvider
     {
-        public async Task<ApplicationReadDto> CreateAsync(ApplicationWriteDto applicationWriteDto)
+        /// <inheritdoc />
+        public async Task<ApplicationResponse> CreateAsync(ApplicationRequest applicationRequest)
         {
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment(ConnectEndpoints.Application)
                 .WithOAuthBearerToken(Settings.Token)
-                .PostJsonAsync(applicationWriteDto)
-                .ReceiveJson<ApplicationReadDto>();
+                .PostJsonAsync(applicationRequest)
+                .ReceiveJson<ApplicationResponse>();
         }
 
-        public async Task<ApplicationReadDto> GetByClientIdAsync(string clientId)
+        /// <inheritdoc />
+        public async Task<ApplicationResponse> GetByClientIdAsync(string clientId)
         {
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment($"{ConnectEndpoints.Application}/{clientId}")
                 .WithOAuthBearerToken(Settings.Token)
-                .GetJsonAsync<ApplicationReadDto>();
+                .GetJsonAsync<ApplicationResponse>();
         }
     }
 }

@@ -16,6 +16,8 @@
         public const string NotAcceptableExceptionMessage = "HTTP 406 Not Acceptable. Check the used HTTP verb used.";
         public const string NotFoundExceptionMessage = "HTTP 404 Not Found.";
         public const string UnauthorizedExceptionMessage = "HTTP 401 Unauthorized.";
+        public const string TooManyRequestsExceptionMessage =
+            "HTTP 429 Too Many Requests. The API is rate limiting your requests, retry later.";
         public const string UnkownHttpExceptionMessage = "HTTP Exception. Check the response for details.";
     }
 }

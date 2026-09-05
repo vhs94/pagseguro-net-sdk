@@ -8,5 +8,6 @@
         public const string Capture = "capture";
         public const string Cancel = "cancel";
         public const string CalculateFee = "fees/calculate";
+        public const string ChargeIdQueryParam = "charge_id";
     }
 }

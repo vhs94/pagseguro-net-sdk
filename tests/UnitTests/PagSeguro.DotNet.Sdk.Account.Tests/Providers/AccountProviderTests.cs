@@ -1,8 +1,9 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Flurl;
-using PagSeguro.DotNet.Sdk.Account.Dtos;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
+using PagSeguro.DotNet.Sdk.Account.Models.Requests;
+using PagSeguro.DotNet.Sdk.Account.Models.Responses;
 using PagSeguro.DotNet.Sdk.Account.Providers;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
@@ -11,76 +12,76 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
 {
     public class AccountProviderTests : BaseProviderTests<AccountProvider>
     {
-        private CreatedAccountDto _createdAccountDto = null!;
-        private AccountReadDto _accountReadDto = null!;
+        private CreatedAccountResponse _createdAccountResponse = null!;
+        private AccountResponse _accountResponse = null!;
 
         protected override AccountProvider CreateProvider()
         {
-            return new AccountProvider(Settings);
+            return new AccountProvider(Settings, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
-            _createdAccountDto = CreateCreatedAccountDto();
-            _accountReadDto = CreateAccountReadDto();
+            _createdAccountResponse = CreateCreatedAccountResponse();
+            _accountResponse = CreateAccountResponse();
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account))
                 .WithVerb(HttpMethod.Post)
-                .RespondWithJson(_createdAccountDto);
+                .RespondWithJson(_createdAccountResponse);
             HttpTestMock
-                .ForCallsTo(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, "*"))
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account, "*"))
                 .WithVerb(HttpMethod.Get)
-                .RespondWithJson(_accountReadDto);
+                .RespondWithJson(_accountResponse);
         }
 
-        private CreatedAccountDto CreateCreatedAccountDto()
+        private CreatedAccountResponse CreateCreatedAccountResponse()
         {
-            return Fixture.Create<CreatedAccountDto>();
+            return Fixture.Create<CreatedAccountResponse>();
         }
 
-        private AccountReadDto CreateAccountReadDto()
+        private AccountResponse CreateAccountResponse()
         {
-            return Fixture.Create<AccountReadDto>();
+            return Fixture.Create<AccountResponse>();
         }
 
         [Fact]
         public async Task CreateAsync_AccountIsValid_HttpRequestIsCreated()
         {
-            AccountWriteDto accountWriteDto = CreateAccountWriteDto();
+            AccountRequest accountRequest = CreateAccountRequest();
 
-            CreatedAccountDto result = await Provider.CreateAsync(accountWriteDto);
+            CreatedAccountResponse result = await Provider.CreateAsync(accountRequest);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(AccountHeaders.ClientId, Settings.ClientId)
                 .WithHeader(AccountHeaders.ClientSecret, Settings.ClientSecret)
-                .WithRequestJson(accountWriteDto)
+                .WithRequestJson(accountRequest)
                 .WithVerb(HttpMethod.Post)
                 .Times(1);
             result
                 .Should()
                 .BeEquivalentTo(
-                    _createdAccountDto,
+                    _createdAccountResponse,
                     options => options.Excluding(f => f.Person!.BirthDate));
             result.Person!.BirthDate
                 .Should()
-                .Be(_createdAccountDto.Person!.BirthDate.Date);
+                .Be(_createdAccountResponse.Person!.BirthDate.Date);
 
         }
 
-        private AccountWriteDto CreateAccountWriteDto()
+        private AccountRequest CreateAccountRequest()
         {
-            return Fixture.Create<AccountWriteDto>();
+            return Fixture.Create<AccountRequest>();
         }
 
         [Fact]
         public async Task CreateAsync_AccessTokenIsEmpty_ClientNotConnectedExceptionIsThrown()
         {
-            AccountWriteDto accountWriteDto = CreateAccountWriteDto();
+            AccountRequest accountRequest = CreateAccountRequest();
             Settings.AccessToken = null;
 
-            Func<Task> task = async () => await Provider.CreateAsync(accountWriteDto);
+            Func<Task> task = async () => await Provider.CreateAsync(accountRequest);
 
             await task
                 .Should()
@@ -90,11 +91,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         [Fact]
         public async Task CreateAsync_ClientApplicationIsEmpty_MissingClientApplicationExceptionIsThrown()
         {
-            AccountWriteDto accountWriteDto = CreateAccountWriteDto();
+            AccountRequest accountRequest = CreateAccountRequest();
             Settings.ClientId = null;
             Settings.ClientSecret = null;
 
-            Func<Task> task = async () => await Provider.CreateAsync(accountWriteDto);
+            Func<Task> task = async () => await Provider.CreateAsync(accountRequest);
 
             await task
                 .Should()
@@ -106,10 +107,10 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
         {
             string accountId = "accountId";
 
-            AccountReadDto result = await Provider.GetByIdAsync(accountId);
+            AccountResponse result = await Provider.GetByIdAsync(accountId);
 
             HttpTestMock
-                .ShouldHaveCalled(Url.Combine(Provider.BaseUrl, AccountEndpoints.Account, accountId))
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, AccountEndpoints.Account, accountId))
                 .WithOAuthBearerToken(Settings.Token)
                 .WithHeader(AccountHeaders.ClientToken, Settings.AccessToken)
                 .WithVerb(HttpMethod.Get)
@@ -117,11 +118,11 @@ namespace PagSeguro.DotNet.Sdk.Account.Tests.Providers
             result
                 .Should()
                 .BeEquivalentTo(
-                    _accountReadDto,
+                    _accountResponse,
                     options => options.Excluding(f => f.Person!.BirthDate));
             result.Person!.BirthDate
                 .Should()
-                .Be(_accountReadDto.Person!.BirthDate.Date);
+                .Be(_accountResponse.Person!.BirthDate.Date);
         }
 
         [Fact]

@@ -1,0 +1,31 @@
+<Project>
+
+  <!--
+    Mantém as configurações da raiz, se existirem, e acrescenta as que valem
+    apenas para as bibliotecas publicadas em src/. Projetos de teste e de exemplo
+    não são afetados.
+
+    O Import é condicional de propósito: o Directory.Build.props da raiz é um
+    arquivo local (está no .gitignore), então ele não existe no CI. Sem a
+    condição, GetPathOfFileAbove devolve vazio e o build quebra com MSB4020.
+  -->
+  <PropertyGroup>
+    <_RootDirectoryBuildProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</_RootDirectoryBuildProps>
+  </PropertyGroup>
+
+  <Import Project="$(_RootDirectoryBuildProps)" Condition="'$(_RootDirectoryBuildProps)' != ''" />
+
+  <PropertyGroup>
+    <!--
+      Gera o arquivo de documentação XML para que os ///-comentários sigam dentro
+      do pacote NuGet e apareçam como IntelliSense para quem consome a lib.
+      O CS1591 (membro público sem comentário XML) fica suprimido: a superfície
+      pública - modelos, interfaces dos providers e implementações - está
+      documentada, mas helpers, settings, exceções e tipos de serialização são
+      deixados de fora de propósito.
+    -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+</Project>

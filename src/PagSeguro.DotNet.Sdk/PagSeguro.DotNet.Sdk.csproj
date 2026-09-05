@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName)</PackageId>
-		<PackageVersion>5.0.0</PackageVersion>
+		<PackageVersion>6.0.0</PackageVersion>
 		<Title>PagSeguro DotNet SDK</Title>
 		<Authors>victor_santana09</Authors>
 		<Description>Fluent Client para APIs PagSeguro</Description>
@@ -40,10 +40,12 @@
 	<ItemGroup>
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Account\PagSeguro.DotNet.Sdk.Account.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Certificate\PagSeguro.DotNet.Sdk.Certificate.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Checkout\PagSeguro.DotNet.Sdk.Checkout.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common\PagSeguro.DotNet.Sdk.Common.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Connect\PagSeguro.DotNet.Sdk.Connect.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
 		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.PublicKey\PagSeguro.DotNet.Sdk.PublicKey.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Subscriptions\PagSeguro.DotNet.Sdk.Subscriptions.csproj" />
 	</ItemGroup>
 
 </Project>

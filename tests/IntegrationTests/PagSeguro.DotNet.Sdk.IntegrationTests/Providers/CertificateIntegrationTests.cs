@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Certificate.Dtos;
+using PagSeguro.DotNet.Sdk.Certificate.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
 {
@@ -10,7 +10,7 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
         {
             await Client.ConnectChallengeAsync();
 
-            CertificateReadDto result = await Client
+            CertificateResponse result = await Client
                 .ForCertificate()
                 .CreateAsync();
 

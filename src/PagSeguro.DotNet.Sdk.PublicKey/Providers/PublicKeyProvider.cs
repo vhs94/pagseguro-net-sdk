@@ -1,45 +1,49 @@
 ﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
-using PagSeguro.DotNet.Sdk.PublicKey.Dtos;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
+using PagSeguro.DotNet.Sdk.PublicKey.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.PublicKey.Providers
 {
-    public class PublicKeyProvider(PagSeguroSettings settings)
-        : BaseProvider(settings),
+    /// <inheritdoc cref="IPublicKeyProvider" />
+    public class PublicKeyProvider(PagSeguroSettings settings, IFlurlClient flurlClient)
+        : BaseProvider(settings, flurlClient),
         IPublicKeyProvider
     {
-        public async Task<PublicKeyReadDto> CreateAsync()
+        /// <inheritdoc />
+        public async Task<PublicKeyResponse> CreateAsync()
         {
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
                 .WithOAuthBearerToken(Settings.Token)
                 .PostJsonAsync(new
                 {
                     type = "card"
                 })
-                .ReceiveJson<PublicKeyReadDto>();
+                .ReceiveJson<PublicKeyResponse>();
         }
 
-        public async Task<PublicKeyReadDto> UpdateAsync()
+        /// <inheritdoc />
+        public async Task<PublicKeyResponse> UpdateAsync()
         {
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
                 .AppendPathSegment(PublicKeyEndpoints.Card)
                 .WithOAuthBearerToken(Settings.Token)
                 .PutAsync()
-                .ReceiveJson<PublicKeyReadDto>();
+                .ReceiveJson<PublicKeyResponse>();
         }
 
-        public async Task<PublicKeyReadDto> GetAsync()
+        /// <inheritdoc />
+        public async Task<PublicKeyResponse> GetAsync()
         {
-            return await BaseUrl
+            return await Request()
                 .AppendPathSegment(PublicKeyEndpoints.PublicKey)
                 .AppendPathSegment(PublicKeyEndpoints.Card)
                 .WithOAuthBearerToken(Settings.Token)
-                .GetJsonAsync<PublicKeyReadDto>();
+                .GetJsonAsync<PublicKeyResponse>();
         }
     }
 }

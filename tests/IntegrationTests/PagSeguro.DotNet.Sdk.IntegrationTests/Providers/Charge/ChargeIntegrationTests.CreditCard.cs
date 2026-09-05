@@ -1,10 +1,7 @@
-﻿using AutoFixture;
+using AutoFixture;
 using FluentAssertions;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Amount;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.Card;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.ChargeByCard.CreditCard;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Charges.PaymentMethod.CreditCard;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
 {
@@ -13,39 +10,39 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
         [Fact]
         public async Task CreateAsync_WithCreditCard_ChargeIsCreated()
         {
-            CreditCardPaymentMethodWriteDto paymentMethodDto = CreateCreditCardPaymentMethodWriteDto();
-            ChargeByCreditCardWriteDto chargeWriteDto = CreateChargeByCreditCardWriteDto(paymentMethodDto);
+            CreditCardPaymentMethodRequest paymentMethodRequest = CreateCreditCardPaymentMethodRequest();
+            ChargeByCreditCardRequest chargeRequest = CreateChargeByCreditCardRequest(paymentMethodRequest);
 
-            ChargeByCreditCardReadDto result = await Client
+            ChargeByCreditCardResponse result = await Client
                .ForCharge()
                .WithCreditCard()
-               .Load(chargeWriteDto)
+               .Load(chargeRequest)
                .ChargeAsync();
 
             await Task.Delay(1000);
-            ChargeByCreditCardReadDto chargeByCreditCardReadDto = await Client
+            ChargeByCreditCardResponse chargeByCreditCardResponse = await Client
                 .ForCharge()
                 .WithCreditCard()
                 .GetByIdAsync(result.Id!);
-            AssertChargeWithAutoCapture(result, chargeWriteDto);
-            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod!, paymentMethodDto);
-            result.Should().BeEquivalentTo(chargeByCreditCardReadDto);
+            AssertChargeWithAutoCapture(result, chargeRequest);
+            AssertCreditCardPaymentMethodResponse(result.PaymentMethod!, paymentMethodRequest);
+            result.Should().BeEquivalentTo(chargeByCreditCardResponse);
         }
 
-        private CreditCardPaymentMethodWriteDto CreateCreditCardPaymentMethodWriteDto(
+        private CreditCardPaymentMethodRequest CreateCreditCardPaymentMethodRequest(
             bool capture = true)
         {
-            return Fixture.Build<CreditCardPaymentMethodWriteDto>()
+            return Fixture.Build<CreditCardPaymentMethodRequest>()
                 .With(pm => pm.Installments, 1)
                 .With(pm => pm.Capture, capture)
                 .With(pm => pm.SoftDescriptor, "MyStore")
-                .With(pm => pm.Card, CreateCardWriteDto())
+                .With(pm => pm.Card, CreateCardRequest())
                 .Create();
         }
 
-        private CardWriteDto CreateCardWriteDto()
+        private CardRequest CreateCardRequest()
         {
-            return Fixture.Build<CardWriteDto>()
+            return Fixture.Build<CardRequest>()
                 .With(cc => cc.Number, "4111111111111111")
                 .With(cc => cc.ExpMonth, 3)
                 .With(cc => cc.ExpYear, 2023)
@@ -53,15 +50,15 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
                 .Create();
         }
 
-        private ChargeByCreditCardWriteDto CreateChargeByCreditCardWriteDto(
-            CreditCardPaymentMethodWriteDto paymentMethodDto)
+        private ChargeByCreditCardRequest CreateChargeByCreditCardRequest(
+            CreditCardPaymentMethodRequest paymentMethodRequest)
         {
             return Client
                 .ForCharge()
                 .WithCreditCard()
-                .AddPaymentMethod(paymentMethodDto)
+                .AddPaymentMethod(paymentMethodRequest)
                 .WithMetadata(CreateMetadata())
-                .WithAmount(CreateAmountWriteDto())
+                .WithAmount(CreateAmountRequest())
                 .WithReferenceId("ex-00001")
                 .WithDescription("Motivo do pagamento")
                 .WithNotificationUrl("https://myurl.com")
@@ -73,9 +70,9 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             return Fixture.Create<IDictionary<string, string>>();
         }
 
-        private static ChargeAmountWriteDto CreateAmountWriteDto()
+        private static ChargeAmountRequest CreateAmountRequest()
         {
-            return new ChargeAmountWriteDto
+            return new ChargeAmountRequest
             {
                 Currency = "BRL",
                 Value = 1000
@@ -83,86 +80,87 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
         }
 
         private void AssertChargeWithAutoCapture(
-            ChargeByCardReadDto receivedChargeDto,
-            ChargeByCardWriteDto expectedChargeDto)
+            ChargeByCardResponse receivedChargeResponse,
+            ChargeByCardRequest expectedChargeRequest)
         {
-            AssertChargeReadDto(receivedChargeDto, expectedChargeDto);
-            receivedChargeDto.PaymentResponse!.Reference.Should().Be("032416400102");
-            receivedChargeDto.Amount!.Summary!.Paid.Should().Be(1000);
+            AssertChargeResponse(receivedChargeResponse, expectedChargeRequest);
+            receivedChargeResponse.PaymentResponse!.Reference.Should().Be("032416400102");
+            receivedChargeResponse.Amount!.Summary!.Paid.Should().Be(1000);
         }
 
-        private void AssertChargeReadDto(
-            ChargeByCardReadDto receivedChargeDto,
-            ChargeByCardWriteDto expectedChargeDto)
+        private void AssertChargeResponse(
+            ChargeByCardResponse receivedChargeResponse,
+            ChargeByCardRequest expectedChargeRequest)
         {
-            receivedChargeDto.Should().NotBeNull();
-            receivedChargeDto.Should().BeEquivalentTo(expectedChargeDto, options => options.ExcludingMissingMembers());
-            receivedChargeDto.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
-            receivedChargeDto.PaidDate!.Value!.Date.Should().Be(DateTime.UtcNow.Date);
-            receivedChargeDto.Status.Should().Be("PAID");
-            receivedChargeDto.PaymentResponse!.Message!.Should().Be("SUCESSO");
-            receivedChargeDto.PaymentResponse.Code.Should().Be(20000);
-            receivedChargeDto.Amount!.Summary!.Total.Should().Be(1000);
-            receivedChargeDto.Amount.Summary.Refunded.Should().Be(0);
-            receivedChargeDto.Links.Should().NotBeNullOrEmpty();
+            receivedChargeResponse.Should().NotBeNull();
+            receivedChargeResponse.Should().BeEquivalentTo(expectedChargeRequest, options => options.ExcludingMissingMembers());
+            receivedChargeResponse.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
+            receivedChargeResponse.Status.Should().Be("PAID");
+            receivedChargeResponse.PaidDate.Should().NotBeNull();
+            receivedChargeResponse.PaidDate!.Value.Date.Should().Be(DateTime.UtcNow.Date);
+            receivedChargeResponse.PaymentResponse!.Message!.Should().Be("SUCESSO");
+            receivedChargeResponse.PaymentResponse.Code.Should().Be(20000);
+            receivedChargeResponse.Amount!.Summary!.Total.Should().Be(1000);
+            receivedChargeResponse.Amount.Summary.Refunded.Should().Be(0);
+            receivedChargeResponse.Links.Should().NotBeNullOrEmpty();
         }
 
-        private void AssertCreditCardPaymentMethodReadDto(
-            CreditCardPaymentMethodReadDto receivedPaymentMethod,
-            CreditCardPaymentMethodWriteDto expectedPaymentMethod)
+        private void AssertCreditCardPaymentMethodResponse(
+            CreditCardPaymentMethodResponse receivedPaymentMethod,
+            CreditCardPaymentMethodRequest expectedPaymentMethod)
         {
             receivedPaymentMethod.Should().BeEquivalentTo(
                 expectedPaymentMethod,
                 options => options.ExcludingMissingMembers());
-            AssertCartReadDto(receivedPaymentMethod.Card);
+            AssertCartResponse(receivedPaymentMethod.Card);
         }
 
-        private static void AssertCartReadDto(CardReadDto? cardReadDto)
+        private static void AssertCartResponse(CardResponse? cardResponse)
         {
-            cardReadDto.Should().NotBeNull();
-            cardReadDto.Brand.Should().Be("visa");
-            cardReadDto.FirstDigits.Should().Be(411111);
-            cardReadDto.LastDigits.Should().Be(1111);
+            cardResponse.Should().NotBeNull();
+            cardResponse.Brand.Should().Be("visa");
+            cardResponse.FirstDigits.Should().Be(411111);
+            cardResponse.LastDigits.Should().Be(1111);
         }
 
         [Fact]
         public async Task CaptureAsync_WithCreditCard_ChargeIsCaptured()
         {
-            CreditCardPaymentMethodWriteDto paymentMethodDto = CreateCreditCardPaymentMethodWriteDto(false);
-            ChargeByCreditCardWriteDto chargeWriteDto = Client
+            CreditCardPaymentMethodRequest paymentMethodRequest = CreateCreditCardPaymentMethodRequest(false);
+            ChargeByCreditCardRequest chargeRequest = Client
                 .ForCharge()
                 .WithCreditCard()
-                .AddPaymentMethod(paymentMethodDto)
+                .AddPaymentMethod(paymentMethodRequest)
                 .WithMetadata(CreateMetadata())
-                .WithAmount(CreateAmountWriteDto())
+                .WithAmount(CreateAmountRequest())
                 .WithReferenceId("ex-00001")
                 .WithDescription("Motivo do pagamento")
                 .WithNotificationUrl("https://myurl.com")
                 .Build();
-            ChargeByCreditCardReadDto chargeReadtDto = await Client
+            ChargeByCreditCardResponse chargeResponse = await Client
                .ForCharge()
                .WithCreditCard()
-               .Load(chargeWriteDto)
+               .Load(chargeRequest)
                .ChargeAsync();
             await Task.Delay(1000);
 
-            ChargeByCreditCardReadDto result = await Client
+            ChargeByCreditCardResponse result = await Client
                .ForCharge()
                .WithCreditCard()
-               .WithId(chargeReadtDto.Id!)
+               .WithId(chargeResponse.Id!)
                .CaptureAsync(100);
 
-            AssertChargeWithPreAuthorizedCapture(result, chargeWriteDto);
-            AssertCreditCardPaymentMethodReadDto(result.PaymentMethod!, paymentMethodDto);
+            AssertChargeWithPreAuthorizedCapture(result, chargeRequest);
+            AssertCreditCardPaymentMethodResponse(result.PaymentMethod!, paymentMethodRequest);
         }
 
         private void AssertChargeWithPreAuthorizedCapture(
-            ChargeByCardReadDto receivedChargeDto,
-            ChargeByCardWriteDto expectedChargeDto)
+            ChargeByCardResponse receivedChargeResponse,
+            ChargeByCardRequest expectedChargeRequest)
         {
-            AssertChargeReadDto(receivedChargeDto, expectedChargeDto);
-            receivedChargeDto.PaymentResponse!.Reference!.Should().Be("31022400001");
-            receivedChargeDto.Amount!.Summary!.Paid.Should().Be(100);
+            AssertChargeResponse(receivedChargeResponse, expectedChargeRequest);
+            receivedChargeResponse.PaymentResponse!.Reference!.Should().Be("31022400001");
+            receivedChargeResponse.Amount!.Summary!.Paid.Should().Be(100);
         }
     }
 }

@@ -1,0 +1,17 @@
+﻿using System.Text.Json.Serialization;
+
+namespace PagSeguro.DotNet.Sdk.Orders.Models.Responses
+{
+    /// <summary>
+    /// Meio de pagamento com cartão de crédito e autenticação 3DS retornado na cobrança.
+    /// <see href="https://developer.pagbank.com.br/reference/criar-pagar-pedido-com-3ds-validacao-externa">ler documentação</see>
+    /// </summary>
+    public class CreditCardWith3DsAuthPaymentMethodResponse : CreditCardPaymentMethodResponse
+    {
+        /// <summary>
+        /// Resultado da autenticação 3DS.
+        /// </summary>
+        [JsonPropertyName("authentication_method")]
+        public AuthenticationMethodResponse? AuthenticationMethod { get; set; }
+    }
+}

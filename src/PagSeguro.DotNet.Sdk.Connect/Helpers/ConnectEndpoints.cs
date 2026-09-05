@@ -4,5 +4,7 @@
     {
         public const string Application = "/oauth2/application";
         public const string Token = "/oauth2/token";
+        public const string Refresh = "/oauth2/refresh";
+        public const string Revoke = "/oauth2/revoke";
     }
 }

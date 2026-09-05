@@ -1,49 +1,54 @@
-﻿using Flurl;
-using Flurl.Http;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
-using PagSeguro.DotNet.Sdk.Orders.Helpers;
+﻿using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees
 {
-    public interface IFeeProvider : IProvider, IBuilder<IFeeProvider, FeeWriteDto>
+    /// <summary>
+    /// Simulação das taxas de venda e dos planos de parcelamento com repasse de juros.
+    /// <see href="https://developer.pagbank.com.br/reference/consultar-taxas-transacao">ler documentação</see>
+    /// </summary>
+    public interface IFeeProvider
     {
-        public IFeeProvider WithCreditCardBin(int creditCardBin)
-        {
-            Entity.CreditCardBin = creditCardBin;
-            return this;
-        }
+        /// <summary>
+        /// Parâmetros da simulação em construção no builder.
+        /// </summary>
+        FeeRequest Entity { get; set; }
 
-        public IFeeProvider WithMaxInstallments(int maxInstallments)
-        {
-            Entity.MaxInstallments = maxInstallments;
-            return this;
-        }
+        /// <summary>
+        /// Reinicia o builder, descartando os parâmetros já informados.
+        /// </summary>
+        void Reset();
 
-        public IFeeProvider WithMaxInstallmentsNoInterest(int maxInstallmentsNoInterest)
-        {
-            Entity.MaxInstallmentsNoInterest = maxInstallmentsNoInterest;
-            return this;
-        }
-
-        public IFeeProvider WithValue(int amountValue)
-        {
-            Entity.Value = amountValue;
-            return this;
-        }
-
-        public async Task<FeeReadDto> CalculateAsync()
-        {
-            FeeWriteDto feeWriteDto = Build();
-            return await BaseUrl
-                .AppendPathSegments(OrderEndpoint.Charges, OrderEndpoint.CalculateFee)
-                .WithOAuthBearerToken(Settings.Token)
-                .SetQueryParam("payment_methods", feeWriteDto.PaymentMethods)
-                .SetQueryParam("value", feeWriteDto.Value)
-                .SetQueryParam("max_installments", feeWriteDto.MaxInstallments)
-                .SetQueryParam("max_installments_no_interest", feeWriteDto.MaxInstallmentsNoInterest)
-                .SetQueryParam("credit_card_bin", feeWriteDto.CreditCardBin)
-                .GetJsonAsync<FeeReadDto>();
-        }
+        /// <summary>
+        /// Define os seis primeiros dígitos do cartão (BIN).
+        /// </summary>
+        IFeeProvider WithCreditCardBin(int creditCardBin);
+        /// <summary>
+        /// Define a quantidade máxima de parcelas permitidas.
+        /// </summary>
+        IFeeProvider WithMaxInstallments(int maxInstallments);
+        /// <summary>
+        /// Define a quantidade de parcelas sem juros
+        /// custeadas pelo vendedor.
+        /// </summary>
+        IFeeProvider WithMaxInstallmentsNoInterest(int maxInstallmentsNoInterest);
+        /// <summary>
+        /// Define o valor original da transação, em centavos.
+        /// </summary>
+        IFeeProvider WithValue(int amountValue);
+        /// <summary>
+        /// Carrega parâmetros já montados no builder, substituindo o conteúdo atual.
+        /// </summary>
+        IFeeProvider Load(FeeRequest entity);
+        /// <summary>
+        /// Retorna os parâmetros montados e reinicia o builder.
+        /// </summary>
+        FeeRequest Build();
+        /// <summary>
+        /// Consulta as taxas de venda das transações e exibe o repasse dos juros.
+        /// Corresponde a GET /charges/fees/calculate.
+        /// <see href="https://developer.pagbank.com.br/reference/consultar-taxas-transacao">ler documentação</see>
+        /// </summary>
+        Task<FeeResponse> CalculateAsync();
     }
 }

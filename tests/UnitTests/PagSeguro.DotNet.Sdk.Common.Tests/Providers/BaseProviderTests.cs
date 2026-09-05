@@ -1,24 +1,28 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using Flurl;
+using Flurl.Http;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Exceptions.Validations;
 using PagSeguro.DotNet.Sdk.Common.Helpers;
-using PagSeguro.DotNet.Sdk.Common.Interfaces;
+using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 
 namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
 {
     public abstract class BaseProviderTests<TProvider> : BaseTests
-        where TProvider : IProvider
+        where TProvider : BaseProvider
     {
         public PagSeguroSettings Settings { get; private set; } = null!;
         public TProvider Provider { get; private set; } = default!;
         protected IServiceProvider ServiceProviderMock { get; private set; } = null!;
+        protected IFlurlClient FlurlClientMock { get; private set; } = null!;
 
         protected override void InitializeMocks()
         {
             CreateMocks();
             ServiceProviderMock = CreateServiceProvider();
+            FlurlClientMock = CreateFlurlClient();
             Settings = CreateSettings();
             Provider = CreateProvider();
             SetupMocks();
@@ -26,6 +30,8 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
 
         private IServiceProvider CreateServiceProvider()
             => Substitute.For<IServiceProvider>();
+        private IFlurlClient CreateFlurlClient()
+            => new FlurlClient();
         private PagSeguroSettings CreateSettings()
         {
             return Fixture.Build<PagSeguroSettings>()
@@ -37,10 +43,16 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
                 .Create();
         }
 
+        /// <summary>
+        /// Repassa a URL base para as classes de teste dos outros assemblies:
+        /// BaseProvider.BaseUrl e protegida e so este assembly tem acesso interno.
+        /// </summary>
+        protected Url ProviderBaseUrl => Provider.BaseUrl;
+
         protected abstract TProvider CreateProvider();
 
         [Fact]
-        public void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
+        public virtual void BaseUrl_EnvironmentIsSandbox_SandboxUrlIsAssigned()
         {
             Provider.BaseUrl.ToString()
                 .Should()
@@ -48,7 +60,7 @@ namespace PagSeguro.DotNet.Sdk.Common.Tests.Providers
         }
 
         [Fact]
-        public void BaseUrl_EnvironmentIsProduction_ProductionUrlIsAssigned()
+        public virtual void BaseUrl_EnvironmentIsProduction_ProductionUrlIsAssigned()
         {
             Settings.Environment = PagSeguroEnvironment.Production;
 

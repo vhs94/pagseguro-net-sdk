@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using PagSeguro.DotNet.Sdk.PublicKey.Dtos;
+using PagSeguro.DotNet.Sdk.PublicKey.Models.Responses;
 
 namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
 {
@@ -8,11 +8,11 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
         [Fact]
         public async Task CreateAsync_RequestIsValid_PublicKeyIsCreated()
         {
-            PublicKeyReadDto result = await Client
+            PublicKeyResponse result = await Client
                 .ForPublicKey()
                 .CreateAsync();
 
-            PublicKeyReadDto publicKeyReadDto = await Client
+            PublicKeyResponse publicKeyResponse = await Client
                 .ForPublicKey()
                 .GetAsync();
             result
@@ -23,13 +23,13 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
                 .Be(PublicKey);
             result
                 .Should()
-                .BeEquivalentTo(publicKeyReadDto);
+                .BeEquivalentTo(publicKeyResponse);
         }
 
         [Fact]
         public async Task UpdateAsync_RequestIsValid_PublicKeyIsUpdated()
         {
-            PublicKeyReadDto result = await Client
+            PublicKeyResponse result = await Client
                 .ForPublicKey()
                 .UpdateAsync();
 

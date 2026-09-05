@@ -1,32 +1,32 @@
-﻿using AutoFixture;
+using AutoFixture;
 using FluentAssertions;
 using Flurl;
 using PagSeguro.DotNet.Sdk.Common.Serialization;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
-using PagSeguro.DotNet.Sdk.Orders.Dtos.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
-using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
+using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
+using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Fees;
 using System.Text.Json;
 
 namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
 {
-    public class FeeProviderTests : BaseProviderTests<IFeeProvider>
+    public class FeeProviderTests : BaseProviderTests<FeeProvider>
     {
-        private FeeReadDto _feeReadDto = null!;
+        private FeeResponse _feeResponse = null!;
 
-        protected override IFeeProvider CreateProvider()
+        protected override FeeProvider CreateProvider()
         {
-            return new FeeProvider(Settings);
+            return new FeeProvider(Settings, FlurlClientMock);
         }
 
         protected override void SetupMocks()
         {
             string feeJson = File.ReadAllText("Assets/fees.json");
-            _feeReadDto = JsonSerializer.Deserialize<FeeReadDto>(feeJson, options: JsonOptions.Default)!;
+            _feeResponse = JsonSerializer.Deserialize<FeeResponse>(feeJson, options: JsonOptions.Default)!;
             HttpTestMock
                 .ForCallsTo(
-                    Url.Combine(Provider.BaseUrl, OrderEndpoint.Charges, "*"))
+                    Url.Combine(ProviderBaseUrl, OrderEndpoint.Charges, "*"))
                 .WithVerb(HttpMethod.Get)
                 .RespondWith(feeJson);
         }
@@ -84,33 +84,33 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Fees
         }
 
         [Fact]
-        public async Task CalculateAsync_FeeWriteDtoIsValid_HttpRequestIsCreated()
+        public async Task CalculateAsync_FeeRequestIsValid_HttpRequestIsCreated()
         {
-            FeeWriteDto feeWriteDto = CreateFeeWriteDto();
+            FeeRequest feeRequest = CreateFeeRequest();
 
-            FeeReadDto result = await Provider.Load(feeWriteDto).CalculateAsync();
+            FeeResponse result = await Provider.Load(feeRequest).CalculateAsync();
 
             HttpTestMock
                 .ShouldHaveCalled(Url.Combine(
-                    Provider.BaseUrl,
+                    ProviderBaseUrl,
                     OrderEndpoint.Charges,
                     OrderEndpoint.CalculateFee))
                 .WithOAuthBearerToken(Settings.Token)
-                .WithQueryParam("payment_methods", feeWriteDto.PaymentMethods)
-                .WithQueryParam("value", feeWriteDto.Value)
-                .WithQueryParam("max_installments", feeWriteDto.MaxInstallments)
-                .WithQueryParam("max_installments_no_interest", feeWriteDto.MaxInstallmentsNoInterest)
-                .WithQueryParam("credit_card_bin", feeWriteDto.CreditCardBin)
+                .WithQueryParam("payment_methods", feeRequest.PaymentMethods)
+                .WithQueryParam("value", feeRequest.Value)
+                .WithQueryParam("max_installments", feeRequest.MaxInstallments)
+                .WithQueryParam("max_installments_no_interest", feeRequest.MaxInstallmentsNoInterest)
+                .WithQueryParam("credit_card_bin", feeRequest.CreditCardBin)
                 .WithVerb(HttpMethod.Get)
                 .Times(1);
             result
             .Should()
-                .BeEquivalentTo(_feeReadDto);
+                .BeEquivalentTo(_feeResponse);
         }
 
-        private FeeWriteDto CreateFeeWriteDto()
+        private FeeRequest CreateFeeRequest()
         {
-            return Fixture.Create<FeeWriteDto>();
+            return Fixture.Create<FeeRequest>();
         }
     }
 }
