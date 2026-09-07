@@ -1,10 +1,10 @@
 using AutoFixture;
-using AutoMapper;
 using FluentAssertions;
 using Flurl;
 using NSubstitute;
 using PagSeguro.DotNet.Sdk.Common.Tests.Providers;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Models.Maps;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Orders;
@@ -16,11 +16,11 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
         private ChargedOrderResponse<ChargeByDebitCardWith3DsAuthResponse> _orderResponse = null!;
         private ChargedOrderRequest<ChargeByDebitCardWith3DsAuthRequest> _orderRequest = null!;
 
-        public IMapper MapperMock { get; private set; } = null!;
+        public IOrderRequestMapper MapperMock { get; private set; } = null!;
 
         protected override void CreateMocks()
         {
-            MapperMock = Substitute.For<IMapper>();
+            MapperMock = Substitute.For<IOrderRequestMapper>();
         }
 
         protected override DebitCardWith3DsAuthOrderProvider CreateProvider()
@@ -39,7 +39,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
                 .WithVerb(HttpMethod.Post, HttpMethod.Get)
                 .RespondWithJson(_orderResponse);
             MapperMock
-                .Map<ChargedOrderRequest<ChargeByDebitCardWith3DsAuthRequest>>(Arg.Any<OrderRequest>())
+                .ToChargedOrder<ChargeByDebitCardWith3DsAuthRequest>(Arg.Any<OrderRequest>())
                 .Returns(_orderRequest);
         }
 
@@ -103,7 +103,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Tests.Providers.Orders
 
             MapperMock
                 .Received(1)
-                .Map<ChargedOrderRequest<ChargeByDebitCardWith3DsAuthRequest>>(Arg.Is<OrderRequest>(
+                .ToChargedOrder<ChargeByDebitCardWith3DsAuthRequest>(Arg.Is<OrderRequest>(
                     order => order.ReferenceId == referenceId));
             orderRequest
                 .Should()

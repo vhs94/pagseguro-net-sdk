@@ -51,6 +51,14 @@ namespace PagSeguro.DotNet.Sdk.Tests
         }
 
         [Fact]
+        public void Constructor_SettingsAreValid_ClientSettingsAreMapped()
+        {
+            _client.Settings
+                .Should()
+                .BeEquivalentTo(_settings);
+        }
+
+        [Fact]
         public async Task ConnectAsync_AuthorizationCodeIsValid_AcessTokenIsSet()
         {
             AuthorizationCodeRequest request = CreateAuthorizationCodeRequest();
