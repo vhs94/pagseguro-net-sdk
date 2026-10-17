@@ -30,13 +30,18 @@ dotnet add package PagSeguro.DotNet.Sdk
 
 ## Comece por aqui
 
-- [Introdução](guia/introducao.md) — instalação e primeiros passos
+- [Introdução](guia/introducao.md) — instalação, configuração e primeiros passos
 - [Autenticação](guia/autenticacao.md) — credenciais, Connect e certificado digital
-- [Pedidos e cobranças](guia/pedidos-e-cobrancas.md) — o fluxo mais comum
-- [Assinaturas](guia/assinaturas.md) — cobrança recorrente
+- [Contas, aplicações e chaves](guia/contas-aplicacoes-e-chaves.md) — onboarding e chaves públicas
+- [Pedidos e cobranças](guia/pedidos-e-cobrancas.md) — pedidos, meios de pagamento e taxas
+- [Checkout](guia/checkout.md) — página de pagamento hospedada
+- [Cartões e 3DS](guia/cartoes-e-3ds.md) — tokenização e autenticação do portador
 - [Split de pagamento](guia/split-de-pagamento.md) — dividir uma venda entre contas
-- [Cartões e 3DS](guia/cartoes-e-3ds.md) — tokenizar cartões e autenticar o portador
-- [Referência da API](api/index.md) — todas as classes e membros
+- [Assinaturas](guia/assinaturas.md) — cobrança recorrente, cupons e faturas
+- [Notificações e produção](guia/notificacoes-e-producao.md) — callbacks, reconciliação e repetição segura
+- [Tratamento de erros](guia/erros.md) — exceções e respostas da API
+- [Ambientes e testes](guia/ambientes-e-testes.md) — sandbox e testes
+- [Referência da API](api/index.md) — tipos e membros públicos do SDK
 
 > [!NOTE]
 > Projeto open source mantido pela comunidade, sem vínculo oficial com o PagBank.

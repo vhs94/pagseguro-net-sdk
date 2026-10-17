@@ -11,6 +11,10 @@
 | `PrivateKey` | Chave privada usada para decriptar o desafio do certificado digital |
 | `Environment` | `Sandbox` ou `Production` |
 
+`Token` é a credencial Bearer da conta. As chamadas Connect também enviam
+`ClientId` e `ClientSecret`; após a autenticação, o client guarda o `access_token`
+recebido para os providers que exigem uma conexão ativa.
+
 > [!WARNING]
 > Nunca versione essas credenciais. Use variáveis de ambiente, *user secrets* ou um
 > cofre de segredos.
