@@ -93,6 +93,72 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Tests.Providers
         }
 
         [Fact]
+        public async Task RemoveCouponAsync_SubscriptionHasCoupon_HttpRequestIsCreated()
+        {
+            string subscriptionId = "SUBS_" + Guid.NewGuid();
+            string url = Url.Combine(
+                ProviderBaseUrl,
+                SubscriptionEndpoints.Subscriptions,
+                subscriptionId,
+                SubscriptionEndpoints.CouponsSegment);
+            SubscriptionResponse subscriptionResponse = Fixture.Create<SubscriptionResponse>();
+            HttpTestMock.ForCallsTo(url).RespondWithJson(subscriptionResponse);
+
+            SubscriptionResponse result = await Provider.RemoveCouponAsync(subscriptionId);
+
+            HttpTestMock
+                .ShouldHaveCalled(url)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(SubscriptionHeaders.IdempotencyKey)
+                .WithVerb(HttpMethod.Delete)
+                .Times(1);
+            // A API devolve a assinatura inteira no DELETE, e nao um corpo vazio
+            // como a documentacao indica.
+            result.Should().BeEquivalentTo(subscriptionResponse);
+        }
+
+        [Fact]
+        public async Task CreateAsync_CouponIsInformed_CouponIdIsSerialized()
+        {
+            HttpTestMock
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
+                .RespondWithJson(Fixture.Create<SubscriptionResponse>());
+            SubscriptionRequest subscriptionRequest = new()
+            {
+                Plan = new PlanReference { Id = "PLAN_1" },
+                Customer = new CustomerReference { Id = "CUST_1" },
+                Coupon = new CouponReference { Id = "COUP_1" }
+            };
+
+            await Provider.CreateAsync(subscriptionRequest);
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
+                .With(call => call.RequestBody.Contains("\"coupon\"")
+                    && call.RequestBody.Contains("COUP_1"))
+                .Times(1);
+        }
+
+        [Fact]
+        public async Task CreateAsync_CouponIsNotInformed_CouponIsOmitted()
+        {
+            HttpTestMock
+                .ForCallsTo(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
+                .RespondWithJson(Fixture.Create<SubscriptionResponse>());
+
+            await Provider.CreateAsync(new SubscriptionRequest
+            {
+                Plan = new PlanReference { Id = "PLAN_1" },
+                Customer = new CustomerReference { Id = "CUST_1" }
+            });
+
+            HttpTestMock
+                .ShouldHaveCalled(Url.Combine(ProviderBaseUrl, SubscriptionEndpoints.Subscriptions))
+                .With(call => !call.RequestBody.Contains("coupon"))
+                .Times(1);
+        }
+
+        [Fact]
         public async Task ListInvoicesAsync_SubscriptionExists_InvoicesUrlIsCalled()
         {
             string subscriptionId = "SUBS_" + Guid.NewGuid();

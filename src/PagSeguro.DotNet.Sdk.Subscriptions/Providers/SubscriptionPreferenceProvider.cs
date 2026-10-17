@@ -39,5 +39,30 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
                 .AppendPathSegment(SubscriptionEndpoints.PublicKeys)
                 .GetJsonAsync<SubscriptionPublicKeyResponse>();
         }
+
+        /// <inheritdoc />
+        public async Task<SubscriptionPublicKeyResponse> CreatePublicKeyAsync()
+        {
+            return await IdempotentRequest()
+                .AppendPathSegment(SubscriptionEndpoints.PublicKeys)
+                .PutAsync()
+                .ReceiveJson<SubscriptionPublicKeyResponse>();
+        }
+
+        /// <inheritdoc />
+        public async Task<RetryPreferenceResponse> GetRetryPreferencesAsync()
+        {
+            return await AuthorizedRequest()
+                .AppendPathSegment(SubscriptionEndpoints.RetryPreferences)
+                .GetJsonAsync<RetryPreferenceResponse>();
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateRetryPreferencesAsync(RetryPreferenceRequest retryPreferenceRequest)
+        {
+            await IdempotentRequest()
+                .AppendPathSegment(SubscriptionEndpoints.RetryPreferences)
+                .PutJsonAsync(retryPreferenceRequest);
+        }
     }
 }

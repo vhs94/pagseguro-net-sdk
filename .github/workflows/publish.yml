@@ -7,20 +7,23 @@ jobs:
   publish:
     name: build, pack & publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v3.5.3
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 10.0.x
-      - name: Publish NuGet
-        uses: brandedoutcast/publish-nuget@v2.5.5
+      - name: Pack NuGet
+        run: dotnet pack src/PagSeguro.DotNet.Sdk/PagSeguro.DotNet.Sdk.csproj --configuration Release --output ./artifacts
+      - name: NuGet login (OIDC to temporary API key)
+        uses: NuGet/login@v1
+        id: login
         with:
-          # Filepath of the project to be packaged, relative to root of repository
-          PROJECT_FILE_PATH: src/PagSeguro.DotNet.Sdk/PagSeguro.DotNet.Sdk.csproj
-          # Configuration to build and package
-          BUILD_CONFIGURATION: Release
-          # Regex pattern to extract version info in a capturing group
-          VERSION_REGEX: ^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$
-          # API key to authenticate with NuGet server
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          user: ${{ secrets.NUGET_USER }}
+      - name: Publish NuGet
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate

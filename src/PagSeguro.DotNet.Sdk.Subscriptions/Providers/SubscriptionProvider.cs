@@ -46,7 +46,10 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
             int? limit = null)
         {
             return await AuthorizedRequest()
-                .AppendPathSegments(SubscriptionEndpoints.Subscriptions, subscriptionId, "invoices")
+                .AppendPathSegments(
+                    SubscriptionEndpoints.Subscriptions,
+                    subscriptionId,
+                    SubscriptionEndpoints.InvoicesSegment)
                 .SetQueryParam("offset", offset)
                 .SetQueryParam("limit", limit)
                 .GetJsonAsync<InvoiceListResponse>();
@@ -91,8 +94,20 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
         public async Task RetryAsync(string subscriptionId)
         {
             await IdempotentRequest()
-                .AppendPathSegments(SubscriptionEndpoints.Subscriptions, subscriptionId, "retry")
+                .AppendPathSegments(SubscriptionEndpoints.Subscriptions, subscriptionId, SubscriptionEndpoints.Retry)
                 .PutAsync();
+        }
+
+        /// <inheritdoc />
+        public async Task<SubscriptionResponse> RemoveCouponAsync(string subscriptionId)
+        {
+            return await IdempotentRequest()
+                .AppendPathSegments(
+                    SubscriptionEndpoints.Subscriptions,
+                    subscriptionId,
+                    SubscriptionEndpoints.CouponsSegment)
+                .DeleteAsync()
+                .ReceiveJson<SubscriptionResponse>();
         }
     }
 }

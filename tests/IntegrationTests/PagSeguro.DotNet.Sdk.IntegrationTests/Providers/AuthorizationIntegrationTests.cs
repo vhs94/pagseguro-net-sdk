@@ -59,5 +59,84 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers
             assertion.Which.Response.Should().Contain("token");
             assertion.Which.Response.Should().Contain("invalid_request");
         }
+
+        /// <remarks>
+        /// O caminho feliz do Connect via SMS nao e automatizavel: o SMS vai para o
+        /// telefone cadastrado de uma conta de vendedor de verdade, e as credenciais
+        /// compartilhadas de sandbox nao sao uma. O 403 MERCHANT_ACCOUNT_REQUIRED e a
+        /// prova de que a rota, os headers e o corpo foram aceitos: um corpo mal
+        /// formado para antes, em 400 INVALID_PARAMETER (foi o que aconteceu ao
+        /// enviar o numero da conta sem o digito verificador).
+        /// </remarks>
+        [Fact]
+        public async Task RequestSmsAuthorizationAsync_AccountIsNotAMerchant_ApiRejectsOnlyTheAccount()
+        {
+            SmsAuthorizationRequest smsAuthorizationRequest = new()
+            {
+                BankBranch = "0001",
+                AccountNumber = "12345678-9"
+            };
+
+            Func<Task> task = async () => await Client
+                .ForAuthorization()
+                .RequestSmsAuthorizationAsync(smsAuthorizationRequest);
+
+            var assertion = await task.Should().ThrowAsync<ForbiddenException>();
+            assertion.Which.Response.Should().Contain("MERCHANT_ACCOUNT_REQUIRED");
+        }
+
+        [Fact]
+        public async Task RequestSmsAuthorizationAsync_AccountNumberIsMalformed_ApiRejectsTheFormat()
+        {
+            // Confirma que account_number chega mesmo a API: sem o digito
+            // verificador a validacao de formato reprova antes do 403 acima.
+            SmsAuthorizationRequest smsAuthorizationRequest = new()
+            {
+                BankBranch = "0001",
+                AccountNumber = "12345678"
+            };
+
+            Func<Task> task = async () => await Client
+                .ForAuthorization()
+                .RequestSmsAuthorizationAsync(smsAuthorizationRequest);
+
+            var assertion = await task.Should().ThrowAsync<BadRequestException>();
+            assertion.Which.Response.Should().Contain("account_number");
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenBySmsAsync_ThereIsNoPendingAuthorization_ApiAcceptsThePayload()
+        {
+            SmsTokenRequest smsTokenRequest = new()
+            {
+                AuthorizationId = "AUTH_00000000-0000-0000-0000-000000000000",
+                SmsCode = "123456"
+            };
+
+            Func<Task> task = async () => await Client
+                .ForAuthorization()
+                .CreateAccessTokenBySmsAsync(smsTokenRequest);
+
+            // NO_PENDING_AUTHORIZATION significa que grant_type=sms foi reconhecido
+            // e que authorization_id e sms_code passaram pela validacao de formato.
+            var assertion = await task.Should().ThrowAsync<BadRequestException>();
+            assertion.Which.Response.Should().Contain("NO_PENDING_AUTHORIZATION");
+        }
+
+        [Fact]
+        public async Task CreateAccessTokenBySmsAsync_SmsCodeIsMissing_ApiRejectsTheCode()
+        {
+            SmsTokenRequest smsTokenRequest = new()
+            {
+                AuthorizationId = "AUTH_00000000-0000-0000-0000-000000000000"
+            };
+
+            Func<Task> task = async () => await Client
+                .ForAuthorization()
+                .CreateAccessTokenBySmsAsync(smsTokenRequest);
+
+            var assertion = await task.Should().ThrowAsync<BadRequestException>();
+            assertion.Which.Response.Should().Contain("sms_code");
+        }
     }
 }
