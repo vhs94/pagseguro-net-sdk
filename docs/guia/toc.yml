@@ -2,6 +2,8 @@
   href: introducao.md
 - name: Autenticação
   href: autenticacao.md
+- name: Contas, aplicações e chaves
+  href: contas-aplicacoes-e-chaves.md
 - name: Pedidos e cobranças
   href: pedidos-e-cobrancas.md
 - name: Checkout
@@ -12,6 +14,8 @@
   href: split-de-pagamento.md
 - name: Assinaturas
   href: assinaturas.md
+- name: Notificações e produção
+  href: notificacoes-e-producao.md
 - name: Tratamento de erros
   href: erros.md
 - name: Ambientes e testes

@@ -1,93 +1,81 @@
-Client moderno para APIs PagSeguro
+# PagSeguro .NET SDK
 
+Cliente tipado para integrar aplicações .NET às APIs do PagBank (PagSeguro). Requer .NET 10.
 
-[![Version](https://img.shields.io/nuget/vpre/PagSeguro.DotNet.Sdk.svg)](https://www.nuget.org/packages/PagSeguro.DotNet.Sdk)
+[![NuGet](https://img.shields.io/nuget/vpre/PagSeguro.DotNet.Sdk.svg)](https://www.nuget.org/packages/PagSeguro.DotNet.Sdk)
 [![codecov](https://codecov.io/gh/vhs94/pagseguro-net-sdk/branch/main/graph/badge.svg?token=DBC135AXUC)](https://codecov.io/gh/vhs94/pagseguro-net-sdk)
-[![Docs](https://img.shields.io/badge/docs-github%20pages-blue)](https://vhs94.github.io/pagseguro-net-sdk/)
+[![Documentação](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://vhs94.github.io/pagseguro-net-sdk/)
 
 
-## Install
+## Instalação
 
-* **Package Manager Console (Visual Studio)**
-```sh
-Install-Package PagSeguro.DotNet.Sdk
-```
-
-* **dotnet cli**
 ```sh
 dotnet add package PagSeguro.DotNet.Sdk
 ```
 
+No Package Manager Console do Visual Studio:
+
+```powershell
+Install-Package PagSeguro.DotNet.Sdk
+```
+
 ## Documentação
 
-Guias e referência completa da API: **https://vhs94.github.io/pagseguro-net-sdk/**
+Guias de integração e referência completa: **[vhs94.github.io/pagseguro-net-sdk](https://vhs94.github.io/pagseguro-net-sdk/)**
 
-- [Introdução](https://vhs94.github.io/pagseguro-net-sdk/guia/introducao.html)
-- [Autenticação](https://vhs94.github.io/pagseguro-net-sdk/guia/autenticacao.html)
+- [Introdução e configuração](https://vhs94.github.io/pagseguro-net-sdk/guia/introducao.html)
+- [Autenticação e Connect](https://vhs94.github.io/pagseguro-net-sdk/guia/autenticacao.html)
+- [Contas, aplicações e chaves](https://vhs94.github.io/pagseguro-net-sdk/guia/contas-aplicacoes-e-chaves.html)
 - [Pedidos e cobranças](https://vhs94.github.io/pagseguro-net-sdk/guia/pedidos-e-cobrancas.html)
-- [Assinaturas](https://vhs94.github.io/pagseguro-net-sdk/guia/assinaturas.html)
-- [Split de pagamento](https://vhs94.github.io/pagseguro-net-sdk/guia/split-de-pagamento.html)
+- [Checkout hospedado](https://vhs94.github.io/pagseguro-net-sdk/guia/checkout.html)
 - [Cartões e 3DS](https://vhs94.github.io/pagseguro-net-sdk/guia/cartoes-e-3ds.html)
+- [Split de pagamento](https://vhs94.github.io/pagseguro-net-sdk/guia/split-de-pagamento.html)
+- [Assinaturas](https://vhs94.github.io/pagseguro-net-sdk/guia/assinaturas.html)
+- [Notificações e operação em produção](https://vhs94.github.io/pagseguro-net-sdk/guia/notificacoes-e-producao.html)
+- [Erros, sandbox e testes](https://vhs94.github.io/pagseguro-net-sdk/guia/erros.html)
 - [Referência da API](https://vhs94.github.io/pagseguro-net-sdk/api/)
 
-# Como usar
+## Como usar
 
-### ASP.NET
-
-No ASP.NET, use o middleware para injetar uma instância do ```IPagseguroClient```
+Em uma aplicação ASP.NET, registre o client uma vez e injete `IPagSeguroClient`
+onde for necessário. Carregue as credenciais de uma configuração segura, como
+variáveis de ambiente, User Secrets ou um cofre de segredos; não as versione.
 
 ```csharp
-//configuracao credenciais pagseguro
 builder.Services.AddPagSeguro(options =>
 {
-    options.ClientId = "8815a5e2-616b-4754-a6d1-40d92b71674c";
-    options.ClientSecret = "45e5a4de-b8eb-4b78-9ce6-fad416b1953c";
-    options.Token = "BCABE5E7AA9D43BCBBB76E3C45C1567A";
+    options.ClientId = builder.Configuration["PagBank:ClientId"];
+    options.ClientSecret = builder.Configuration["PagBank:ClientSecret"];
+    options.Token = builder.Configuration["PagBank:Token"];
     options.Environment = PagSeguroEnvironment.Sandbox;
 });
 ```
 
-### ConsoleApp
-
-Crie uma instância de PagSeguroClient, caso queira usar o ambiente de Produção, o Environment pode ser omitido.
+Use o provider correspondente à operação. Exemplo de consulta de pedido:
 
 ```csharp
-var client = new PagSeguroClient(new ClientSettings
+public sealed class PedidosService(IPagSeguroClient client)
 {
-    Environment = PagSeguroEnvironment.Sandbox,
-    Token = "<SEU_TOKEN>"
-});
+    public Task<OrderResponse> ConsultarAsync(string orderId)
+        => client.ForOrder().GetByIdAsync(orderId);
+}
 ```
-Use as fluent interfaces para manipular as APIs, para opções disponíveis [veja a Wiki.](https://github.com/vhs94/pagseguro-net-sdk/wiki)
 
-```csharp
-var creditCardOrder = await client
-    .ForOrder()
-    .WithReferenceId("ref-id")
-    .WithNotificationUrl("https://my.url")
-    .WithCreditCard()
-    .AddCharge(new ChargeByCreditCardRequest())
-    .CreateAsync();
+Para criar pedidos, cobranças, checkout, cartões, split ou assinaturas, siga o
+guia específico antes de integrar em produção. Os exemplos e avisos de segurança
+estão na [documentação completa](https://vhs94.github.io/pagseguro-net-sdk/).
+
+## Desenvolvimento e testes
+
+Clone o repositório e execute os testes com .NET 10:
+
+```sh
+dotnet test
 ```
-# Unit Testing
 
-Compatível com Mocking frameworks como NSubstitute ou Moq. Devido ao design usando fluent interfaces, proporciona alta testabilidade.
+Os testes de integração acessam o sandbox e podem exigir credenciais; consulte
+[Ambientes e testes](https://vhs94.github.io/pagseguro-net-sdk/guia/ambientes-e-testes.html).
 
-```csharp
-    [Fact]
-    public async Task ForOrder_GetByIdAsync_GetByIdAsyncIsCalledWithId()
-    {
-        var clientMock = Substitute.For<PagSeguroClient>(new ClientSettings());
-        string orderId = "order-id";
-
-        await clientMock
-            .ForOrder()
-            .GetByIdAsync(orderId);
-
-        await clientMock
-            .Received(1)
-            .ForOrder()
-            .GetByIdAsync(orderId);
-    }
-```
+> [!NOTE]
+> Este é um projeto open source mantido pela comunidade e sem vínculo oficial com o PagBank.
 

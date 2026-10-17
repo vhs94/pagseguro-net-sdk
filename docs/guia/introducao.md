@@ -66,6 +66,9 @@ client.ForCoupon()                  // cupons de desconto
 client.ForInvoice()                 // faturas
 client.ForSubscriptionPayment()     // pagamentos e estornos
 client.ForSubscriptionPreference()  // preferências e chave pública
+client.ForCardToken()               // tokenização de cartão
+client.ForAuthenticationSession()   // sessão de autenticação 3DS
+client.ForSplit()                   // consulta de split e liberação de custódia
 client.ForFee()                     // simulação de taxas
 client.ForAuthorization()           // OAuth2
 client.ForApplication()             // aplicações Connect

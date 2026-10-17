@@ -10,17 +10,17 @@ achar um tipo pelo nome.
 
 | Quero... | Comece por |
 | --- | --- |
-| Entender o ponto de entrada | <xref:PagSeguro.DotNet.Sdk.IPagSeguroClient> |
-| Configurar credenciais | <xref:PagSeguro.DotNet.Sdk.Settings.ClientSettings> |
-| Criar e pagar pedidos | <xref:PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders.IOrderProvider> |
-| Cobrar com cartao de credito | <xref:PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods.ICreditCardChargeProvider> |
-| Usar a pagina de pagamento hospedada | <xref:PagSeguro.DotNet.Sdk.Checkout.Interfaces.ICheckoutProvider> |
-| Montar cobranca recorrente | <xref:PagSeguro.DotNet.Sdk.Subscriptions.Interfaces.ISubscriptionProvider> |
-| Simular taxas e parcelamento | <xref:PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees.IFeeProvider> |
-| Autenticar via Connect | <xref:PagSeguro.DotNet.Sdk.Connect.Interfaces.IAuthorizationProvider> |
-| Tratar erros da API | <xref:PagSeguro.DotNet.Sdk.Common.Exceptions.Http.PagSeguroHttpException> |
+| Entender o ponto de entrada | [IPagSeguroClient](PagSeguro.DotNet.Sdk.IPagSeguroClient.yml) |
+| Configurar credenciais | [ClientSettings](PagSeguro.DotNet.Sdk.Settings.ClientSettings.yml) |
+| Criar e pagar pedidos | [IOrderProvider](PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders.IOrderProvider.yml) |
+| Cobrar com cartão de crédito | [ICreditCardChargeProvider](PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods.ICreditCardChargeProvider.yml) |
+| Usar a página de pagamento hospedada | [ICheckoutProvider](PagSeguro.DotNet.Sdk.Checkout.Interfaces.ICheckoutProvider.yml) |
+| Montar cobrança recorrente | [ISubscriptionProvider](PagSeguro.DotNet.Sdk.Subscriptions.Interfaces.ISubscriptionProvider.yml) |
+| Simular taxas e parcelamento | [IFeeProvider](PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees.IFeeProvider.yml) |
+| Autenticar via Connect | [IAuthorizationProvider](PagSeguro.DotNet.Sdk.Connect.Interfaces.IAuthorizationProvider.yml) |
+| Tratar erros da API | [PagSeguroHttpException](PagSeguro.DotNet.Sdk.Common.Exceptions.Http.PagSeguroHttpException.yml) |
 
 > [!NOTE]
-> A documentacao cobre as **interfaces** dos providers, que sao o contrato do SDK.
-> Voce nunca instancia as classes concretas: elas chegam prontas pelo client
+> A documentação cobre as **interfaces** dos providers, que são o contrato do SDK.
+> Você não instancia as classes concretas: elas são resolvidas pelo client
 > (`client.ForOrder()`, `client.ForPlan()`, ...).
