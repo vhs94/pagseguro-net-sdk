@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Flurl.Http;
+﻿using Flurl.Http;
 using Microsoft.Extensions.DependencyInjection;
 using PagSeguro.DotNet.Sdk.Account.Helpers;
 using PagSeguro.DotNet.Sdk.Account.Interfaces;
@@ -15,6 +14,7 @@ using PagSeguro.DotNet.Sdk.Connect.Helpers;
 using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
+using PagSeguro.DotNet.Sdk.Maps;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Cards;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
@@ -98,7 +98,6 @@ namespace PagSeguro.DotNet.Sdk
             _services.AddOrderClient();
             _services.AddCheckoutClient();
             _services.AddSubscriptionsClient();
-            _services.AddAutoMapper(typeof(PagSeguroClient));
         }
 
         private IFlurlClient CreateFlurlClient()
@@ -122,9 +121,7 @@ namespace PagSeguro.DotNet.Sdk
 
         private void MapSettings(ClientSettings settings)
         {
-            using var mappingProvider = _services.BuildServiceProvider();
-            IMapper mapper = mappingProvider.GetRequiredService<IMapper>();
-            Settings = mapper.Map<PagSeguroSettings>(settings);
+            Settings = settings.ToPagSeguroSettings();
             _services.AddSingleton(Settings);
         }
 

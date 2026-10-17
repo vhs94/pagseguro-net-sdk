@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using Flurl.Http;
+﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
+using PagSeguro.DotNet.Sdk.Orders.Models.Maps;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
@@ -12,7 +12,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
     /// <inheritdoc cref="IBankSlipOrderProvider" />
     public class BankSlipOrderProvider(
         PagSeguroSettings settings,
-        IMapper mapper,
+        IOrderRequestMapper mapper,
         IFlurlClient flurlClient)
         : BaseProvider(settings, flurlClient),
         IBankSlipOrderProvider
@@ -45,7 +45,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         /// <inheritdoc />
         public IBankSlipOrderProvider Load(OrderRequest orderRequest)
         {
-            _chargedOrderRequest = mapper.Map<ChargedOrderRequest<ChargeByBankSlipRequest>>(orderRequest);
+            _chargedOrderRequest = mapper.ToChargedOrder<ChargeByBankSlipRequest>(orderRequest);
             return this;
         }
 

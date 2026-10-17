@@ -5,6 +5,7 @@ using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges.PaymentMethods;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Splits;
+using PagSeguro.DotNet.Sdk.Orders.Models.Maps;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Cards;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Providers.Fees;
@@ -31,7 +32,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Helpers
             services.AddTransient<ISplitProvider, SplitProvider>();
             services.AddTransient<ICardTokenProvider, CardTokenProvider>();
             services.AddTransient<IAuthenticationSessionProvider, AuthenticationSessionProvider>();
-            services.AddAutoMapper(typeof(OrderProvider));
+            services.AddSingleton<IOrderRequestMapper, OrderRequestMapper>();
         }
     }
 }

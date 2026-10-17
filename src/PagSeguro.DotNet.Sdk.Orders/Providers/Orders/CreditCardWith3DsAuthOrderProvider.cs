@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using Flurl.Http;
+﻿using Flurl.Http;
 using PagSeguro.DotNet.Sdk.Common.Providers;
 using PagSeguro.DotNet.Sdk.Common.Settings;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
+using PagSeguro.DotNet.Sdk.Orders.Models.Maps;
 using PagSeguro.DotNet.Sdk.Orders.Models.Requests;
 using PagSeguro.DotNet.Sdk.Orders.Models.Responses;
 
@@ -12,7 +12,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
     /// <inheritdoc cref="ICreditCardWith3DsAuthOrderProvider" />
     public class CreditCardWith3DsAuthOrderProvider(
         PagSeguroSettings settings,
-        IMapper mapper,
+        IOrderRequestMapper mapper,
         IFlurlClient flurlClient)
         : BaseProvider(settings, flurlClient),
         ICreditCardWith3DsAuthOrderProvider
@@ -45,7 +45,7 @@ namespace PagSeguro.DotNet.Sdk.Orders.Providers.Orders
         /// <inheritdoc />
         public ICreditCardWith3DsAuthOrderProvider Load(OrderRequest orderRequest)
         {
-            _chargedOrderRequest = mapper.Map<ChargedOrderRequest<ChargeByCreditCardWith3DsAuthRequest>>(orderRequest);
+            _chargedOrderRequest = mapper.ToChargedOrder<ChargeByCreditCardWith3DsAuthRequest>(orderRequest);
             return this;
         }
 
