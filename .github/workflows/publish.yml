@@ -17,7 +17,7 @@ jobs:
         with:
           dotnet-version: 10.0.x
       - name: Pack NuGet
-        run: dotnet pack src/PagSeguro.DotNet.Sdk/PagSeguro.DotNet.Sdk.csproj --configuration Release --output ./artifacts
+        run: dotnet pack src/PagSeguro.DotNet.Sdk/PagSeguro.DotNet.Sdk.csproj --configuration Release --output ./artifacts -p:GeneratePackageOnBuild=false
       - name: NuGet login (OIDC to temporary API key)
         uses: NuGet/login@v1
         id: login
