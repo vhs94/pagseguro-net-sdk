@@ -46,6 +46,14 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Interfaces
         Task<RefundListResponse> ListRefundsAsync(string paymentId);
 
         /// <summary>
+        /// Consulta um estorno pelo identificador. Corresponde a GET /refunds/{refund_id}.
+        /// <see href="https://developer.pagbank.com.br/reference/consultar-estorno">ler documentação</see>
+        /// </summary>
+        /// <param name="refundId">Identificador do estorno. Por exemplo, REFU_123.</param>
+        /// <returns>O estorno encontrado.</returns>
+        Task<RefundResponse> GetRefundByIdAsync(string refundId);
+
+        /// <summary>
         /// Lista todos os estornos do vendedor. Corresponde a GET /refunds.
         /// <see href="https://developer.pagbank.com.br/reference/listar-estornos-do-vendedor">ler documentação</see>
         /// </summary>

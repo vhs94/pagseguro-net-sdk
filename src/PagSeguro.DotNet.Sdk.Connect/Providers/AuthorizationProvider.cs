@@ -103,5 +103,44 @@ namespace PagSeguro.DotNet.Sdk.Connect.Providers
                     token_type_hint = revokeTokenRequest.TokenTypeHint.ToDescription()
                 });
         }
+
+        /// <inheritdoc />
+        public async Task<SmsAuthorizationResponse> RequestSmsAuthorizationAsync(
+            SmsAuthorizationRequest smsAuthorizationRequest)
+        {
+            EnsureClientApplication();
+
+            return await Request()
+                .AppendPathSegment(ConnectEndpoints.AuthorizeSms)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .PostJsonAsync(new
+                {
+                    bank_branch = smsAuthorizationRequest.BankBranch,
+                    account_number = smsAuthorizationRequest.AccountNumber
+                })
+                .ReceiveJson<SmsAuthorizationResponse>();
+        }
+
+        /// <inheritdoc />
+        public async Task<AuthorizationCodeResponse> CreateAccessTokenBySmsAsync(
+            SmsTokenRequest smsTokenRequest)
+        {
+            EnsureClientApplication();
+
+            return await Request()
+                .AppendPathSegment(ConnectEndpoints.Token)
+                .WithOAuthBearerToken(Settings.Token)
+                .WithHeader(CommonHeaders.ClientId, Settings.ClientId)
+                .WithHeader(CommonHeaders.ClientSecret, Settings.ClientSecret)
+                .PostJsonAsync(new
+                {
+                    grant_type = smsTokenRequest.GrantType,
+                    authorization_id = smsTokenRequest.AuthorizationId,
+                    sms_code = smsTokenRequest.SmsCode
+                })
+                .ReceiveJson<AuthorizationCodeResponse>();
+        }
     }
 }

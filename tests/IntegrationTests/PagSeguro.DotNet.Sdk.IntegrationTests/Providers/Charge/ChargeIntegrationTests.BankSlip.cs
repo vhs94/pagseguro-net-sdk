@@ -28,10 +28,19 @@ namespace PagSeguro.DotNet.Sdk.IntegrationTests.Providers.Charge
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(
                 chargeRequest,
-                options => options.Excluding(c => c.PaymentMethod!.BankSlip!.DueDate));
+                // ExcludingMissingMembers como nos demais testes de cobranca: o
+                // request tem Splits, que nao existe na resposta.
+                options => options
+                    .Excluding(c => c.PaymentMethod!.BankSlip!.DueDate)
+                    .ExcludingMissingMembers());
             result.PaymentMethod!.BankSlip!.DueDate.Should().Be(bankSlipRequest.DueDate.Date);
             result.Id.Should().StartWith("CHAR");
-            result.CreatedDate.Date.Should().Be(DateTime.UtcNow.Date);
+            // created_at chega com o offset -03:00 e o System.Text.Json converte
+            // para o horario LOCAL da maquina. Comparar com DateTime.UtcNow.Date
+            // confrontaria uma data local com uma data UTC, o que falha sempre que
+            // os dois lados caem em dias diferentes. A janela abaixo compara o
+            // instante, nao o dia, e ainda verifica que o recurso foi criado agora.
+            result.CreatedDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(10));
             result.Links.Should().NotBeNullOrEmpty();
             result.Amount!.Summary!.Paid.Should().Be(0);
             result.Amount.Summary.Total.Should().Be(1000);

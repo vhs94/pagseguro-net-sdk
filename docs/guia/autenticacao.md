@@ -58,6 +58,47 @@ await client.ForAuthorization().RevokeTokenAsync(new RevokeTokenRequest
 
 Revogar o `refresh_token` invalida também o `access_token` associado.
 
+### Connect via SMS
+
+Alternativa ao redirecionamento pelo navegador: o vendedor autoriza a sua
+aplicação com um código recebido por SMS.
+
+```csharp
+client.ConfigureClientApplication("seu-client-id", "seu-client-secret");
+
+SmsAuthorizationResponse envio = await client
+    .ForAuthorization()
+    .RequestSmsAuthorizationAsync(new SmsAuthorizationRequest
+    {
+        BankBranch = "0001",
+        AccountNumber = "12345678-9"
+    });
+
+Console.WriteLine(envio.PhoneNumber);        // telefone mascarado
+Console.WriteLine(envio.RetryAfterSeconds);  // espera até poder reenviar
+```
+
+Com o código em mãos, troque por um `access_token`:
+
+```csharp
+AuthorizationCodeResponse token = await client
+    .ForAuthorization()
+    .CreateAccessTokenBySmsAsync(new SmsTokenRequest
+    {
+        AuthorizationId = envio.Id,
+        SmsCode = "123456"
+    });
+```
+
+> [!NOTE]
+> `AccountNumber` precisa vir com o dígito verificador (`12345678-9`); sem ele a
+> API responde `INVALID_PARAMETER`. No sandbox, `SmsCode = "123456"` simula
+> sucesso e `"200200"` simula erro.
+
+> [!IMPORTANT]
+> O SMS vai para o telefone cadastrado de uma conta de **vendedor**. Com uma conta
+> comum a API responde `403 MERCHANT_ACCOUNT_REQUIRED`.
+
 ## Certificado digital
 
 O certificado usa o fluxo de desafio. O SDK decripta o desafio com a sua

@@ -34,7 +34,10 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
         public async Task<RefundResponse> RefundAsync(string paymentId, RefundRequest refundRequest)
         {
             return await IdempotentRequest()
-                .AppendPathSegments(SubscriptionEndpoints.Payments, paymentId, "refunds")
+                .AppendPathSegments(
+                    SubscriptionEndpoints.Payments,
+                    paymentId,
+                    SubscriptionEndpoints.RefundsSegment)
                 .PostJsonAsync(refundRequest)
                 .ReceiveJson<RefundResponse>();
         }
@@ -43,8 +46,19 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Providers
         public async Task<RefundListResponse> ListRefundsAsync(string paymentId)
         {
             return await AuthorizedRequest()
-                .AppendPathSegments(SubscriptionEndpoints.Payments, paymentId, "refunds")
+                .AppendPathSegments(
+                    SubscriptionEndpoints.Payments,
+                    paymentId,
+                    SubscriptionEndpoints.RefundsSegment)
                 .GetJsonAsync<RefundListResponse>();
+        }
+
+        /// <inheritdoc />
+        public async Task<RefundResponse> GetRefundByIdAsync(string refundId)
+        {
+            return await AuthorizedRequest()
+                .AppendPathSegments(SubscriptionEndpoints.Refunds, refundId)
+                .GetJsonAsync<RefundResponse>();
         }
 
         /// <inheritdoc />

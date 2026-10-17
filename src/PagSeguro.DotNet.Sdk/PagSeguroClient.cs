@@ -16,9 +16,11 @@ using PagSeguro.DotNet.Sdk.Connect.Interfaces;
 using PagSeguro.DotNet.Sdk.Connect.Models.Requests;
 using PagSeguro.DotNet.Sdk.Connect.Models.Responses;
 using PagSeguro.DotNet.Sdk.Orders.Helpers;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Cards;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Charges;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Fees;
 using PagSeguro.DotNet.Sdk.Orders.Interfaces.Orders;
+using PagSeguro.DotNet.Sdk.Orders.Interfaces.Splits;
 using PagSeguro.DotNet.Sdk.PublicKey.Helpers;
 using PagSeguro.DotNet.Sdk.PublicKey.Interfaces;
 using PagSeguro.DotNet.Sdk.Settings;
@@ -56,6 +58,12 @@ namespace PagSeguro.DotNet.Sdk
             => ServiceProvider.GetRequiredService<IFeeProvider>();
         public virtual ICheckoutProvider ForCheckout()
             => ServiceProvider.GetRequiredService<ICheckoutProvider>();
+        public virtual ISplitProvider ForSplit()
+            => ServiceProvider.GetRequiredService<ISplitProvider>();
+        public virtual ICardTokenProvider ForCardToken()
+            => ServiceProvider.GetRequiredService<ICardTokenProvider>();
+        public virtual IAuthenticationSessionProvider ForAuthenticationSession()
+            => ServiceProvider.GetRequiredService<IAuthenticationSessionProvider>();
         public virtual IPlanProvider ForPlan()
             => ServiceProvider.GetRequiredService<IPlanProvider>();
         public virtual ICustomerProvider ForCustomer()

@@ -51,5 +51,41 @@ namespace PagSeguro.DotNet.Sdk.Connect.Interfaces
         /// com <c>ConfigureClientApplication()</c>.</para>
         /// </remarks>
         Task RevokeTokenAsync(RevokeTokenRequest revokeTokenRequest);
+
+        /// <summary>
+        /// Envia um SMS com um código de autorização ao telefone cadastrado na
+        /// conta PagBank informada. É o primeiro passo do Connect via SMS, uma
+        /// alternativa ao redirecionamento pelo navegador.
+        /// Corresponde a POST /oauth2/authorize/sms.
+        /// <see href="https://developer.pagbank.com.br/reference/solicitar-autorizacao-via-sms">ler documentação</see>
+        /// </summary>
+        /// <param name="smsAuthorizationRequest">Agência e conta do vendedor.</param>
+        /// <returns>
+        /// O identificador da autorização pendente e o telefone mascarado que
+        /// recebeu o SMS.
+        /// </returns>
+        /// <remarks>
+        /// <para><strong>Atenção:</strong> requer o ClientId e o ClientSecret configurados
+        /// com <c>ConfigureClientApplication()</c>, e a conta autenticada precisa
+        /// ser uma conta de vendedor.</para>
+        /// </remarks>
+        Task<SmsAuthorizationResponse> RequestSmsAuthorizationAsync(
+            SmsAuthorizationRequest smsAuthorizationRequest);
+
+        /// <summary>
+        /// Troca o código recebido por SMS por um access_token. É o segundo passo
+        /// do Connect via SMS.
+        /// Corresponde a POST /oauth2/token com grant_type sms.
+        /// <see href="https://developer.pagbank.com.br/reference/obter-access-token">ler documentação</see>
+        /// </summary>
+        /// <param name="smsTokenRequest">
+        /// Identificador da autorização e o código recebido por SMS.
+        /// </param>
+        /// <returns>O access_token emitido.</returns>
+        /// <remarks>
+        /// <para><strong>Atenção:</strong> requer o ClientId e o ClientSecret configurados
+        /// com <c>ConfigureClientApplication()</c>.</para>
+        /// </remarks>
+        Task<AuthorizationCodeResponse> CreateAccessTokenBySmsAsync(SmsTokenRequest smsTokenRequest);
     }
 }

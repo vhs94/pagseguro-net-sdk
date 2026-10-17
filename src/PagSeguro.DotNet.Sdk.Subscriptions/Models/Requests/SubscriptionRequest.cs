@@ -46,5 +46,12 @@ namespace PagSeguro.DotNet.Sdk.Subscriptions.Models.Requests
         /// <summary>Valor da assinatura, quando diferente do valor do plano.</summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Money? Amount { get; set; }
+
+        /// <summary>
+        /// Cupom de desconto aplicado à assinatura. Informe apenas o Id de um
+        /// cupom ativo.
+        /// </summary>
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public CouponReference? Coupon { get; set; }
     }
 }
