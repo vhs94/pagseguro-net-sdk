@@ -9,15 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-<<<<<<< HEAD
 		<PackageReference Include="NSubstitute" Version="6.2.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
-=======
-		<PackageReference Include="NSubstitute" Version="5.3.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.11.0" />
->>>>>>> main
 		<PackageReference Include="xunit" Version="2.9.3" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
+		<PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -32,13 +27,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
-	  <ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common.Tests\PagSeguro.DotNet.Sdk.Common.Tests.csproj" />
+		<ProjectReference Include="..\..\..\src\PagSeguro.DotNet.Sdk.Orders\PagSeguro.DotNet.Sdk.Orders.csproj" />
+		<ProjectReference Include="..\PagSeguro.DotNet.Sdk.Common.Tests\PagSeguro.DotNet.Sdk.Common.Tests.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Assets\fees.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="Assets\fees.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 </Project>
